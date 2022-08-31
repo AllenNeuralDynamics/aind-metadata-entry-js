@@ -2,21 +2,9 @@ import logo from './logo.svg';
 import './App.css';
 import Form from "@rjsf/core";
 
-const schema = {
-  title: "Test form",
-  type: "object",
-  properties: {
-    name: {
-      type: "string",
-      title: "Employee Name"
-    },
-    institution: {
-      type: "string",
-      enum: ["AIND", "AIBS"],
-      title: "Institution"
-    }
-  }
-};
+// creates js object from json schema
+const json_file = require('./schemas/data-description-schema.json')
+const schema = json_file;
 
 function App() {
   return (

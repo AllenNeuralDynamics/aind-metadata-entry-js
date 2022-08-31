@@ -1,0 +1,378 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "string",
+            "const": "0.1.0",
+            "description": "schema version"
+        },
+        "specimen_id": {
+            "type": "string",
+            "title": "Specimen ID",
+            "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes."
+        },
+        "headframes": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/headframe" },
+            "uniqueItems": true,
+            "title": "Headframes"
+        },
+        "craniotomies": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/craniotomy" },
+            "uniqueItems": true,
+            "title": "Craniotomies"
+        },
+        "injections": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/injection" },
+            "uniqueItems": true,
+            "title": "Injections"
+        },
+        "tissue_preps": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/tissue_prep"},
+            "uniqueItems": true,
+            "title": "Tissue Preps"
+        },
+        "water_restriction_protocol_id": {
+            "type": "string",
+            "title": "Water restriction protocol number"
+        },
+        "water_restriction_start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Water restriction start date"
+        },
+        "water_restriction_end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Water restriction end date"
+        },
+        "training_protocols":{
+            "type": "array",
+            "items": {"$ref": "#/$defs/training_protocol"},
+            "uniqueItems": true,
+            "title": "Training protocols"
+        },
+        "tissue_preparations": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/tissue_prep"},
+            "uniqueItems": true,
+            "title": "Tissue preparation"
+        },
+        "notes": {
+            "type": "string",
+            "title": "Notes"
+        }
+    },
+    
+    "$defs": {
+        "tissue_prep": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": [
+                        "Perfusion",
+                        "Fixation",
+                        "Double delipidation",
+                        "DCM delipidation",
+                        "Immunostaining",
+                        "Gelation"
+                    ],
+                    "title": "Name"
+                },
+                "date_started": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date started"
+                },
+                "date_ended": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date ended"
+                },
+                "experimenter_full_name": {
+                    "type": "string",
+                    "title": "Experimenter full name",
+                    "description": "First and last name of the experimenter."
+                },
+                "protocol_id": {
+                    "type": "string",
+                    "title": "Protocol ID"
+                },
+                "notes": {
+                    "type": "string"
+                }
+            },
+            "required": ["name", "date_started", "protocol_id"]
+        },
+        "training_protocol": {
+            "type": "object",
+            "properties": {
+                "training_protocol_id": {
+                    "type": "string",
+                    "title": "Training protocol ID"
+                },
+                "training_protocol_start_date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Training protocol start date"
+                },
+                "training_protocol_end_date":{
+                    "type": "string",
+                    "format": "date",
+                    "title": "Training protocol end date"
+                },
+                "notes": {
+                    "type": "string",
+                    "title": "Notes"
+                }
+            },
+            "required": [
+                "training_protocol_id",
+                "training_protocol_start_date"
+            ]
+        },
+        "headframe": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                },
+                "experimenter_full_name": {
+                    "type": "string",
+                    "title": "Experimenter full name",
+                    "description": "First and last name of the experimenter."
+                },
+                "headframe_protocol_id": {
+                    "type": "string",
+                    "title": "Headframe protocol ID"
+                },
+                "headframe_part_number": {
+                    "type": "string",
+                    "title": "Headframe part number"
+                },
+                "headframe_material": {
+                    "type": "string",
+                    "title": "Headframe material",
+                    "enum": ["Titanium", "Steel"]
+                },
+                "well_part_number": {
+                    "type": "string",
+                    "title": "Well part number"
+                },
+                "well_type": {
+                    "type": "string",
+                    "title": "Well type",
+                    "enum": ["A","B"]
+                },
+                "notes": {
+                    "type": "string",
+                    "title": "Notes"
+                }
+            },
+            "required": [
+                "date",
+                "experimenter_full_name",
+                "headframe_protocol_id",
+                "headframe_part_number",
+                "headframe_material" 
+            ]
+        },
+        "craniotomy": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                },
+                "experimenter_full_name": {
+                    "type": "string",
+                    "title": "Experimenter full name",
+                    "description": "First and last name of the experimenter."
+                },
+                "craniotomy_protocol_id": {
+                    "type": "string",
+                    "title": "Craniotomy protocol ID"
+                },
+                "craniotomy_coordinate_ml": {
+                    "type": "number",
+                    "title": "Craniotomy coordinate ML (mm)",
+                    "units": "mm"
+                },
+                "craniotomy_coordinates_ap": {
+                    "type": "number",
+                    "title": "Craniotomy coordinates AP (mm)",
+                    "units": "mm"
+                },
+                "craniotomy_size": {
+                    "type": "number",
+                    "title": "Craniotomy size (mm)",
+                    "units": "mm"
+                },
+                "implant_part_number": {
+                    "type": "string",
+                    "title": "Implant part number"
+                },
+                "dura_removed": {
+                    "type": "boolean",
+                    "title": "Dura removed"
+                },
+                "protective_material": {
+                    "type": "string",
+                    "title": "Protective material",
+                    "enum": [
+                        "Duragel", 
+                        "SORTA-clear", 
+                        "Kwik-Cast",
+                        "Other - see notes"
+                    ]
+                },
+                "notes": {
+                    "type": "string",
+                    "title": "Notes"
+                }
+            },
+            "required": [
+                "date",
+                "experimenter_full_name",
+                "craniotomy_protocol_id",
+                "craniotomy_coordinates_ml",
+                "craniotomy_coordinates_ap",
+                "craniotomy_size"
+            ]
+        },
+        "injection": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                },
+                "experimenter_full_name": {
+                    "type": "string",
+                    "title": "Experimenter full name",
+                    "description": "First and last name of the experimenter."
+                },
+                "injection_protocol_id": {
+                    "type": "string",
+                    "title": "Injection protocol ID"
+                },
+                "injection_hemisphere": {
+                    "type": "string",
+                    "title": "Injection hemisphere",
+                    "enum": ["left", "right"]
+                },
+                "injection_coordinate_ml": {
+                    "type": "number",
+                    "title": "Injection coordinate ML (mm)",
+                    "units": "mm"
+                },
+                "injection_coordinate_ap": {
+                    "type": "number",
+                    "title": "Injection coordinate AP (mm)",
+                    "units": "mm"
+                },
+                "injection_coordinate_depth": {
+                    "type": "number",
+                    "title": "Injection coodinate depth (mm)",
+                    "units": "mm"
+                },
+                "injection_angle": {
+                    "type": "number",
+                    "title": "Injection angle (deg)",
+                    "units": "deg"
+                },
+                "injection_virus": {
+                    "type": "string",
+                    "title": "Injection virus"
+                },
+                "injection_virus_id": {
+                    "type": "string",
+                    "title": "Injection virus ID"
+                },
+                "injection_type": {
+                    "type": "string",
+                    "title": "Injection type",
+                    "enum": ["Iontophoresis","Nanoject"]
+                },
+                "injection_duration": {
+                    "type": "string",
+                    "format": "time",
+                    "title": "Injection duration"
+                },
+                "notes": {
+                    "type": "string",
+                    "title": "Notes"
+                },
+                "injection_class": {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "injection_type": {
+                                    "type": "string",
+                                    "const": "Nanoject"
+                                },
+                                "injection_volume": {
+                                    "type": "number",
+                                    "title": "Injection volume (nL)",
+                                    "units": "nL"
+                                }
+                            },
+                            "required": [
+                                "injection_type",
+                                "injection_volume"
+                            ]
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "injection_type": {
+                                    "type": "string",
+                                    "const": "Iontophoresis"
+                                },
+                                "injection_current": {
+                                    "type": "number",
+                                    "title": "Injection current (uA)",
+                                    "units": "uA"
+                                },
+                                "alternating_current": {
+                                    "type": "string",
+                                    "title": "Alternating current"
+                                }
+                            },
+                            "required": [
+                                "injection_type",
+                                "injection_current",
+                                "alternating_current"
+                            ]
+                        }
+                    ]
+                }
+            },            
+            "required": [
+                "date",
+                "experimenter_full_name",
+                "injection_protocol_id",
+                "injection_coordinate_ml",
+                "injection_coordinate_ap",
+                "injection_coordinate_depth",
+                "injection_angle",
+                "injection_virus",
+                "injection_type",
+                "injection_duration"
+            ]
+        }
+    },
+    "required": [
+        "specimen_id"
+        ]
+}

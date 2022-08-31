@@ -1,0 +1,44 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "data description schema",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "string",
+            "const": "0.1.0",
+            "title": "Version"
+        },
+        "license": {
+            "type": "string",
+            "const": "CC-BY-4.0",
+            "title": "License"
+        },
+        "data_level": {
+            "type": "string",
+            "enum": ["raw data", "derived data"],
+            "title": "Data Level"            
+        },
+        "name": {
+            "type": "string",
+            "title": "Name of data"
+        },
+        "institution": {
+            "type": "string",
+            "enum": ["AIND", "AIBS"],
+            "title": "Institution"
+        },
+        "group": {
+            "type": "string",
+            "enum": ["ephys", "ophys", "MSMA", "behavior"],
+            "title": "Group"
+        },
+        "project_name": {
+            "type": "string",
+            "title": "Project Name"           
+        },
+        "project_id": {
+            "type": "string",
+            "title": "Project ID"
+        }
+    }
+}
