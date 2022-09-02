@@ -5,6 +5,7 @@
 	"version": {
             "type": "string",
             "const": "0.1.0",
+            "description": "schema version",
             "title": "Version"
 	},
 	"species": {
@@ -14,7 +15,8 @@
 	},
 	"specimen_id": {
             "type": "string",
-            "title": "Specimen ID"
+            "title": "Specimen ID",
+            "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes."
 	},
 	"sex": {
             "type": "string",
@@ -28,6 +30,7 @@
 	},
 	"genotype": {
             "type": "string",
+            "description": "Genotype of the animal providing both alleles",
             "title": "Genotype"
 	},
 	"background_strain":{
@@ -37,10 +40,12 @@
 	},
 	"source": {
             "type": "string",
+            "description": "If the subject was not bred in house, where was it acquired from.",
             "title": "Source"
 	},
 	"restrictions": {
             "type": "string",
+            "description": "Any restrictions on use or publishing based on specimen source",
             "title": "Restrictions"
 	},
 	"breeding_group": {

@@ -1,11 +1,11 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "data description schema",
     "type": "object",
     "properties": {
         "version": {
             "type": "string",
             "const": "0.1.0",
+            "description": "schema version",
             "title": "Version"
         },
         "license": {
@@ -20,7 +20,8 @@
         },
         "name": {
             "type": "string",
-            "title": "Name of data"
+            "description": "name of data, conventionally also the name of the directory containing all data and metadata",
+            "title": "Name"
         },
         "institution": {
             "type": "string",
