@@ -1,4 +1,3 @@
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom'; 
 
