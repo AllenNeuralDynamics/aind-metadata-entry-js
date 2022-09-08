@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "@rjsf/core";
 import Homepage from './Homepage.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import TestForm from './testForm';
+import TestForm from './TestForm';
 
 
 function FormContainer() {
