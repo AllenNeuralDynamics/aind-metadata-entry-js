@@ -7,7 +7,8 @@ const Homepage = () => {
       <h1>AIND MetaData Entry </h1>
       <Link to='/procedures'>Procedures Form</Link> | {" "}
       <Link to='/subject'>Subject Form</Link> | {" "}
-      <Link to='/data_description'>Data Description Form</Link>
+      <Link to='/data_description'>Data Description Form</Link> | {" "}
+      <Link to='/test'>Test Form</Link>
 
       </div>
   )
