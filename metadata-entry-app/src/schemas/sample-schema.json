@@ -1,5 +1,5 @@
 {
-    "title": "test schema",
+    "title": "sample schema",
     "type": "object",
     "properties": {
         "name": {

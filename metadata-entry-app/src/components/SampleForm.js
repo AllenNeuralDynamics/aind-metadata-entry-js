@@ -1,21 +1,20 @@
-import React from 'react'
 import Form from '@rjsf/core'
 import SaverHelpers from './SaveHelpers'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class DataDescriptionForm extends SaverHelpers {
+class TestForm extends SaverHelpers {
     constructor(props) {
         super(props);
 
-        const data_json = require('../schemas/data-description-schema.json')
+        const data_json = require('../schemas/sample-schema.json')
         this.schema = data_json;
     }
-    
+
     render() {
         return (
             <div>
                 <Form schema={this.schema}
-                      onSubmit={this.onSubmit}
+                      onSubmit={() => this.onSubmit("sample")}
                       formData={this.formData} >
                 </Form>
             </div>
@@ -23,4 +22,4 @@ class DataDescriptionForm extends SaverHelpers {
     }
 }
 
-export default DataDescriptionForm;
+export default TestForm;

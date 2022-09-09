@@ -2,7 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "@rjsf/core";
 import Homepage from './Homepage.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import TestForm from './TestForm';
+import SampleForm from './SampleForm';
+import DataDescriptionForm from './DataDescriptionForm.js';
 
 
 function FormContainer() {
@@ -13,8 +14,8 @@ function FormContainer() {
   const subject_json = require('../schemas/subject-schema.json')
   const subject_schema = subject_json;
 
-  const data_json = require('../schemas/data-description-schema.json')
-  const data_description_schema = data_json;
+  //const data_json = require('../schemas/data-description-schema.json')
+  //const data_description_schema = data_json;
 
   return(
     <Router>
@@ -22,8 +23,8 @@ function FormContainer() {
         <Route exact path="/" element={<Homepage />} />
           <Route exact path="/procedures" element={<Form schema={procedures_schema} />} /> 
           <Route exact path="/subject" element={<Form schema={subject_schema} />} />
-          <Route exact path="/data_description" element={<Form schema={data_description_schema} />} />
-          <Route exact path="/test" element={<TestForm />} />
+          <Route exact path="/data_description" element={<DataDescriptionForm />} />
+          <Route exact path="/test" element={<SampleForm />} />
 
       </Routes>
   </Router>
