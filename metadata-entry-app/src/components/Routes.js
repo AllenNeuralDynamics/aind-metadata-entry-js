@@ -7,15 +7,12 @@ import DataDescriptionForm from './DataDescriptionForm.js';
 
 
 function FormContainer() {
-  //creates js object from json schema
+  /* Routes all the Form Components and Homepage */
   const procedures_json = require('../schemas/procedures-schema.json')
   const procedures_schema = procedures_json;
 
   const subject_json = require('../schemas/subject-schema.json')
   const subject_schema = subject_json;
-
-  //const data_json = require('../schemas/data-description-schema.json')
-  //const data_description_schema = data_json;
 
   return(
     <Router>
