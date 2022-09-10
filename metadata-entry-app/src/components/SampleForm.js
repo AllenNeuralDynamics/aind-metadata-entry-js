@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class TestForm extends SaverHelpers {
     constructor(props) {
         super(props);
+        // If I already have filled out a shcema, look for it and put it in state.
 
         const data_json = require('../schemas/sample-schema.json')
         this.schema = data_json;
@@ -14,7 +15,7 @@ class TestForm extends SaverHelpers {
         return (
             <div>
                 <Form schema={this.schema}
-                      onSubmit={() => this.onSubmit("sample")}
+                      onSubmit={this.onSubmit}
                       formData={this.formData} >
                 </Form>
             </div>
