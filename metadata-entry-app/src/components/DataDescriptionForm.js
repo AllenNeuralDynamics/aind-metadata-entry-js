@@ -4,6 +4,7 @@ import SaverHelpers from './SaveHelpers'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class DataDescriptionForm extends SaverHelpers {
+    /* Renders a form from data-description-schema.json and uses function onSubmit from SaverHelpers class to collect the entered data */ 
     constructor(props) {
         super(props);
 

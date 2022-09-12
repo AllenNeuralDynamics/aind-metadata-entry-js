@@ -3,6 +3,7 @@ import SaverHelpers from './SaveHelpers'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class TestForm extends SaverHelpers {
+    /* Renders a sample form and uses function onSubmit from SaverHelpers class to collect the entered data */ 
     constructor(props) {
         super(props);
 
