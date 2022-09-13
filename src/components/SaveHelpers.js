@@ -8,9 +8,10 @@ class SaverHelpers extends React.Component {
             Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
             Adds title field for filename save
         */
-        schema.id = schema.schema; // "https://json-schema.org/draft/2020-12/schema"
+        schema.id = "https://json-schema.org/draft/2020-12/schema";
+        console.log(schema.id)
         schema.title = filename;
-        return schema;
+        return schema; 
     };
     onSubmit = (event) => {
         /* 
