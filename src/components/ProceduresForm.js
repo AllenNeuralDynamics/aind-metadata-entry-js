@@ -9,8 +9,7 @@ class ProceduresForm extends SaverHelpers {
         super(props);
 
         const data_json = require('../schemas/procedures-schema.json')
-        this.schema = data_json;
-        this.preProcessing(this.schema, "procedures")
+        this.schema = this.preProcessing(data_json, "procedures")
     }
     
     render() {

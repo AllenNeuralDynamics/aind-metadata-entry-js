@@ -3,10 +3,13 @@ import React from 'react'
 
 class SaverHelpers extends React.Component {
     preProcessing = (schema, filename) => {
-        /* Adds id and title fields to schemas for schema validation */
-        schema.id = "https://json-schema.org/draft/2020-12/schema";
+        /*
+        PreProcessing for schema validation
+            Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
+            Adds title field for filename save
+        */
+        schema.id = schema.schema; // "https://json-schema.org/draft/2020-12/schema"
         schema.title = filename;
-        console.log(schema);
         return schema;
     };
     onSubmit = (event) => {
