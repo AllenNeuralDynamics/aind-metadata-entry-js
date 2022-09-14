@@ -1,8 +1,4 @@
-import React from 'react'
-
-
-class SaverHelpers extends React.Component {
-    preProcessing = (schema, filename) => {
+function preProcessing (schema, filename) {
         /*
         PreProcessing for schema validation
             Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
@@ -12,8 +8,9 @@ class SaverHelpers extends React.Component {
         console.log(schema.id)
         schema.title = filename;
         return schema; 
-    };
-    onSubmit = (event) => {
+};
+
+function onSubmit (event) {
         /* 
         Saves the metadata as a json schema on client-server
         */
@@ -25,13 +22,18 @@ class SaverHelpers extends React.Component {
         const filename = this.schema.title
         console.log(filename)
         FileSaver.saveAs(blob, `${filename}.json`);
-    };
+};
 
-    onSaveToState = (event) => {
+function onSaveToState (event) {
         /* Saves metadata as an object into React State */
         this.setState(({formData: Object.assign({}, event.formData)}))
         console.log(this.formData);
-    };
-}
+};
 
-export default SaverHelpers
+const SaveHelpers = {
+    preProcessing,
+    onSubmit,
+    onSaveToState
+};
+
+export default SaveHelpers;
