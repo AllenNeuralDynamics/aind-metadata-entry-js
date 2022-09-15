@@ -1,3 +1,4 @@
+
 function preProcessing (schema, filename) {
         /*
         PreProcessing for schema validation
@@ -10,17 +11,19 @@ function preProcessing (schema, filename) {
         return schema; 
 };
 
-function onSubmit (event) {
+function onSubmit (event, schema) {
         /* 
         Saves the metadata as a json schema on client-server
         */
+       // event.preventDefault()
         alert("Saving filled schema as a json file.")
         var FileSaver = require('file-saver');
         const data = event.formData;
         const fileData = JSON.stringify(data);
         var blob = new Blob([fileData], {type: "text/plain"});
-        const filename = this.schema.title
-        console.log(filename)
+        const filename = schema.title
+        //console.log(filename)
+        //const filename = "filledform"
         FileSaver.saveAs(blob, `${filename}.json`);
 };
 
