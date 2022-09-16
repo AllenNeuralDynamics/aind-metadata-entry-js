@@ -6,32 +6,34 @@ function preProcessing (schema, filename) {
             Adds title field for filename save
         */
         schema.id = "https://json-schema.org/draft/2020-12/schema";
-        console.log(schema.id)
         schema.title = filename;
         return schema; 
 };
 
-function onSubmit (event, schema) {
+function onSubmit ({formData},event) {
         /* 
         Saves the metadata as a json schema on client-server
         */
        // event.preventDefault()
-        alert("Saving filled schema as a json file.")
+
+       console.log("data submitted: ", formData)
+        /*alert("Saving filled schema as a json file.")
         var FileSaver = require('file-saver');
-        const data = event.formData;
-        const fileData = JSON.stringify(data);
+        //const formData = event.formData;
+        const fileData = JSON.stringify(formData);
         var blob = new Blob([fileData], {type: "text/plain"});
         const filename = schema.title
         //console.log(filename)
         //const filename = "filledform"
-        FileSaver.saveAs(blob, `${filename}.json`);
+        FileSaver.saveAs(blob, `${filename}.json`);*/
 };
 
 function onSaveToState (event) {
         /* Saves metadata as an object into React State */
         this.setState(({formData: Object.assign({}, event.formData)}))
-        console.log(this.formData);
+        //console.log(event.formData);
 };
+
 
 const SaveHelpers = {
     preProcessing,

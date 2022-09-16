@@ -3,8 +3,15 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SaveHelpers from './SaveHelpers';
 
+const onSubmit = ({formData},e)  => {
+  /* 
+  Saves the metadata as a json schema on client-server
+  */
+ // event.preventDefault()
 
-// TODO: FIX ONSUBMIT (CURRENTLY OCCURING ON THE RENDER OF THE FORM, RATHER THAN THE CLICK OF THE SUBMIT BUTTON)
+ console.log("data submitted: ", e.formData)
+};
+
 export default function SchemaForm (props) {
   /*
   Method to read and render a form based on the user-selected schema
@@ -13,20 +20,25 @@ export default function SchemaForm (props) {
   Returns: 
     Form
   */
+
   const schema_path = props.schema
-  console.log("schema path", props.schema)
   var current_schema = schema_path
+  const formData = {}
+  //this.schema = schema_path
 
   if (schema_path === null) {
-      return <div> Select </div>;
-    }
-    // TODO: replace "filename" with var filename
-    current_schema = SaveHelpers.preProcessing(schema_path, "filename")
-    return (
-      <div>
-        <Form schema={current_schema} 
-        onSubmit={SaveHelpers.onSubmit}>
-        </Form>
-      </div>
-    ) 
+    return <div> Select </div>;
+  }
+  // TODO: replace "filename" with var filename
+  current_schema = SaveHelpers.preProcessing(schema_path, "filename")
+  console.log(current_schema)
+  return (
+    <div>
+      <Form schema={current_schema}
+      onSubmit={() => onSubmit()} >
+      </Form>
+    </div>
+  ) 
 }
+
+

@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import SchemaForm from "./SchemaForm";
-import SaveHelpers from './SaveHelpers';
+import SchemaForm from "./SchemaFormClass";
 
 export default function App(props) {
     const data_description = require('../schemas/data-description-schema.json');
@@ -9,21 +8,18 @@ export default function App(props) {
 
     // TODO: make this an array of sets? {schema, filename} 
     const schemas = [data_description,procedures,subject]
+    
+    const [value, setValue] = useState(null);
 
-const [value, setValue] = useState(null);
-
-  return ( <div>
-             <div> 
-               <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
-               <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
-               <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
-             </div>
+    return ( <div>
+                <div> 
+                    <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
+                    <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
+                    <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
+                </div>
              <div>
                  <SchemaForm schema={value}/>
-                 <div>
-                     <button onClick={SaveHelpers.onSubmit()}>Submit</button>
-                </div>
              </div>
            </div>
-         );
+    );
 }
