@@ -8,6 +8,8 @@ export default function App(props) {
     procedures.title = "procedures";
     const subject = require('../schemas/subject-schema.json');
     subject.title = "subject";
+    const processing = require('../schemas/processing.json');
+    processing.title = "processing";
 
     // TODO: make this an array of sets? {schema, filename} 
     const schemas = [data_description,procedures,subject];

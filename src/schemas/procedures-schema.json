@@ -2,10 +2,17 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {
+        "describedBy": {
+            "type": "string",
+            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/procedures.json",
+            "description": "The URL reference to the schema.",
+            "title": "Described by"
+        },
         "version": {
             "type": "string",
-            "const": "0.1.0",
-            "description": "schema version"
+            "const": "0.2.0",
+            "description": "schema version",
+            "title": "Version"
         },
         "specimen_id": {
             "type": "string",
@@ -24,17 +31,17 @@
             "uniqueItems": true,
             "title": "Craniotomies"
         },
+        "mri_scans": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/mris"},
+            "uniqueItems": true,
+            "title": "MRI scans"
+        },
         "injections": {
             "type": "array",
             "items": {"$ref": "#/$defs/injection" },
             "uniqueItems": true,
             "title": "Injections"
-        },
-        "tissue_preps": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/tissue_prep"},
-            "uniqueItems": true,
-            "title": "Tissue Preps"
         },
         "water_restriction_protocol_id": {
             "type": "string",
@@ -60,7 +67,7 @@
             "type": "array",
             "items": {"$ref": "#/$defs/tissue_prep"},
             "uniqueItems": true,
-            "title": "Tissue preparation"
+            "title": "Tissue preparations"
         },
         "notes": {
             "type": "string",
@@ -69,6 +76,52 @@
     },
     
     "$defs": {
+        "mris": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date"
+                },
+                "experimenter_full_name": {
+                    "type": "string",
+                    "title": "Experimenter full name",
+                    "description": "First and last name of the experimenter."
+                },
+                "scan_type": {
+                    "type": "string",
+                    "title": "Scan type",
+                    "enum": ["RARE"]
+                },
+                "scanner_location": {
+                    "type": "string",
+                    "title": "Scanner location",
+                    "enum": ["UW SLU", "Fred Hutch"]
+                },
+                "magnetic_strength": {
+                    "type": "integer",
+                    "title": "Magnetic strength (T)",
+                    "enum": [7, 14],
+                    "units": "T"
+                },
+                "resolution": {
+                    "type": "number",
+                    "title": "Resolution"
+                },
+                "protocol_id": {
+                    "type": "string",
+                    "title": "Protocol ID"
+                }
+            },
+            "required": [
+                "date",
+                "experimenter_full_name",
+                "scan_type",
+                "resolution",
+                "protocol_id"
+            ]
+        },
         "tissue_prep": {
             "type": "object",
             "properties": {
@@ -298,11 +351,6 @@
                     "type": "string",
                     "title": "Injection virus ID"
                 },
-                "injection_type": {
-                    "type": "string",
-                    "title": "Injection type",
-                    "enum": ["Iontophoresis","Nanoject"]
-                },
                 "injection_duration": {
                     "type": "string",
                     "format": "time",
@@ -316,29 +364,20 @@
                     "anyOf": [
                         {
                             "type": "object",
+                            "title": "Nanoject",
                             "properties": {
-                                "injection_type": {
-                                    "type": "string",
-                                    "const": "Nanoject"
-                                },
                                 "injection_volume": {
                                     "type": "number",
                                     "title": "Injection volume (nL)",
                                     "units": "nL"
                                 }
                             },
-                            "required": [
-                                "injection_type",
-                                "injection_volume"
-                            ]
+                            "required": ["injection_volume"]
                         },
                         {
                             "type": "object",
+                            "title": "Iontophoresis",
                             "properties": {
-                                "injection_type": {
-                                    "type": "string",
-                                    "const": "Iontophoresis"
-                                },
                                 "injection_current": {
                                     "type": "number",
                                     "title": "Injection current (uA)",
@@ -350,7 +389,6 @@
                                 }
                             },
                             "required": [
-                                "injection_type",
                                 "injection_current",
                                 "alternating_current"
                             ]
@@ -367,12 +405,14 @@
                 "injection_coordinate_depth",
                 "injection_angle",
                 "injection_virus",
-                "injection_type",
-                "injection_duration"
+                "injection_duration",
+                "injection_class"
             ]
         }
     },
     "required": [
+        "describedBy",
+        "version",
         "specimen_id"
         ]
 }
