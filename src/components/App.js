@@ -1,25 +1,30 @@
 import React, {useState} from "react";
-import SchemaForm from "./SchemaFormClass";
+import RenderForm from "./SchemaForm";
 
 export default function App(props) {
     const data_description = require('../schemas/data-description-schema.json');
+    data_description.title = "data_description";
     const procedures = require('../schemas/procedures-schema.json');
+    procedures.title = "procedures";
     const subject = require('../schemas/subject-schema.json');
+    subject.title = "subject";
 
     // TODO: make this an array of sets? {schema, filename} 
-    const schemas = [data_description,procedures,subject]
+    const schemas = [data_description,procedures,subject];
     
     const [value, setValue] = useState(null);
 
-    return ( <div>
-                <div> 
-                    <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
-                    <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
-                    <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
-                </div>
-             <div>
-                 <SchemaForm schema={value}/>
-             </div>
-           </div>
+    return (
+
+        <div>
+            <div> 
+                <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
+                <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
+                <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
+            </div>
+        <div>
+            <RenderForm schema={value} />
+        </div>
+    </div>
     );
-}
+};
