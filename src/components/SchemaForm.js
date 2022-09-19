@@ -23,7 +23,6 @@ export default function RenderForm (props) {
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
     */
     schema.id = "https://json-schema.org/draft/2020-12/schema";
-    schema.describedby = schema.describedBy
     return schema;
   };
 
@@ -34,7 +33,7 @@ export default function RenderForm (props) {
     alert("Saving filled schema as a json file.")
     var FileSaver = require('file-saver');
     const data = event.formData;
-    const fileData = JSON.stringify(data);
+    const fileData = JSON.stringify(data, undefined, 4);
     var blob = new Blob([fileData], {type: "text/plain"});
     const filename = props.schema.title;
     FileSaver.saveAs(blob, `${filename}.json`);
@@ -50,3 +49,4 @@ export default function RenderForm (props) {
     </div>
   );
 };
+
