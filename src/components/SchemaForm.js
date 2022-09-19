@@ -33,10 +33,10 @@ export default function RenderForm (props) {
     Saves the input metadata as a json schema on client-server
     */
     alert("Saving filled schema as a json file.")
-    var FileSaver = require('file-saver');
+    const FileSaver = require('file-saver');
     const data = event.formData;
     const fileData = JSON.stringify(data, undefined, 4);
-    var blob = new Blob([fileData], {type: "text/plain"});
+    const blob = new Blob([fileData], {type: "text/plain"});
     const filename = props.schema.title;
     FileSaver.saveAs(blob, `${filename}.json`);
   };
