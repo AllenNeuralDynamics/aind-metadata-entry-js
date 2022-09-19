@@ -11,7 +11,7 @@ export default function RenderForm (props) {
     Form object 
   */
   
-  var current_schema = props.schema;
+  let current_schema = props.schema;
 
   if (current_schema === null) {
     return <div> Select </div>
@@ -22,13 +22,15 @@ export default function RenderForm (props) {
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
     */
-    schema.id = "https://json-schema.org/draft/2020-12/schema";
+   if (schema.$schema !== undefined) {
+    schema.id = schema.$schema;
+   }
     return schema;
   };
 
   const saveFile = (event) => {
     /* 
-    Saves the metadata as a json schema on client-server
+    Saves the input metadata as a json schema on client-server
     */
     alert("Saving filled schema as a json file.")
     var FileSaver = require('file-saver');
@@ -49,4 +51,5 @@ export default function RenderForm (props) {
     </div>
   );
 };
+
 
