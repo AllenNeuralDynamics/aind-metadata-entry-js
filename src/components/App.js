@@ -12,7 +12,7 @@ export default function App(props) {
     processing.title = "processing";
 
     // TODO: make this an array of sets? {schema, filename} 
-    const schemas = [data_description,procedures,subject];
+    const schemas = [data_description,procedures,subject, processing];
     
     const [value, setValue] = useState(null);
 
@@ -23,6 +23,7 @@ export default function App(props) {
                 <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
                 <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
                 <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
+                <button onClick={() => setValue((schemas[3]))}>Use Processing Schema</button>
             </div>
         <div>
             <RenderForm schema={value} />
