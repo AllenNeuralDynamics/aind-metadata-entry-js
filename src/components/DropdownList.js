@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import RenderForm from "./RenderForm";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {DropdownButton} from "bootstrap";
+import { Dropdown } from "bootstrap";
 
 export default function App(props) {
     const data_description = require('../schemas/data-description-schema.json');
@@ -18,18 +19,18 @@ export default function App(props) {
     const [value, setValue] = useState(null);
 
     return (
-
+        
         <div>
-            <div> 
-                <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
-                <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
-                <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
-                <button onClick={() => setValue((schemas[3]))}>Use Processing Schema</button>
-            </div>
-        <div>
+            <DropdownButton id="dropdown-basic-button" title="Select a Schema">
+                <Dropdown.Item as ="button">
+                <div onClick={() => setValue((schemas[0]))}>Use Data Description Schema</div>
+                </Dropdown.Item>
+            </DropdownButton>
+            <div>
             <RenderForm schema={value} />
-        </div>
+            </div>
     </div>
+
     );
 };
 

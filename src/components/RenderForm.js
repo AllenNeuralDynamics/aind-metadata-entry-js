@@ -14,7 +14,7 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (current_schema === null) {
-    return <div> Select </div>
+    return <h1> Select a schema </h1>
   };
 
   const preProcessing = (schema) => {

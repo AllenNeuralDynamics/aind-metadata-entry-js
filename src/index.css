@@ -1,0 +1,13 @@
+body {
+    margin: 20px;
+  }
+  
+  h1 {
+    color: navy;
+    margin-left: 20px;
+  }
+
+  form {
+    margin-left: 20px;
+    margin: 1em auto 2em;
+  }
