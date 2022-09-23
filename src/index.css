@@ -5,6 +5,14 @@ body {
   
   h1 {
     color: navy;
+    font-style: bold;
     width: 500px;
-    margin-left: 20px;
+    margin: 20px;
+  }
+
+  warning {
+    font-style: italic;
+    color: red;
+    font-weight: lighter;
+
   }

@@ -13,7 +13,7 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (JSON.stringify(current_schema) === '{}') {
-    return <div> A schema has not been selected yet </div>
+    return <warning> A schema has not been selected yet </warning>
   };
 
   const preProcessing = (schema) => {
