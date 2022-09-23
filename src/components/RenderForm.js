@@ -6,15 +6,14 @@ export default function RenderForm (props) {
   /*
   Method to read and render a form based on the user-selected schema
   Arguements:
-    props.schema (string) = the filepath for selected schema
+    props.schema (object) = the selected schema
   Returns: 
     Form object 
   */
-  
   let current_schema = props.schema;
 
-  if (current_schema === null) {
-    return <h1> Select a schema </h1>
+  if (JSON.stringify(current_schema) === '{}') {
+    return <div> A schema has not been selected yet </div>
   };
 
   const preProcessing = (schema) => {
