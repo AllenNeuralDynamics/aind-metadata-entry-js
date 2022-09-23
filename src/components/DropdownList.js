@@ -37,7 +37,7 @@ export default function DropdownList(props) {
         <div>
             <h1> AIND Metadata Entry </h1>
             <label>
-                Select a Metadata Schema
+                Select a Schema
                 <select value={value} onChange={handleChange}>
                    {options.map((option) => (
                     <option value={option.value}>{option.label}</option>
