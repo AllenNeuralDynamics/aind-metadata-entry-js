@@ -12,7 +12,7 @@ export default function RenderForm (props) {
   */
   let current_schema = props.schema;
 
-  if (JSON.stringify(current_schema) === '{}') {
+  if (current_schema === '') {
     return <warning> A schema has not been selected yet </warning>
   };
 
@@ -21,6 +21,7 @@ export default function RenderForm (props) {
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
     */
+   schema = require(schema)
    if (schema.$schema !== undefined) {
     schema.id = schema.$schema;
    }
@@ -39,7 +40,6 @@ export default function RenderForm (props) {
     const filename = props.schema.title;
     FileSaver.saveAs(blob, `${filename}.json`);
   };
-
   current_schema = preProcessing(current_schema);
 
   return (
