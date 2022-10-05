@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+//import schemas from "./App";
 
 // TODO: list of options. map filepaths (value) to labels; already have this? what's the pt of orange radish ex
 // or, instead of list just put straight in
@@ -15,10 +16,10 @@ export default function Dropdown(props) {
   return (
     <div>
       <select value={value} onChange={handleChange}>
-        <option value="../schemas/data-description-schema.json">Data Description Schema</option>
-        <option value="../schemas/procedures-schema.json">Procedures Schema</option>
-        <option value="../schemas/subject-schema.json">Subject Schema</option>
-        <option value="../schemas/processing-schema.json">Processing Schema</option>
+        <option value='data description'>Data Description Schema</option>
+        <option value='procedures'>Procedures Schema</option>
+        <option value='subject'>Subject Schema</option>
+        <option value='../schemas/processing-schema.json'>Processing Schema</option>
       </select>
     </div>
   );

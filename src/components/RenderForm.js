@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import schema_map from '../utilities/constants';
 
 export default function RenderForm (props) {
   /*
@@ -13,20 +14,21 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (current_schema === '') {
-    return <warning> A schema has not been selected yet </warning>
+    return <body> A schema has not been selected yet </body>
   };
 
-  const preProcessing = (schema) => {
+  const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
     */
-   schema = require(schema)
-   if (schema.$schema !== undefined) {
-    schema.id = schema.$schema;
-   }
+    // const key = schema_path
+    const schema = schema_map[key]
+    if (schema.$schema !== undefined) {
+      schema.id = schema.$schema;
+    }
     return schema;
-  };
+  }; 
 
   const saveFile = (event) => {
     /* 

@@ -9,8 +9,6 @@ export default function App(props) {
         Maps schemas to corresponding labels (string) in options (list)
         Renders dropdown menu with options
      */
-    //const default_schema = '{}'
-    //const [value, setValue] = useState(default_schema);
 
     const [value, setValue] = useState('');
 
