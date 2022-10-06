@@ -1,34 +1,32 @@
 import React, {useState} from "react";
-import RenderForm from "./SchemaForm";
+import RenderForm from "./RenderForm";
+import Dropdown from "./Dropdown";
 
 export default function App(props) {
-    const data_description = require('../schemas/data-description-schema.json');
-    data_description.title = "data_description";
-    const procedures = require('../schemas/procedures-schema.json');
-    procedures.title = "procedures";
-    const subject = require('../schemas/subject-schema.json');
-    subject.title = "subject";
-    const processing = require('../schemas/processing.json');
-    processing.title = "processing";
+    /*
+    Application to display a dropdown menu of schemas.
+        Creates schema objects from filepaths
+        Maps schemas to corresponding labels (string) in options (list)
+        Renders dropdown menu with options
+     */
 
-    // TODO: make this an array of sets? {schema, filename} 
-    const schemas = [data_description,procedures,subject, processing];
-    
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState('');
+
+    const callbackFunction = (childData) => {
+        /**
+         * Method to put the selected user-schema into state
+         */
+        setValue(childData);
+    }
 
     return (
-
         <div>
-            <div> 
-                <button onClick={() => setValue((schemas[0]))}>Use Data Description Schema</button>
-                <button onClick={() => setValue((schemas[1]))}>Use Procedures Schema</button>
-                <button onClick={() => setValue((schemas[2]))}>Use Subject Schema</button>
-                <button onClick={() => setValue((schemas[3]))}>Use Processing Schema</button>
-            </div>
-        <div>
-            <RenderForm schema={value} />
-        </div>
+           < Dropdown parentCallback={callbackFunction} />
+           <div>
+           <RenderForm schema={value} />
+           </div>
+    
     </div>
+
     );
 };
-

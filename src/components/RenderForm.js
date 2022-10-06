@@ -1,32 +1,34 @@
 import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import schema_map from '../utilities/constants';
 
 export default function RenderForm (props) {
   /*
   Method to read and render a form based on the user-selected schema
   Arguements:
-    props.schema (string) = the filepath for selected schema
+    props.schema (object) = the selected schema
   Returns: 
     Form object 
   */
-  
   let current_schema = props.schema;
 
-  if (current_schema === null) {
-    return <div> Select </div>
+  if (current_schema === '') {
+    return <body> A schema has not been selected yet </body>
   };
 
-  const preProcessing = (schema) => {
+  const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
     */
-   if (schema.$schema !== undefined) {
-    schema.id = schema.$schema;
-   }
+    // const key = schema_path
+    const schema = schema_map[key]
+    if (schema.$schema !== undefined) {
+      schema.id = schema.$schema;
+    }
     return schema;
-  };
+  }; 
 
   const saveFile = (event) => {
     /* 
@@ -40,7 +42,6 @@ export default function RenderForm (props) {
     const filename = props.schema.title;
     FileSaver.saveAs(blob, `${filename}.json`);
   };
-
   current_schema = preProcessing(current_schema);
 
   return (
