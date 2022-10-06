@@ -21,12 +21,13 @@ export default function App(props) {
 
     return (
         <div>
-           < Dropdown parentCallback={callbackFunction} />
-           <div>
+            <h1> AIND Metadata Entry </h1>
+            <body>
+            < Dropdown parentCallback={callbackFunction} />
+            </body>
+            <body>
            <RenderForm schema={value} />
-           </div>
-    
-    </div>
-
+           </body>
+        </div>
     );
 };

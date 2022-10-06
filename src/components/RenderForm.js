@@ -39,7 +39,7 @@ export default function RenderForm (props) {
     const data = event.formData;
     const fileData = JSON.stringify(data, undefined, 4);
     const blob = new Blob([fileData], {type: "text/plain"});
-    const filename = props.schema.title;
+    const filename = JSON.stringify(props.schema);
     FileSaver.saveAs(blob, `${filename}.json`);
   };
   current_schema = preProcessing(current_schema);
