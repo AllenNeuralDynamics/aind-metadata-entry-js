@@ -14,7 +14,7 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (current_schema === '') {
-    return <body> A schema has not been selected yet </body>
+    return <div> A schema has not been selected yet </div>
   };
 
   const preProcessing = (key) => {

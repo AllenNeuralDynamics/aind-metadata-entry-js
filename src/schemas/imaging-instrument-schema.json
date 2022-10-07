@@ -64,37 +64,37 @@
           "objectives": {
             "type": "array",
             "title": "Objectives",
-            "items": { "$ref": "#/$definitions/objective" },
+            "items": { "$ref": "#/$defs/objective" },
             "uniqueItems": true
         },
         "detectors": {
             "type": "array",
             "title": "Detectors",
-            "items": { "$ref": "#/$definitions/detector"},
+            "items": { "$ref": "#/$defs/detector"},
             "uniqueItems": true
         },
         "light_sources": {
             "type": "array",
             "title": "Light sources",
-            "items": { "$ref": "#/$definitions/lightsource"},
+            "items": { "$ref": "#/$defs/lightsource"},
             "uniqueItems": true
         },
         "fluorescence_filters": {
             "type": "array",
             "title": "Fluorescence filters",
-            "items": { "$ref": "#/$definitions/filter"},
+            "items": { "$ref": "#/$defs/filter"},
             "uniqueItems": true
         },
         "motorized_stages": {
             "type": "array",
             "title": "Motorized stages",
-            "items": { "$ref": "#/$definitions/stage"},
+            "items": { "$ref": "#/$defs/stage"},
             "uniqueItems": true
         },
         "additional_devices": {
             "type": "array",
             "title": "Additional devices",
-            "items": { "$ref": "#/$definitions/device"},
+            "items": { "$ref": "#/$defs/device"},
             "uniqueItems": true
         },
         "calibration_date": {
@@ -112,7 +112,7 @@
             "type": "string"
         }
       },
-      "$definitions": {
+      "$defs": {
         "objective": {
             "type": "object",
             "properties": {
