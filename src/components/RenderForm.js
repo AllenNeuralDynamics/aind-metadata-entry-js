@@ -17,11 +17,26 @@ export default function RenderForm (props) {
     return <div> Please select a schema. </div>
   };
 
+  const preProcessingHelper = (obj) => {
+    /* 
+    Iterates through schema properties
+      Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
+    */ 
+    Object.keys(obj).forEach(key => {
+
+    const prop = obj[key]
+    if (prop.const !== undefined) {
+        prop.readOnly = true;
+        prop.default = prop.const
+        }
+    })
+  }
+
   const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
-      Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
+      Uses helper function to make const fields non-fillable
     */
     const schema = schema_map[key]
     if (schema.$schema !== undefined) {
@@ -29,12 +44,7 @@ export default function RenderForm (props) {
     }
 
     const properties = schema.properties
-    for (const [name, prop] of Object.entries(properties)) {
-      if(prop.const !== undefined) { 
-        prop.readOnly = true;
-        prop.default = prop.const
-      }
-    }
+    preProcessingHelper(properties)
     
     return schema;
   }; 
