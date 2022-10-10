@@ -14,19 +14,27 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (current_schema === '') {
-    return <div> A schema has not been selected yet </div>
+    return <div> Please select a schema. </div>
   };
 
   const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
+      Makes const fields in schemas non-fillable by adding readOnly
     */
-    // const key = schema_path
     const schema = schema_map[key]
     if (schema.$schema !== undefined) {
       schema.id = schema.$schema;
     }
+
+    const properties = schema.properties
+    for (const [name, prop] of Object.entries(properties)) {
+      if(prop.const !== undefined) { 
+        prop.readOnly = true;
+      }
+    }
+    
     return schema;
   }; 
 
