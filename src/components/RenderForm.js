@@ -21,7 +21,7 @@ export default function RenderForm (props) {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
-      Makes const fields in schemas non-fillable by adding readOnly
+      Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
     */
     const schema = schema_map[key]
     if (schema.$schema !== undefined) {
@@ -32,6 +32,7 @@ export default function RenderForm (props) {
     for (const [name, prop] of Object.entries(properties)) {
       if(prop.const !== undefined) { 
         prop.readOnly = true;
+        prop.default = prop.const
       }
     }
     
