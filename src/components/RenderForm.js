@@ -19,16 +19,20 @@ export default function RenderForm (props) {
 
   const preProcessingHelper = (obj) => {
     /* 
-    Iterates through schema properties
+    Iterates through schema to make const fields non-fillable
       Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
     */ 
     Object.keys(obj).forEach(key => {
 
-    const prop = obj[key]
-    if (prop.const !== undefined) {
+      const prop = obj[key]
+      if (prop.const !== undefined) {
         prop.readOnly = true;
         prop.default = prop.const
-        }
+      }
+
+      if (typeof(prop) === 'object') {
+        preProcessingHelper(prop)
+      }
     })
   }
 
@@ -43,8 +47,7 @@ export default function RenderForm (props) {
       schema.id = schema.$schema;
     }
 
-    const properties = schema.properties
-    preProcessingHelper(properties)
+    preProcessingHelper(schema)
     
     return schema;
   }; 
