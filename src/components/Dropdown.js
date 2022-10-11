@@ -17,6 +17,7 @@ export default function Dropdown(props) {
   return (
     <div>
       <select value={value} onChange={handleChange}>
+        <option value='sample'>Sample</option>
         <option value='data description'>Data Description Schema</option>
         <option value='procedures'>Procedures Schema</option>
         <option value='subject'>Subject Schema</option>
