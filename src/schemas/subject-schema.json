@@ -94,17 +94,16 @@
             "notes": {
                     "type": "string",
                     "title": "Notes"
-        }
+            }
         },
-            "required": [
-                    "describedBy",
-                    "version",
-                    "species",
-                    "specimen_id",
-                    "sex",
-                    "date_of_birth",
-                    "genotype",
-                    "light_cycle"
+        "required": [
+                "describedBy",
+                "version",
+                "species",
+                "specimen_id",
+                "sex",
+                "date_of_birth",
+                "genotype",
+                "light_cycle"
         ]
-    }
-    
+}

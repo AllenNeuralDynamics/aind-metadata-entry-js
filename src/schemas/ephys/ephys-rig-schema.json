@@ -4,31 +4,29 @@
     "properties": {
         "describedBy": {
             "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ophys/ophys_rig.json",
+            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.json",
             "description": "The URL reference to the schema.",
             "title": "Described by"
         },
         "version": {
             "type": "string",
-            "const": "0.0.1",
+            "const": "0.2.0",
             "description": "schema version",
             "title": "Version"
         },
         "rig_id": {
             "type": "string",
-            "const": "0_0_0",
             "description": "room_stim apparatus_version",
             "title": "Rig ID"
         },
         "devices": {
-            "type": "string",
-            "title": "Devices",
-            "properties":{
-                "photometry_probes": {
+            "type": "object",
+            "properties": {
+                "probes": {
                     "type": "array",
                     "items": { "$ref": "#/$defs/probe" },
                     "uniqueItems": true,
-                    "title": "Photometry probes"
+                    "title": "Probes"
                 },
                 "cameras": {
                     "type": "array",
@@ -48,9 +46,27 @@
                     "uniqueItems": true,
                     "title": "Visual monitor"
                 },
-                "running_disk": {
-                    "$ref": "#/$defs/disk",
-                    "title": "Running disk"
+                "running_disc": {
+                    "$ref": "#/$defs/disc",
+                    "title": "Running disc"
+                },
+                "harp_devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "Behavior",
+                            "WEAR basestation",
+                            "Camera trigger control",
+                            "LED array interface",
+                            "Analog input",
+                            "Multi PWM generator",
+                            "Clock synchronizer"
+                        ]
+                    }
+                },
+                "notes": {
+                    "type": "string"
                 }
             }
         }
@@ -62,29 +78,6 @@
         "devices"
     ],
     "$defs": {
-        "probe": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Probe A", "Probe B", "Probe C"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                }
-            },
-            "required": ["name", "model", "serial_number"]
-        },
         "laser": {
             "type": "object",
             "properties": {
@@ -207,6 +200,26 @@
                 "angle_roll"
             ]	
         },
+        "probe": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": ["Probe A", "Probe B", "Probe C", "Probe D", "Probe E", "Probe F", 
+                        "Probe G", "Probe H", "Probe I", "Probe J"],
+                    "title": "Name"
+                },
+                "type": {
+                    "type": "string",
+                    "title": "Type"
+                },
+                "serial_number": {
+                    "type": "string",
+                    "title": "Serial number"
+                }
+            },
+            "required": ["name", "type", "serial_number"]
+        },
         "monitor": {
             "type": "object",
             "properties": {
@@ -299,7 +312,7 @@
                 "brightness"
             ]
         },
-        "disk": {
+        "disc": {
             "type": "object",
             "properties": {
                 "radius": {
@@ -319,6 +332,6 @@
                 }
             },
             "required": ["radius"]
-        }
+        }		
     }
 }
