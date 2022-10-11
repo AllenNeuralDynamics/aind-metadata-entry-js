@@ -14,19 +14,41 @@ export default function RenderForm (props) {
   let current_schema = props.schema;
 
   if (current_schema === '') {
-    return <body> A schema has not been selected yet </body>
+    return <div> Please select a schema. </div>
   };
+
+  const preProcessingHelper = (obj) => {
+    /* 
+    Iterates through schema to make const fields non-fillable
+      Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
+    */ 
+    Object.keys(obj).forEach(key => {
+
+      const prop = obj[key]
+      if (prop.const !== undefined) {
+        prop.readOnly = true;
+        prop.default = prop.const
+      }
+
+      if (typeof(prop) === 'object') {
+        preProcessingHelper(prop)
+      }
+    })
+  }
 
   const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
       Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
+      Uses helper function to make const fields non-fillable
     */
-    // const key = schema_path
     const schema = schema_map[key]
     if (schema.$schema !== undefined) {
       schema.id = schema.$schema;
     }
+
+    preProcessingHelper(schema)
+    
     return schema;
   }; 
 
@@ -39,7 +61,7 @@ export default function RenderForm (props) {
     const data = event.formData;
     const fileData = JSON.stringify(data, undefined, 4);
     const blob = new Blob([fileData], {type: "text/plain"});
-    const filename = props.schema.title;
+    const filename = JSON.stringify(props.schema);
     FileSaver.saveAs(blob, `${filename}.json`);
   };
   current_schema = preProcessing(current_schema);

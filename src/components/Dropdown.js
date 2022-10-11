@@ -21,6 +21,12 @@ export default function Dropdown(props) {
         <option value='procedures'>Procedures Schema</option>
         <option value='subject'>Subject Schema</option>
         <option value='processing'>Processing Schema</option>
+        <option value='ephys session'>Ephys Session Schema</option>
+        <option value='ephys rig'> Ephys Rig Schema</option>
+        <option value='imaging instrument'> Imaging Instrument Schema</option>
+        <option value='imaging acquisition'> Imaging Acquisition Schema</option>
+        <option value='ophys rig'> Ophys Rig Schema</option>
+        <option value='ophys session'> Ophys Session Schema</option>
       </select>
     </div>
   );
