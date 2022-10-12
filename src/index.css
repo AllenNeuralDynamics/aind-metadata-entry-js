@@ -1,11 +1,43 @@
+body {
+  max-width: 80%;
+}
+
+div.form-group.field.field-string {
+  overflow: visible;
+  min-width: 1000px;
+  max-width: 80%;
+}
+
+div.form-group.field.field-integer {
+  overflow: visible;
+  min-width: 1000px;
+  max-width: 80%;
+}
+
+div.form-group.field.field-number {
+  max-width: 80%;
+}
+
+div.form-group.field.field-control {
+  max-width: 80%;
+}
+
+p.col-xs-offset-9 {
+  box-sizing: border-box;
+  margin: 5px;
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  float: left;
+  width: 25%;
+}
+
 div {
   margin: 5px;
-  max-width: 1000px;
 }
   
 h1 {
   color: navy;
-  max-width: 800px;
   margin: 5px;
 }
-
