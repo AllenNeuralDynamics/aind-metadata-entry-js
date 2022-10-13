@@ -70,16 +70,10 @@ export default function RenderForm (props) {
     /* 
     Custom validation function
     */
-
-    /*const Ajv2020 = require("ajv/dist/2020")
+    const Ajv2020 = require("ajv/dist/2020")
     const ajv = new Ajv2020()
     const validate = ajv.compile(schema)
-    return validate(event.formData) */
-
-    const HyperJump = require("@hyperjump/json-schema");
-    HyperJump.add(schema)
-    const validate = HyperJump.validate(schema,event.formData)
-    return validate
+    return validate(event.formData)
   }
   current_schema = preProcessing(current_schema)
 
