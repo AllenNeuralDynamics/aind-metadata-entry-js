@@ -50,7 +50,7 @@ export default function RenderForm (props) {
     preProcessingHelper(schema)
     
     return schema;
-  }; 
+  };
 
   const saveFile = (event) => {
     /* 
@@ -59,16 +59,34 @@ export default function RenderForm (props) {
     alert("Saving filled schema as a json file.")
     const FileSaver = require('file-saver');
     const data = event.formData;
+    console.log(data)
     const fileData = JSON.stringify(data, undefined, 4);
     const blob = new Blob([fileData], {type: "text/plain"});
     const filename = JSON.stringify(props.schema);
     FileSaver.saveAs(blob, `${filename}.json`);
   };
-  current_schema = preProcessing(current_schema);
+
+  const validator = (event,schema) => {
+    /* 
+    Custom validation function
+    */
+
+    /*const Ajv2020 = require("ajv/dist/2020")
+    const ajv = new Ajv2020()
+    const validate = ajv.compile(schema)
+    return validate(event.formData) */
+
+    const HyperJump = require("@hyperjump/json-schema");
+    HyperJump.add(schema)
+    const validate = HyperJump.validate(schema,event.formData)
+    return validate
+  }
+  current_schema = preProcessing(current_schema)
 
   return (
     <div>
       <Form schema={current_schema}
+      validator={(e) => {validator(e, current_schema)}}
       onSubmit={saveFile} >
       </Form>
     </div>
