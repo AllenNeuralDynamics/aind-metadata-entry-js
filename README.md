@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Cloud Deployment
+
+Ensure `gcloud` is configured to the right project. From the root directory, run `./bin/deploy-to-gcloud.sh`. The cloud configurations can be set in `app.yaml`. 
+
 ## Available Scripts
 
 In the project directory, you can run:
