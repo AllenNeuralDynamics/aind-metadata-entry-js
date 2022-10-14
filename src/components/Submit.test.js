@@ -1,4 +1,5 @@
 import React from "react";
+import { Simulate } from 'react-dom/test-utils'
 import { render, fireEvent } from "@testing-library/react";
 import RenderForm from './RenderForm';
 
