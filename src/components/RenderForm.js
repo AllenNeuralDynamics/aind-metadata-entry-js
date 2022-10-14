@@ -23,10 +23,6 @@ export default function RenderForm (props) {
   const validator2020 = (rawSchema && checkDraft2020(rawSchema)) ? ajv : undefined;
   const processedSchema = rawSchema ? preProcessing(rawSchema) : undefined;
 
-  if (schemaKey === '') {
-    return <div> Please select a schema from the dropdown above. </div>
-  };
-
   const saveFile = (event) => {
     /* 
     Saves the input metadata as a json schema on client-server
