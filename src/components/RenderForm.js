@@ -3,6 +3,8 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 
+const draft2020 = "https://json-schema.org/draft/2020-12/schema"
+
 export default function RenderForm (props) {
   /*
   Method to read and render a form based on the user-selected schema
@@ -39,12 +41,13 @@ export default function RenderForm (props) {
   const preProcessing = (key) => {
     /*
     PreProcessing for schema validation
-      Adds id (same as $schema) field to address ajv5 validation and jsonschema 2020-12 compatibility
+      Replaces $schema field with id to address ajv validation and jsonschema 2020-12 compatibility
       Uses helper function to make const fields non-fillable
     */
     const schema = schema_map[key]
-    if (schema.$schema !== undefined) {
+    if (schema.$schema !== undefined && schema.$schema === draft2020) {
       schema.id = schema.$schema;
+      delete(schema.$schema)
     }
 
     preProcessingHelper(schema)
