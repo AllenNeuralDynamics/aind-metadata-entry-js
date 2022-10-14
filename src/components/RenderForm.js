@@ -69,15 +69,6 @@ export default function RenderForm (props) {
     FileSaver.saveAs(blob, `${filename}.json`);
   };
 
-  const validator = (event,schema) => {
-    /* 
-    Custom validation function
-    */
-    const Ajv2020 = require("ajv/dist/2020")
-    const ajv = new Ajv2020()
-    const validate = ajv.compile(schema)
-    return validate(event.formData)
-  }
   current_schema = preProcessing(current_schema)
 
   return (
