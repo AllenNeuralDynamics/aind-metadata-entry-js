@@ -16,7 +16,6 @@ export default function App(props) {
         /**
          * Method to put the selected user-schema into state
          */
-         console.log(childData)
         setValue(childData);
     }
 
