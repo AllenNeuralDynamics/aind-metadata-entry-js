@@ -43,7 +43,7 @@ export default function RenderForm (props) {
       onSubmit={saveFile} >
       </Form>
   );
-} else {
+ } else {
   return(<div> Please select a schema from the dropdown above. </div>)
-}
+ }
 }
