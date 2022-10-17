@@ -10,6 +10,8 @@
             "title": "Email Address",
             "type": "string"
         }
-    }
+    },
+    "required": [
+        "name"
+    ]
 }
-
