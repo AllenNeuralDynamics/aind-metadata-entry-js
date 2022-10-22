@@ -22,6 +22,12 @@ div.form-group.field.field-control {
   max-width: 80%;
 }
 
+div.form-group.field.field-array {
+  overflow: visible;
+  color: navy;
+  display: inline-block;
+}
+
 p.col-xs-offset-9 {
   box-sizing: border-box;
   margin: 5px;
