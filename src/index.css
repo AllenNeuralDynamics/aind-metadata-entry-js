@@ -22,7 +22,7 @@ div.form-group.field.field-control {
   max-width: 80%;
 }
 
-div.form-group.field.field-array {
+div.form-group.field.field-array[title~="coordinates"] {
   overflow: visible;
   color: navy;
   display: inline-block;
