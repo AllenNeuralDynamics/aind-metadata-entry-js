@@ -3,7 +3,6 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 import { checkDraft2020, preProcessing } from '../utilities/schemaHandlers';
-import ArrayFieldTemplate from '../utilities/coordinate.js';
 
 const Ajv2020 = require("ajv/dist/2020")
 
@@ -37,11 +36,13 @@ export default function RenderForm (props) {
     FileSaver.saveAs(blob, `${filename}.json`);
   };
 
+  const uiSchema = require('../schemas/ui-schemas/ephys-session-ui-schema.json')
+
   if(processedSchema){
     return (
       <Form schema={processedSchema}
+      uiSchema={uiSchema}
       validator={validator2020} noHtml5Validate
-      ArrayFieldTemplate={ArrayFieldTemplate(processedSchema)}
       onSubmit={saveFile} >
       </Form>
   );
