@@ -1,4 +1,6 @@
-{
+import ObjectFieldTemplate from './ObjectFieldTemplate'
+
+const uiSchema = {
     "probe_streams": {
       "items": {
             "probes": {
@@ -10,13 +12,7 @@
                             "addable": false
                         },
                         "items": {
-                            "ui:field": "layout", 
-                            "ui:layout": [
-                                {
-                                    "direction": {"md": 6},
-                                    "value": {"md": 6}
-                                }
-                            ],
+                            "ui:ObjectFieldTemplate": ObjectFieldTemplate, 
                             "value": {
                              "ui:placeholder": "0"
                             }
@@ -39,3 +35,5 @@
         }
     }
 }
+
+export default uiSchema;

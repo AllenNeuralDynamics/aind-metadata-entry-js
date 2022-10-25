@@ -3,6 +3,8 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 import { checkDraft2020, preProcessing } from '../utilities/schemaHandlers';
+import ObjectFieldTemplate from '../schemas/ui-schemas/ObjectFieldTemplate';
+import uiSchema from '../schemas/ui-schemas/ephys-session-ui-schema';
 
 const Ajv2020 = require("ajv/dist/2020")
 
@@ -36,7 +38,45 @@ export default function RenderForm (props) {
     FileSaver.saveAs(blob, `${filename}.json`);
   };
 
-  const uiSchema = require('../schemas/ui-schemas/ephys-session-ui-schema.json')
+  //const uiSchema = require('../schemas/ui-schemas/ephys-session-ui-schema.js')
+  
+  /*const uiSchema = {
+    "probe_streams": {
+      "items": {
+            "probes": {
+              "items": {
+                    "targeted_ccf_coordinates": {
+                        "ui:options": {
+                            "orderable": false,
+                            "removable": false,
+                            "addable": false,
+                            //"inline": true
+                        },
+                        "items": { 
+                          "ui:ObjectFieldTemplate": ObjectFieldTemplate,
+                            "value": {
+                             "ui:placeholder": "0"
+                            }
+                        }
+                    },
+                    "targeted_lab_coordinates": {
+                        "ui:options": {
+                            "orderable": false,
+                            "removable": false,
+                            "addable": false
+                        },
+                        "items": {
+                            "value": {
+                             "ui:placeholder": "0"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}*/
+
 
   if(processedSchema){
     return (
