@@ -22,10 +22,12 @@ div.form-group.field.field-control {
   max-width: 80%;
 }
 
-div.form-group.field.field-array[title~="coordinates"] {
-  overflow: visible;
-  color: navy;
-  display: inline-block;
+#root_probe_streams_0_probes_0_targeted_ccf_coordinates_0_direction {
+  max-width: 50%
+}
+
+#root_probe_streams_0_probes_0_targeted_ccf_coordinates_0 {
+  display: inline-block; 
 }
 
 p.col-xs-offset-9 {

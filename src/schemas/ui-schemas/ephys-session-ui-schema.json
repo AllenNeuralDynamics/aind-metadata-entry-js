@@ -10,6 +10,25 @@
                             "addable": false
                         },
                         "items": {
+                            "ui:field": "layout", 
+                            "ui:layout": [
+                                {
+                                    "direction": {"md": 6},
+                                    "value": {"md": 6}
+                                }
+                            ],
+                            "value": {
+                             "ui:placeholder": "0"
+                            }
+                        }
+                    },
+                    "targeted_lab_coordinates": {
+                        "ui:options": {
+                            "orderable": false,
+                            "removable": false,
+                            "addable": false
+                        },
+                        "items": {
                             "value": {
                              "ui:placeholder": "0"
                             }
@@ -17,6 +36,6 @@
                     }
                 }
             }
-      }
+        }
     }
-  }
+}
