@@ -1,11 +1,8 @@
 import React from 'react';
 
-  const ObjectFieldTemplate = ({ TitleField, properties, title, description }) => {
-    // TODO: overwrite direction display 
-    //TODO: throw error if coords are entered incorrectly (ex: [ML,ML,ML])
+  const ObjectFieldTemplate = ({ properties, description }) => {
     return (
       <div>
-        <TitleField title={title} />
         <div className="row">
           {properties.map(prop => (
             <div

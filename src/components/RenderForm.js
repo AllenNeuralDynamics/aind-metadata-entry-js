@@ -3,7 +3,7 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 import { checkDraft2020, preProcessing } from '../utilities/schemaHandlers';
-import uiSchema from '../schemas/ui-schemas/EphysSessionUISchema';
+import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
 
 const Ajv2020 = require("ajv/dist/2020")
 
@@ -37,15 +37,24 @@ export default function RenderForm (props) {
     FileSaver.saveAs(blob, `${filename}.json`);
   };
 
-  // TODO: uiSchema selection based on schema (prob should go in schemaHandlers)
+
+  // TODO: make a function for uiSchema selection based on selectedschema
   if(processedSchema){
-    return (
-      <Form schema={processedSchema}
-      uiSchema={uiSchema}
-      validator={validator2020} noHtml5Validate
-      onSubmit={saveFile} >
-      </Form>
-  );
+    if (schemaKey === "ephys session") {
+      return (
+        <Form schema={processedSchema}
+        uiSchema={EphysSessionUISchema}
+        validator={validator2020} noHtml5Validate
+        onSubmit={saveFile} >
+        </Form>
+    )}
+    else { 
+      return (
+        <Form schema={processedSchema}
+        validator={validator2020} noHtml5Validate
+        onSubmit={saveFile} >
+        </Form>
+      )};
  } else {
   return(<div> Please select a schema from the dropdown above. </div>)
  }

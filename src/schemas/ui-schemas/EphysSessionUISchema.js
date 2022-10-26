@@ -1,6 +1,6 @@
 import ObjectFieldTemplate from './ObjectFieldTemplate'
 
-const uiSchema = {
+const EphysSessionUISchema = {
     "probe_streams": {
       "items": {
             "probes": {
@@ -93,4 +93,4 @@ const uiSchema = {
     }
 }
 
-export default uiSchema;
+export default EphysSessionUISchema;
