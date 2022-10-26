@@ -22,19 +22,9 @@ div.form-group.field.field-control {
   max-width: 80%;
 }
 
-/*#root_probe_streams_0_probes_0_targeted_ccf_coordinates_0_direction {
-  max-width: 50%
-}
-
-#root_probe_streams_0_probes_0_targeted_ccf_coordinates_0 {
-  display: inline-block; 
-  grid-template-columns: 1fr 1fr; 
-  grid-gap: 20px; 
-}*/
-
-div.col-xs-12 {
-  grid-template-columns: 1fr 1fr; 
-  grid-gap: 20px;
+div.col.col-lg-2 {
+  min-width: 25% !important;
+  max-width: 25% !important;
 }
 
 p.col-xs-offset-9 {
