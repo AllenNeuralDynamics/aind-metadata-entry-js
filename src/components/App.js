@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import RenderForm from "./RenderForm";
 import Dropdown from "./Dropdown";
+import RehydrateForm from "./RehydrateForm";
 
 export default function App(props) {
     /*
@@ -25,8 +26,9 @@ export default function App(props) {
             <div>
                  < Dropdown parentCallback={callbackFunction} />
             </div>
+            <button onClick={RehydrateForm}>Rehydrate Form</button>;
             <div>
-                <RenderForm schema={value} />
+                <RenderForm schema={value} /> 
            </div>
         </div>
     );

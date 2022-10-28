@@ -36,9 +36,12 @@ export default function RenderForm (props) {
     FileSaver.saveAs(blob, `${filename}.json`);
   };
 
+  let formData = null;
+
   if(processedSchema){
     return (
       <Form schema={processedSchema}
+      formData = {formData}
       validator={validator2020} noHtml5Validate
       onSubmit={saveFile} >
       </Form>
