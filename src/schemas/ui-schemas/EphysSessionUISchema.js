@@ -6,6 +6,7 @@ const EphysSessionUISchema = {
             "probes": {
               "items": {
                     "targeted_ccf_coordinates": {
+                        "ui:description": "Please only select one of each direction",
                         "ui:options": {
                             "orderable": false,
                             "removable": false,
@@ -32,6 +33,7 @@ const EphysSessionUISchema = {
                         }
                     },
                     "manipulator_coordinates": {
+                        "ui:description": "Please only select one of each direction",
                         "ui:options": {
                             "orderable": false,
                             "removable": false,
