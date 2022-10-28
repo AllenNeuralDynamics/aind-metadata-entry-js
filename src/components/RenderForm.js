@@ -18,6 +18,7 @@ export default function RenderForm (props) {
   */
 
   const schemaKey = props.schema;
+  const formData = props.data
 
   const rawSchema = (schemaKey in schema_map) ? schema_map[schemaKey] : undefined;
   const validator2020 = (rawSchema && checkDraft2020(rawSchema)) ? ajv : undefined;
@@ -35,11 +36,9 @@ export default function RenderForm (props) {
     const filename = JSON.stringify(props.schema);
     FileSaver.saveAs(blob, `${filename}.json`);
   };
-
-  let formData = null;
-  // TODO: update formData if rehydrate button is clicked
   
   if(processedSchema){
+
     return (
       <Form schema={processedSchema}
       formData = {formData}

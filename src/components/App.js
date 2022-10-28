@@ -9,9 +9,11 @@ export default function App(props) {
         Creates schema objects from filepaths
         Maps schemas to corresponding labels (string) in options (list)
         Renders dropdown menu with options
+        Gives user the option to autofill the form with previously input data
      */
 
     const [value, setValue] = useState('');
+    const [data, setData] = useState(null);
 
     const callbackFunction = (childData) => {
         /**
@@ -20,15 +22,20 @@ export default function App(props) {
         setValue(childData);
     }
 
+    const handleRehydrate =  async () => { 
+        const data = await RehydrateForm()
+        setData(data)
+    }
+
     return (
         <div>
             <h1> AIND Metadata Entry </h1>
+            <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
             <div>
                  < Dropdown parentCallback={callbackFunction} />
             </div>
-            <button onClick={RehydrateForm}>Rehydrate Form</button>
             <div>
-                <RenderForm schema={value} /> 
+                <RenderForm schema={value} data={data}/> 
            </div>
         </div>
     );
