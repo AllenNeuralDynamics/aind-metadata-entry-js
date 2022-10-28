@@ -1,6 +1,4 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 export default function RehydrateForm () {
     /*
@@ -8,11 +6,13 @@ export default function RehydrateForm () {
     */
     let fileHandle;
     let formData = null;
-    RehydrateForm.addEventListener('click', async () => {
-        // Destructure the one-element array.
+
+    async function getData() { 
         [fileHandle] = await window.showOpenFilePicker();
         const file = await fileHandle.getFile();
         const contents = await file.text();
-        formData = contents;
-    });
+        return contents
+    }
+    formData = getData()
+    return formData;
 }

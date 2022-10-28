@@ -15,7 +15,7 @@ export default function App(props) {
 
     const callbackFunction = (childData) => {
         /**
-         * Method to put the selected user-schema into state
+         * Method to put the user-selected schema into state
          */
         setValue(childData);
     }
@@ -26,7 +26,7 @@ export default function App(props) {
             <div>
                  < Dropdown parentCallback={callbackFunction} />
             </div>
-            <button onClick={RehydrateForm}>Rehydrate Form</button>;
+            <button onClick={RehydrateForm}>Rehydrate Form</button>
             <div>
                 <RenderForm schema={value} /> 
            </div>

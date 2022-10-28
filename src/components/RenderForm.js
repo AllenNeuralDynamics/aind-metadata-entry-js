@@ -37,7 +37,8 @@ export default function RenderForm (props) {
   };
 
   let formData = null;
-
+  // TODO: update formData if rehydrate button is clicked
+  
   if(processedSchema){
     return (
       <Form schema={processedSchema}
