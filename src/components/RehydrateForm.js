@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default async function RehydrateForm () {
+export default async function RehydrateForm (props) {
     /*
     Functional component to pre-fill form with user-selected data file
         Uses file system access API to access local files
