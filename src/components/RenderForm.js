@@ -53,6 +53,7 @@ export default function RenderForm (props) {
       return (
         <Form schema={processedSchema}
         formData={formData}
+        uiSchema={EphysSessionUISchema}
         validator={validator2020} noHtml5Validate
         onSubmit={saveFile} >
         </Form>

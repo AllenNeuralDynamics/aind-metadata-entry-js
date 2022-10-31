@@ -1,0 +1,8 @@
+{
+    "short_name": "Metadata Entry",
+    "name": "AIND Metadata Entry App",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}
