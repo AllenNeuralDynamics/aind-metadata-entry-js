@@ -35,7 +35,7 @@
             "title": "Session end time"
         },	
         "specimen_id": {
-            "type": "integer",
+            "type": "string",
             "title": "Specimen ID"
         },
         "project_name": {
