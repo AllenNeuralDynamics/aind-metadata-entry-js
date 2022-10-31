@@ -17,5 +17,6 @@ import React from 'react';
     );
   }
 
-  export default ObjectFieldTemplate;
+export default ObjectFieldTemplate;
+
   
