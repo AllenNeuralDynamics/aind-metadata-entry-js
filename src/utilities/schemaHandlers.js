@@ -47,3 +47,4 @@ export const checkDraft2020 = (schema) => {
     
     return copiedSchema;
   }
+  
