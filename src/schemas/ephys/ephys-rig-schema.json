@@ -1,337 +1,443 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "EphysRig",
+    "description": "description of an ephys rig",
     "type": "object",
     "properties": {
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "version": {
-            "type": "string",
-            "const": "0.2.0",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "rig_id": {
-            "type": "string",
-            "description": "room_stim apparatus_version",
-            "title": "Rig ID"
-        },
-        "devices": {
-            "type": "object",
-            "properties": {
-                "probes": {
-                    "type": "array",
-                    "items": { "$ref": "#/$defs/probe" },
-                    "uniqueItems": true,
-                    "title": "Probes"
-                },
-                "cameras": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/camera" },
-                    "uniqueItems": true,
-                    "title": "Cameras"
-                },
-                "lasers": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/laser" },
-                    "uniqueItems": true,
-                    "title": "Lasers"
-                },
-                "visual_monitors": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/monitor"},
-                    "uniqueItems": true,
-                    "title": "Visual monitor"
-                },
-                "running_disc": {
-                    "$ref": "#/$defs/disc",
-                    "title": "Running disc"
-                },
-                "harp_devices": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "Behavior",
-                            "WEAR basestation",
-                            "Camera trigger control",
-                            "LED array interface",
-                            "Analog input",
-                            "Multi PWM generator",
-                            "Clock synchronizer"
-                        ]
-                    }
-                },
-                "notes": {
-                    "type": "string"
-                }
-            }
-        }
+       "describedBy": {
+          "title": "Described by",
+          "description": "The URL reference to the schema.",
+          "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.py",
+          "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.py",
+          "type": "string"
+       },
+       "schema_version": {
+          "title": "Version",
+          "description": "schema version",
+          "default": "0.2.0",
+          "const": "0.2.0",
+          "type": "string"
+       },
+       "rig_id": {
+          "title": "Rig ID",
+          "description": "room_stim apparatus_version",
+          "type": "string"
+       },
+       "devices": {
+          "$ref": "#/definitions/Devices"
+       }
     },
     "required": [
-        "describedBy",
-        "version",
-        "rig_id",
-        "devices"
+       "rig_id",
+       "devices"
     ],
-    "$defs": {
-        "laser": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Laser A", "Laser B"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "wavelength": {
-                    "type": "integer",
-                    "title": "Wavelength (nm)",
-                    "units": "nm"
-                },
-                "maximum_power": {
-                    "type": "number",
-                    "title": "Maximum power (mW)",
-                    "units": "mW"
-                },
-                "coupling_efficiency": {
-                    "type": "number",
-                    "title": "Coupling efficiency (percent)",
-                    "units": "percent"
-                },
-                "calibration_data": {
-                    "type": "string",
-                    "description": "path to calibration data",
-                    "title": "Calibration data"
-                },
-                "calibration_date":{
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Calibration date"
+    "definitions": {
+       "ProbeName": {
+          "title": "ProbeName",
+          "description": "TODO",
+          "enum": [
+             "Probe A",
+             "Probe B",
+             "Probe C",
+             "Probe D",
+             "Probe E",
+             "Probe F",
+             "Probe G",
+             "Probe H",
+             "Probe I",
+             "Probe J"
+          ]
+       },
+       "ProbeType": {
+          "title": "ProbeType",
+          "description": "TODO",
+          "enum": [
+             "Neuropixels 1.0",
+             "Neuropixels UHD (Fixed)",
+             "Neuropixels UHD (Switchable)",
+             "Neuropixels 2.0 (Single Shank)",
+             "Neuropixels 2.0 (Multi Shank)",
+             "Neuropixels 2.0 (Quad Base)",
+             "Neuropixels Opto (Demonstrator)",
+             "Michigan uLED Probe (Version 1)",
+             "MPI Photonic Probe (Version 1)"
+          ]
+       },
+       "Probe": {
+          "title": "Probe",
+          "description": "description of a probe",
+          "type": "object",
+          "properties": {
+             "name": {
+                "title": "Name",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/ProbeName"
+                   }
+                ]
+             },
+             "type": {
+                "title": "Type",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/ProbeType"
+                   }
+                ]
+             },
+             "serial_number": {
+                "title": "Serial number",
+                "type": "string"
+             }
+          },
+          "required": [
+             "name",
+             "type",
+             "serial_number"
+          ]
+       },
+       "CameraName": {
+          "title": "CameraName",
+          "description": "list of camera names",
+          "enum": [
+             "Body Camera",
+             "Eye Camera",
+             "Face Camera"
+          ]
+       },
+       "Camera": {
+          "title": "Camera",
+          "description": "description of generic camera",
+          "type": "object",
+          "properties": {
+             "name": {
+                "title": "Name",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/CameraName"
+                   }
+                ]
+             },
+             "manufacturer": {
+                "title": "Manufacturer",
+                "type": "string"
+             },
+             "model": {
+                "title": "Model",
+                "type": "string"
+             },
+             "serial_number": {
+                "title": "Serial number",
+                "type": "string"
+             },
+             "position_x": {
+                "title": "Position X",
+                "type": "number"
+             },
+             "position_y": {
+                "title": "Position Y",
+                "type": "number"
+             },
+             "position_z": {
+                "title": "Position Z",
+                "type": "number"
+             },
+             "angle_pitch": {
+                "title": "Angle pitch (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "angle_yaw": {
+                "title": "Angle yaw (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "angle_roll": {
+                "title": "Angle roll (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "recording_software": {
+                "title": "Recording software",
+                "type": "string"
+             },
+             "recording_software_version": {
+                "title": "Recording software version",
+                "type": "string"
+             }
+          },
+          "required": [
+             "name",
+             "manufacturer",
+             "model",
+             "serial_number",
+             "position_x",
+             "position_y",
+             "position_z",
+             "angle_pitch",
+             "angle_yaw",
+             "angle_roll"
+          ]
+       },
+       "LaserName": {
+          "title": "LaserName",
+          "description": "TODO",
+          "enum": [
+             "Laser A",
+             "Laser B"
+          ]
+       },
+       "Laser": {
+          "title": "Laser",
+          "description": "description of lasers used in ephys recordings",
+          "type": "object",
+          "properties": {
+             "name": {
+                "title": "Name",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/LaserName"
+                   }
+                ]
+             },
+             "manufacturer": {
+                "title": "Manufacturer",
+                "type": "string"
+             },
+             "model": {
+                "title": "Model",
+                "type": "string"
+             },
+             "serial_number": {
+                "title": "Serial number",
+                "type": "string"
+             },
+             "wavelength": {
+                "title": "Wavelength (nm)",
+                "units": "nm",
+                "type": "integer"
+             },
+             "maximum_power": {
+                "title": "Maximum power (mW)",
+                "units": "mW",
+                "type": "number"
+             },
+             "coupling_efficiency": {
+                "title": "Coupling efficiency (percent)",
+                "units": "percent",
+                "type": "number"
+             },
+             "calibration_data": {
+                "title": "Calibration data",
+                "description": "path to calibration data",
+                "type": "string"
+             },
+             "calibration_date": {
+                "title": "Calibration date",
+                "type": "string",
+                "format": "date-time"
+             }
+          },
+          "required": [
+             "name",
+             "manufacturer",
+             "model",
+             "serial_number"
+          ]
+       },
+       "Monitor": {
+          "title": "Monitor",
+          "description": "description of a physical display",
+          "type": "object",
+          "properties": {
+             "manufacturer": {
+                "title": "Manufacturer",
+                "type": "string"
+             },
+             "model": {
+                "title": "Model",
+                "type": "string"
+             },
+             "serial_number": {
+                "title": "Serial number",
+                "type": "string"
+             },
+             "refresh_rate": {
+                "title": "Refresh rate (Hz)",
+                "units": "Hz",
+                "type": "integer"
+             },
+             "width": {
+                "title": "Width (pixels)",
+                "units": "pixels",
+                "type": "integer"
+             },
+             "height": {
+                "title": "Height (pixels)",
+                "units": "pixels",
+                "type": "integer"
+             },
+             "viewing_distance": {
+                "title": "Viewing distance (cm)",
+                "units": "cm",
+                "type": "number"
+             },
+             "position_x": {
+                "title": "Position X",
+                "type": "number"
+             },
+             "position_y": {
+                "title": "Position Y",
+                "type": "number"
+             },
+             "position_z": {
+                "title": "Position Z",
+                "type": "number"
+             },
+             "angle_pitch": {
+                "title": "Angle pitch (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "angle_yaw": {
+                "title": "Angle yaw (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "angle_roll": {
+                "title": "Angle roll (deg)",
+                "units": "deg",
+                "type": "number"
+             },
+             "contrast": {
+                "title": "Contrast (percent)",
+                "description": "Monitor's contrast setting",
+                "units": "percent",
+                "type": "integer"
+             },
+             "brightness": {
+                "title": "Brightness",
+                "description": "Monitor's brightness setting",
+                "type": "integer"
+             }
+          },
+          "required": [
+             "manufacturer",
+             "model",
+             "serial_number",
+             "refresh_rate",
+             "width",
+             "height",
+             "viewing_distance",
+             "position_x",
+             "position_y",
+             "position_z",
+             "angle_pitch",
+             "angle_yaw",
+             "angle_roll",
+             "contrast",
+             "brightness"
+          ]
+       },
+       "Surface": {
+          "title": "Surface",
+          "description": "TODO",
+          "enum": [
+             "none",
+             "foam"
+          ]
+       },
+       "Disc": {
+          "title": "Disc",
+          "description": "basic running disc information",
+          "type": "object",
+          "properties": {
+             "radius": {
+                "title": "Radius (cm)",
+                "units": "cm",
+                "type": "number"
+             },
+             "surface": {
+                "title": "Surface",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/Surface"
+                   }
+                ]
+             },
+             "date_surface_replaced": {
+                "title": "Date surface replaced",
+                "type": "string",
+                "format": "date-time"
+             }
+          },
+          "required": [
+             "radius"
+          ]
+       },
+       "HarpDevice": {
+          "title": "HarpDevice",
+          "description": "list of harp device names",
+          "enum": [
+             "Behavior",
+             "Camera Controller",
+             "Load Cells",
+             "Sound Board",
+             "Timestamp Generator",
+             "Input Expander"
+          ]
+       },
+       "Devices": {
+          "title": "Devices",
+          "description": "all of the devices in the rig",
+          "type": "object",
+          "properties": {
+             "probes": {
+                "title": "Probes",
+                "uniqueItems": true,
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/Probe"
                 }
-            },
-            "required": [
-                "name",
-                "manufacturer",
-                "model",
-                "serial_number"
-            ]
-        },
-        "camera": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Body Camera", "Eye Camera", "Face Camera"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "position_x": {
-                    "type": "number",
-                    "title": "Position X"
-                },
-                "position_y": {
-                    "type": "number",
-                    "title": "Position Y"
-                },
-                "position_z": {
-                    "type": "number",
-                    "title": "Position Z"
-                },
-                "angle_pitch": {
-                    "type": "number",
-                    "title": "Angle pitch (deg)",
-                    "units": "deg"
-                },
-                "angle_yaw": {
-                    "type": "number",
-                    "title": "Angle yaw (deg)",
-                    "units": "deg"
-                },
-                "angle_roll": {
-                    "type": "number",
-                    "title": "Angle roll (deg)",
-                    "units": "deg"
-                },
-                "recording_software": {
-                    "type": "string",
-                    "title": "Recording software"
-                },
-                "recording_software_version": {
-                    "type": "string",
-                    "title": "Recording software version"
+             },
+             "cameras": {
+                "title": "Cameras",
+                "uniqueItems": true,
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/Camera"
                 }
-            },
-            "required": [
-                "name",
-                "manufacturer",
-                "model",
-                "serial_number",
-                "position_x",
-                "position_y",
-                "position_z",
-                "angle_pitch",
-                "angle_yaw",
-                "angle_roll"
-            ]	
-        },
-        "probe": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Probe A", "Probe B", "Probe C", "Probe D", "Probe E", "Probe F", 
-                        "Probe G", "Probe H", "Probe I", "Probe J"],
-                    "title": "Name"
-                },
-                "type": {
-                    "type": "string",
-                    "title": "Type"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
+             },
+             "lasers": {
+                "title": "Lasers",
+                "uniqueItems": true,
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/Laser"
                 }
-            },
-            "required": ["name", "type", "serial_number"]
-        },
-        "monitor": {
-            "type": "object",
-            "properties": {
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "refresh_rate": {
-                    "type": "integer",
-                    "title": "Refresh rate (Hz)",
-                    "units": "Hz"
-                },
-                "width": {
-                    "type": "integer",
-                    "title": "Width (pixels)",
-                    "units": "pixels"
-                },
-                "height": {
-                    "type": "integer",
-                    "title": "Height (pixels)",
-                    "units": "pixels"
-                },
-                "viewing_distance": {
-                    "type": "number",
-                    "title": "Viewing distance (cm)",
-                    "units": "cm"
-                },
-                "position_x": {
-                    "type": "number",
-                    "title": "Position X"
-                },
-                "position_y": {
-                    "type": "number",
-                    "title": "Position Y"
-                },
-                "position_z": {
-                    "type": "number",
-                    "title": "Position Z"
-                },
-                "angle_pitch": {
-                    "type": "number",
-                    "title": "Angle pitch (deg)",
-                    "units": "deg"
-                },
-                "angle_yaw": {
-                    "type": "number",
-                    "title": "Angle yaw (deg)",
-                    "units": "deg"
-                },
-                "angle_roll": {
-                    "type": "number",
-                    "title": "Angle roll (deg)",
-                    "units": "deg"
-                },
-                "contrast": {
-                    "type": "integer",
-                    "description": "Monitor's contrast setting",
-                    "title": "Contrast (percent)",
-                    "units": "percent"
-                },
-                "brightness": {
-                    "type": "integer",
-                    "title": "Brightness",
-                    "description": "Monitor's brightness setting"
+             },
+             "visual_monitors": {
+                "title": "Visual monitor",
+                "uniqueItems": true,
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/Monitor"
                 }
-            },
-            "required": [
-                "manufacturer",
-                "model",
-                "serial_number",
-                "refresh_rate",
-                "width",
-                "height",
-                "viewing_distance",
-                "position_x",
-                "position_y",
-                "position_z",
-                "angle_pitch",
-                "angle_yaw",
-                "angle_roll",
-                "contrast",
-                "brightness"
-            ]
-        },
-        "disc": {
-            "type": "object",
-            "properties": {
-                "radius": {
-                    "type": "number",
-                    "title": "Radius (cm)",
-                    "units": "cm"
-                },
-                "surface": {
-                    "type": "string",
-                    "title": "Surface",
-                    "enum": ["none", "foam"]
-                },
-                "date_surface_replaced": {
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Date surface replaced"
+             },
+             "running_disc": {
+                "title": "Running disc",
+                "allOf": [
+                   {
+                      "$ref": "#/definitions/Disc"
+                   }
+                ]
+             },
+             "harp_devices": {
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/HarpDevice"
                 }
-            },
-            "required": ["radius"]
-        }		
+             }
+          }
+       }
     }
-}
+ }
+ 
