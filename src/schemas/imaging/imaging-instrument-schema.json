@@ -1,577 +1,577 @@
 {
-    "title": "Instrument",
-    "description": "instrument is a collection of devices, etc",
-    "type": "object",
-    "properties": {
-       "version": {
-          "title": "Version",
-          "description": "schema version",
-          "default": "0.1.0",
-          "const": "0.1.0",
-          "type": "string"
-       },
-       "describedBy": {
-          "title": "Described by",
-          "description": "The URL reference to the schema.",
-          "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/instrument.py",
-          "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/instrument.py",
-          "type": "string"
-       },
-       "instrument_id": {
-          "title": "Instrument ID",
-          "description": "unique identifier for this instrument configuration",
-          "type": "string"
-       },
-       "microscope": {
-          "title": "Microscope information",
-          "allOf": [
-             {
-                "$ref": "#/definitions/Microscope"
-             }
-          ]
-       },
-       "temperature_control": {
-          "title": "Temperature control",
-          "type": "boolean"
-       },
-       "humidity_control": {
-          "title": "Humidity control",
-          "type": "boolean"
-       },
-       "vibration_control": {
-          "title": "Vibration control",
-          "type": "boolean"
-       },
-       "optical_table_model": {
-          "title": "Optical table model",
-          "type": "string"
-       },
-       "optical_table_size": {
-          "title": "Optical table size",
-          "type": "number"
-       },
-       "objectives": {
-          "title": "Objectives",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Objective"
-          }
-       },
-       "detectors": {
-          "title": "Detectors",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Detector"
-          }
-       },
-       "light_sources": {
-          "title": "Light sources",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Lightsource"
-          }
-       },
-       "fluorescence_filters": {
-          "title": "Fluorescence filters",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Filter"
-          }
-       },
-       "motorized_stages": {
-          "title": "Motorized stages",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Device"
-          }
-       },
-       "additional_devices": {
-          "title": "Additional devices",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Device"
-          }
-       },
-       "calibration_date": {
-          "title": "Calibration date",
-          "description": "Date of most recent calibration",
-          "type": "string",
-          "format": "date"
-       },
-       "calibration_data": {
-          "title": "Calibration data",
-          "description": "Path to calibration data from most recent calibration",
-          "type": "string"
-       },
-       "daq_device_name": {
-          "title": "DAQ device name",
-          "description": "DAQ device name as it appears to the PC",
-          "type": "string"
-       },
-       "daq_model_name": {
-          "title": "DAQ model",
-          "description": "DAQ product name",
-          "type": "string"
-       },
-       "daq_update_frequency": {
-          "title": "DAQ update frequency (Hz)",
-          "type": "number"
-       },
-       "daq_ao_names_to_channel": {
-          "title": "DAQ analog outputs",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Ao"
-          }
-       },
-       "com_ports": {
-          "title": "COM ports",
-          "uniqueItems": true,
-          "type": "array",
-          "items": {
-             "$ref": "#/definitions/Com"
-          }
-       },
-       "notes": {
-          "title": "Notes",
-          "type": "string"
-       }
-    },
-    "required": [
-       "microscope",
-       "objectives",
-       "detectors",
-       "light_sources"
-    ],
-    "definitions": {
-       "MicroscopeType": {
-          "title": "MicroscopeType",
-          "description": "various microscope names",
-          "enum": [
-             "mesoSPIM",
-             "exaSPIM",
-             "diSPIM",
-             "smartSPIM",
-             "Confocal",
-             "Two photon",
-             "Other"
-          ]
-       },
-       "MicroscopeManufacturer": {
-          "title": "MicroscopeManufacturer",
-          "description": "various microscope manufacturers",
-          "enum": [
-             "Olympus",
-             "Leica",
-             "LifeCanvas",
-             "Custom"
-          ]
-       },
-       "Microscope": {
-          "title": "Microscope",
-          "description": "microscope device information",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Microscope type",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/MicroscopeType"
-                   }
-                ]
-             },
-             "manufacturer": {
-                "title": "Microscope manufacturer",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/MicroscopeManufacturer"
-                   }
-                ]
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             },
-             "location": {
-                "title": "Microscope location",
-                "type": "string"
-             }
-          },
-          "required": [
-             "type",
-             "manufacturer",
-             "location"
-          ]
-       },
-       "Immersion": {
-          "title": "Immersion",
-          "description": "immersion media",
-          "enum": [
-             "air",
-             "water",
-             "oil",
-             "multi",
-             "other"
-          ]
-       },
-       "Objective": {
-          "title": "Objective",
-          "description": "objective device information",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Type",
-                "description": "Generic device type",
-                "type": "string"
-             },
-             "manufacturer": {
-                "title": "Manufacturer",
-                "type": "string"
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             },
-             "numerical_aperture": {
-                "title": "Numerical aperture (in air)",
-                "type": "number"
-             },
-             "magnification": {
-                "title": "Magnification",
-                "type": "number"
-             },
-             "immersion": {
-                "title": "Immersion",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/Immersion"
-                   }
-                ]
-             }
-          },
-          "required": [
-             "numerical_aperture",
-             "magnification",
-             "immersion"
-          ]
-       },
-       "CameraType": {
-          "title": "CameraType",
-          "description": "camera type list",
-          "enum": [
-             "Camera",
-             "PMT",
-             "other"
-          ]
-       },
-       "DataInterface": {
-          "title": "DataInterface",
-          "description": "TODO",
-          "enum": [
-             "USB",
-             "CameraLink",
-             "Coax",
-             "other"
-          ]
-       },
-       "Cooling": {
-          "title": "Cooling",
-          "description": "cooling medium",
-          "enum": [
-             "air",
-             "water"
-          ]
-       },
-       "Detector": {
-          "title": "Detector",
-          "description": "detector device description",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Type",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/CameraType"
-                   }
-                ]
-             },
-             "manufacturer": {
-                "title": "Manufacturer",
-                "type": "string"
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             },
-             "data_interface": {
-                "title": "Data interface",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/DataInterface"
-                   }
-                ]
-             },
-             "cooling": {
-                "title": "Cooling",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/Cooling"
-                   }
-                ]
-             }
-          },
-          "required": [
-             "type",
-             "data_interface",
-             "cooling"
-          ]
-       },
-       "LightsourceType": {
-          "title": "LightsourceType",
-          "description": "light source types",
-          "enum": [
-             "lamp",
-             "laser",
-             "LED",
-             "other"
-          ]
-       },
-       "Coupling": {
-          "title": "Coupling",
-          "description": "TODO",
-          "enum": [
-             "Free-space",
-             "SMF",
-             "MMF",
-             "other"
-          ]
-       },
-       "Lightsource": {
-          "title": "Lightsource",
-          "description": "lightsource device information",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Type",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/LightsourceType"
-                   }
-                ]
-             },
-             "manufacturer": {
-                "title": "Manufacturer",
-                "type": "string"
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             },
-             "coupling": {
-                "title": "Coupling",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/Coupling"
-                   }
-                ]
-             },
-             "wavelength": {
-                "title": "Wavelength (nm)",
-                "type": "number"
-             },
-             "max_power": {
-                "title": " Maximum power (mW)",
-                "type": "number"
-             },
-             "filter_wheel_index": {
-                "title": "Filter index",
-                "type": "integer"
-             }
-          },
-          "required": [
-             "type",
-             "coupling",
-             "wavelength",
-             "max_power",
-             "filter_wheel_index"
-          ]
-       },
-       "FilterType": {
-          "title": "FilterType",
-          "description": "filter types",
-          "enum": [
-             "Long pass",
-             "Band pass",
-             "Short pass",
-             "Multiband"
-          ]
-       },
-       "FilterManufacturer": {
-          "title": "FilterManufacturer",
-          "description": "list of filter manufacturers",
-          "enum": [
-             "Chroma",
-             "Semrock",
-             "Other"
-          ]
-       },
-       "Filter": {
-          "title": "Filter",
-          "description": "filter device description",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Type",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/FilterType"
-                   }
-                ]
-             },
-             "manufacturer": {
-                "title": "Filter manufacturer",
-                "allOf": [
-                   {
-                      "$ref": "#/definitions/FilterManufacturer"
-                   }
-                ]
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             },
-             "diameter": {
-                "title": "Size (mm)",
-                "type": "number"
-             },
-             "thickness": {
-                "title": "Size (mm)",
-                "type": "number"
-             },
-             "description": {
-                "title": "Description",
-                "description": "Where/how filter is being used",
-                "type": "string"
-             }
-          },
-          "required": [
-             "type",
-             "manufacturer",
-             "diameter",
-             "thickness"
-          ]
-       },
-       "Device": {
-          "title": "Device",
-          "description": "base device description",
-          "type": "object",
-          "properties": {
-             "type": {
-                "title": "Type",
-                "description": "Generic device type",
-                "type": "string"
-             },
-             "manufacturer": {
-                "title": "Manufacturer",
-                "type": "string"
-             },
-             "model": {
-                "title": "Model",
-                "type": "string"
-             },
-             "serial_number": {
-                "title": "Serial number",
-                "type": "string"
-             },
-             "notes": {
-                "title": "Notes",
-                "type": "string"
-             }
-          }
-       },
-       "Ao": {
-          "title": "Ao",
-          "description": "TODO",
-          "type": "object",
-          "properties": {
-             "hardware_device": {
-                "title": "Controlled hardware device",
-                "type": "string"
-             },
-             "ao_channel": {
-                "title": "AO channel",
-                "type": "integer"
-             }
-          },
-          "required": [
-             "ao_channel"
-          ]
-       },
-       "Com": {
-          "title": "Com",
-          "description": "TODO",
-          "type": "object",
-          "properties": {
-             "hardware_name": {
-                "title": "Controlled hardware device",
-                "type": "string"
-             },
-             "com_port": {
-                "title": "COM port",
-                "type": "string"
-             }
-          },
-          "required": [
-             "hardware_name",
-             "com_port"
-          ]
-       }
-    }
- }
+   "title": "Instrument",
+   "description": "Description of an instrument, which is a collection of devices",
+   "type": "object",
+   "properties": {
+      "version": {
+         "title": "Version",
+         "description": "schema version",
+         "default": "0.1.0",
+         "const": "0.1.0",
+         "type": "string"
+      },
+      "describedBy": {
+         "title": "Described by",
+         "description": "The URL reference to the schema.",
+         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/instrument.py",
+         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/instrument.py",
+         "type": "string"
+      },
+      "instrument_id": {
+         "title": "Instrument ID",
+         "description": "unique identifier for this instrument configuration",
+         "type": "string"
+      },
+      "microscope": {
+         "title": "Microscope information",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Microscope"
+            }
+         ]
+      },
+      "temperature_control": {
+         "title": "Temperature control",
+         "type": "boolean"
+      },
+      "humidity_control": {
+         "title": "Humidity control",
+         "type": "boolean"
+      },
+      "vibration_control": {
+         "title": "Vibration control",
+         "type": "boolean"
+      },
+      "optical_table_model": {
+         "title": "Optical table model",
+         "type": "string"
+      },
+      "optical_table_size": {
+         "title": "Optical table size",
+         "type": "number"
+      },
+      "objectives": {
+         "title": "Objectives",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Objective"
+         }
+      },
+      "detectors": {
+         "title": "Detectors",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Detector"
+         }
+      },
+      "light_sources": {
+         "title": "Light sources",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Lightsource"
+         }
+      },
+      "fluorescence_filters": {
+         "title": "Fluorescence filters",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Filter"
+         }
+      },
+      "motorized_stages": {
+         "title": "Motorized stages",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Device"
+         }
+      },
+      "additional_devices": {
+         "title": "Additional devices",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Device"
+         }
+      },
+      "calibration_date": {
+         "title": "Calibration date",
+         "description": "Date of most recent calibration",
+         "type": "string",
+         "format": "date"
+      },
+      "calibration_data": {
+         "title": "Calibration data",
+         "description": "Path to calibration data from most recent calibration",
+         "type": "string"
+      },
+      "daq_device_name": {
+         "title": "DAQ device name",
+         "description": "DAQ device name as it appears to the PC",
+         "type": "string"
+      },
+      "daq_model_name": {
+         "title": "DAQ model",
+         "description": "DAQ product name",
+         "type": "string"
+      },
+      "daq_update_frequency": {
+         "title": "DAQ update frequency (Hz)",
+         "type": "number"
+      },
+      "daq_ao_names_to_channel": {
+         "title": "DAQ analog outputs",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/AnalogOutput"
+         }
+      },
+      "com_ports": {
+         "title": "COM ports",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Com"
+         }
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "microscope",
+      "objectives",
+      "detectors",
+      "light_sources"
+   ],
+   "definitions": {
+      "MicroscopeType": {
+         "title": "MicroscopeType",
+         "description": "Microscope name",
+         "enum": [
+            "mesoSPIM",
+            "exaSPIM",
+            "diSPIM",
+            "smartSPIM",
+            "Confocal",
+            "Two photon",
+            "Other"
+         ]
+      },
+      "MicroscopeManufacturer": {
+         "title": "MicroscopeManufacturer",
+         "description": "Microscope manufacturer name",
+         "enum": [
+            "Olympus",
+            "Leica",
+            "LifeCanvas",
+            "Custom"
+         ]
+      },
+      "Microscope": {
+         "title": "Microscope",
+         "description": "Description of a microscope device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Microscope type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/MicroscopeType"
+                  }
+               ]
+            },
+            "manufacturer": {
+               "title": "Microscope manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/MicroscopeManufacturer"
+                  }
+               ]
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "location": {
+               "title": "Microscope location",
+               "type": "string"
+            }
+         },
+         "required": [
+            "type",
+            "manufacturer",
+            "location"
+         ]
+      },
+      "Immersion": {
+         "title": "Immersion",
+         "description": "Immersion media name",
+         "enum": [
+            "air",
+            "water",
+            "oil",
+            "multi",
+            "other"
+         ]
+      },
+      "Objective": {
+         "title": "Objective",
+         "description": "Description of an objective device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Type",
+               "description": "Generic device type",
+               "type": "string"
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "numerical_aperture": {
+               "title": "Numerical aperture (in air)",
+               "type": "number"
+            },
+            "magnification": {
+               "title": "Magnification",
+               "type": "number"
+            },
+            "immersion": {
+               "title": "Immersion",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Immersion"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "numerical_aperture",
+            "magnification",
+            "immersion"
+         ]
+      },
+      "CameraType": {
+         "title": "CameraType",
+         "description": "Camera type name",
+         "enum": [
+            "Camera",
+            "PMT",
+            "other"
+         ]
+      },
+      "DataInterface": {
+         "title": "DataInterface",
+         "description": "Data interface name",
+         "enum": [
+            "USB",
+            "CameraLink",
+            "Coax",
+            "other"
+         ]
+      },
+      "Cooling": {
+         "title": "Cooling",
+         "description": "Cooling medium name",
+         "enum": [
+            "air",
+            "water"
+         ]
+      },
+      "Detector": {
+         "title": "Detector",
+         "description": "Description of a detector device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Detector Type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CameraType"
+                  }
+               ]
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "data_interface": {
+               "title": "Data interface",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "cooling": {
+               "title": "Cooling",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Cooling"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "type",
+            "data_interface",
+            "cooling"
+         ]
+      },
+      "LightsourceType": {
+         "title": "LightsourceType",
+         "description": "Light source type name",
+         "enum": [
+            "lamp",
+            "laser",
+            "LED",
+            "other"
+         ]
+      },
+      "Coupling": {
+         "title": "Coupling",
+         "description": "Coupling method name",
+         "enum": [
+            "Free-space",
+            "SMF",
+            "MMF",
+            "other"
+         ]
+      },
+      "Lightsource": {
+         "title": "Lightsource",
+         "description": "Description of lightsource device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Lightsource Type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/LightsourceType"
+                  }
+               ]
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "coupling": {
+               "title": "Coupling",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Coupling"
+                  }
+               ]
+            },
+            "wavelength": {
+               "title": "Wavelength (nm)",
+               "type": "number"
+            },
+            "max_power": {
+               "title": " Maximum power (mW)",
+               "type": "number"
+            },
+            "filter_wheel_index": {
+               "title": "Filter index",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "type",
+            "coupling",
+            "wavelength",
+            "max_power",
+            "filter_wheel_index"
+         ]
+      },
+      "FilterType": {
+         "title": "FilterType",
+         "description": "Filter type name",
+         "enum": [
+            "Long pass",
+            "Band pass",
+            "Short pass",
+            "Multiband"
+         ]
+      },
+      "FilterManufacturer": {
+         "title": "FilterManufacturer",
+         "description": "Filter manufacturer name",
+         "enum": [
+            "Chroma",
+            "Semrock",
+            "Other"
+         ]
+      },
+      "Filter": {
+         "title": "Filter",
+         "description": "Description of a filter device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Filter Type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FilterType"
+                  }
+               ]
+            },
+            "manufacturer": {
+               "title": "Filter manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FilterManufacturer"
+                  }
+               ]
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "diameter": {
+               "title": "Size (mm)",
+               "type": "number"
+            },
+            "thickness": {
+               "title": "Size (mm)",
+               "type": "number"
+            },
+            "description": {
+               "title": "Description",
+               "description": "Where/how filter is being used",
+               "type": "string"
+            }
+         },
+         "required": [
+            "type",
+            "manufacturer",
+            "diameter",
+            "thickness"
+         ]
+      },
+      "Device": {
+         "title": "Device",
+         "description": "Description of a device",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Type",
+               "description": "Generic device type",
+               "type": "string"
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            }
+         }
+      },
+      "AnalogOutput": {
+         "title": "AnalogOutput",
+         "description": "Description of analog output",
+         "type": "object",
+         "properties": {
+            "hardware_device": {
+               "title": "Controlled hardware device",
+               "type": "string"
+            },
+            "ao_channel": {
+               "title": "Analog output channel",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "ao_channel"
+         ]
+      },
+      "Com": {
+         "title": "Com",
+         "description": "Description of a communication system",
+         "type": "object",
+         "properties": {
+            "hardware_name": {
+               "title": "Controlled hardware device",
+               "type": "string"
+            },
+            "com_port": {
+               "title": "COM port",
+               "type": "string"
+            }
+         },
+         "required": [
+            "hardware_name",
+            "com_port"
+         ]
+      }
+   }
+}
