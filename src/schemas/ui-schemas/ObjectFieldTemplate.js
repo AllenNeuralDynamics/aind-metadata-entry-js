@@ -1,8 +1,10 @@
 import React from 'react';
 
-  const ObjectFieldTemplate = ({ properties, description }) => {
+  const ObjectFieldTemplate = ({ properties, description, title }) => {
     return (
       <div>
+        <legend> {title} </legend>
+        {description}
         <div className="row">
           {properties.map(prop => (
             <div
@@ -12,7 +14,6 @@ import React from 'react';
             </div>
           ))}
         </div>
-        {description}
       </div>
     );
   }

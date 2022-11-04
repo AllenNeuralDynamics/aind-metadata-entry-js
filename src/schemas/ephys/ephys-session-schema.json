@@ -118,46 +118,31 @@
             "Other"
          ]
       },
-      "AnatomicalDirection": {
-         "title": "AnatomicalDirection",
-         "description": "Anatomical direction name (TODO: combine with imaging direction)",
-         "enum": [
-            "ML",
-            "AP",
-            "DV"
-         ]
-      },
       "CcfCoords": {
          "title": "CcfCoords",
          "description": "Coordinates in CCF template space",
          "type": "object",
          "properties": {
-            "direction": {
-               "title": "AnatomicalDirection",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/AnatomicalDirection"
-                  }
-               ]
+            "ML": {
+               "title": "ML (um)",
+               "units": "um",
+               "type": "number"
             },
-            "value": {
-               "title": "Value (um)",
-               "units": "mm",
+            "AP": {
+               "title": "AP (um)",
+               "units": "um",
+               "type": "number"
+            },
+            "DV": {
+               "title": "DV (um)",
+               "units": "um",
                "type": "number"
             }
          },
          "required": [
-            "direction",
-            "value"
-         ]
-      },
-      "Direction": {
-         "title": "Direction",
-         "description": "Axis direction name (TODO: combine with imaging axis)",
-         "enum": [
-            "X",
-            "Y",
-            "Z"
+            "ML",
+            "AP",
+            "DV"
          ]
       },
       "Field3dCoordinatesMm": {
@@ -165,23 +150,26 @@
          "description": "Description of 3d coordinates in mm",
          "type": "object",
          "properties": {
-            "direction": {
-               "title": "Direction",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Direction"
-                  }
-               ]
+            "X": {
+               "title": "X (mm)",
+               "units": "mm",
+               "type": "number"
             },
-            "value": {
-               "title": "Value (mm)",
+            "Y": {
+               "title": "Y (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "Z": {
+               "title": "Z (mm)",
                "units": "mm",
                "type": "number"
             }
          },
          "required": [
-            "direction",
-            "value"
+            "X",
+            "Y",
+            "Z"
          ]
       },
       "AngleName": {
@@ -236,34 +224,28 @@
             },
             "targeted_ccf_coordinates": {
                "title": "Targeted CCF coordinates",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/CcfCoords"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CcfCoords"
+                  }
+               ]
             },
             "targeted_lab_coordinates": {
                "title": "Targeted lab coordinates",
                "description": "Targeted coordinates relative to the headframe",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Field3dCoordinatesMm"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                  }
+               ]
             },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Field3dCoordinatesMm"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                  }
+               ]
             },
             "manipulator_angles": {
                "title": "Manipulator angles",
@@ -308,34 +290,28 @@
             },
             "targeted_ccf_coordinates": {
                "title": "Targeted CCF coordinates",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/CcfCoords"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CcfCoords"
+                  }
+               ]
             },
             "targeted_lab_coordinates": {
                "title": "Targeted lab coordinates",
                "description": "Targeted coordinates relative to the headframe",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Field3dCoordinatesMm"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                  }
+               ]
             },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
-               "minItems": 3,
-               "maxItems": 3,
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Field3dCoordinatesMm"
-               }
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                  }
+               ]
             },
             "manipulator_angles": {
                "title": "Manipulator angles",
