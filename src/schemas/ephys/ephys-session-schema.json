@@ -66,14 +66,6 @@
             "$ref": "#/definitions/Stream"
          }
       },
-      "ccf_version": {
-         "title": "CCF version",
-         "allOf": [
-            {
-               "$ref": "#/definitions/CcfVersion"
-            }
-         ]
-      },
       "coordinate_transform": {
          "title": "Coordinate transform",
          "description": "Path to file that details the coordinate transform.",
@@ -91,8 +83,7 @@
       "subject_id",
       "session_type",
       "rig_id",
-      "probe_streams",
-      "ccf_version"
+      "probe_streams"
    ],
    "definitions": {
       "SessionType": {
@@ -118,58 +109,74 @@
             "Other"
          ]
       },
+      "CcfVersion": {
+         "title": "CcfVersion",
+         "description": "CCF version",
+         "enum": [
+            "CCFv3"
+         ]
+      },
       "CcfCoords": {
          "title": "CcfCoords",
          "description": "Coordinates in CCF template space",
          "type": "object",
          "properties": {
-            "ML": {
+            "ml": {
                "title": "ML (um)",
                "units": "um",
                "type": "number"
             },
-            "AP": {
+            "ap": {
                "title": "AP (um)",
                "units": "um",
                "type": "number"
             },
-            "DV": {
+            "dv": {
                "title": "DV (um)",
                "units": "um",
                "type": "number"
+            },
+            "ccf_version": {
+               "title": "CCF version",
+               "default": "CCFv3",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CcfVersion"
+                  }
+               ]
             }
          },
          "required": [
-            "ML",
-            "AP",
-            "DV"
+            "ml",
+            "ap",
+            "dv"
          ]
       },
-      "Field3dCoordinatesMm": {
-         "title": "Field3dCoordinatesMm",
+      "Coordinates3d": {
+         "title": "Coordinates3d",
          "description": "Description of 3d coordinates in mm",
          "type": "object",
          "properties": {
-            "X": {
+            "x": {
                "title": "X (mm)",
                "units": "mm",
                "type": "number"
             },
-            "Y": {
+            "y": {
                "title": "Y (mm)",
                "units": "mm",
                "type": "number"
             },
-            "Z": {
+            "z": {
                "title": "Z (mm)",
                "units": "mm",
                "type": "number"
             }
          },
          "required": [
-            "X",
-            "Y",
-            "Z"
+            "x",
+            "y",
+            "z"
          ]
       },
       "AngleName": {
@@ -230,20 +237,11 @@
                   }
                ]
             },
-            "targeted_lab_coordinates": {
-               "title": "Targeted lab coordinates",
-               "description": "Targeted coordinates relative to the headframe",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Field3dCoordinatesMm"
-                  }
-               ]
-            },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                     "$ref": "#/definitions/Coordinates3d"
                   }
                ]
             },
@@ -260,7 +258,6 @@
             "name",
             "tip_targeted_structure",
             "targeted_ccf_coordinates",
-            "targeted_lab_coordinates",
             "manipulator_coordinates",
             "manipulator_angles"
          ]
@@ -296,20 +293,11 @@
                   }
                ]
             },
-            "targeted_lab_coordinates": {
-               "title": "Targeted lab coordinates",
-               "description": "Targeted coordinates relative to the headframe",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Field3dCoordinatesMm"
-                  }
-               ]
-            },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Field3dCoordinatesMm"
+                     "$ref": "#/definitions/Coordinates3d"
                   }
                ]
             },
@@ -328,7 +316,6 @@
             "power",
             "targeted_structure",
             "targeted_ccf_coordinates",
-            "targeted_lab_coordinates",
             "manipulator_coordinates",
             "manipulator_angles"
          ]
@@ -370,13 +357,6 @@
             "stream_stop_time",
             "probes",
             "lasers"
-         ]
-      },
-      "CcfVersion": {
-         "title": "CcfVersion",
-         "description": "CCF version",
-         "enum": [
-            "CCFv3"
          ]
       }
    }
