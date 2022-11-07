@@ -1,109 +1,180 @@
 {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "properties": {
-            "describedBy": {
-                    "type": "string",
-                    "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.json",
-                    "description": "The URL reference to the schema.",
-                    "title": "Described by"
-            },
-            "version": {
-                    "type": "string",
-                    "const": "0.1.0",
-                    "description": "schema version",
-                    "title": "Version"
-            },
-            "species": {
-                    "type": "string",
-                    "enum": ["Mus musculus", "Callithrix jacchus", "Macaca mulatta", "Homo sapiens"],
-                    "title": "Species"
-            },
-            "specimen_id": {
-                    "type": "string",
-                    "title": "Specimen ID",
-                    "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes."
-            },
-            "sex": {
-                    "type": "string",
-                    "enum": ["Female", "Male"],
-                    "title": "Sex"
-            },   
-            "date_of_birth": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date of birth"   
-            },
-            "genotype": {
-                    "type": "string",
-                    "description": "Genotype of the animal providing both alleles",
-                    "title": "Genotype"
-            },
-            "background_strain":{
-                    "type": "string",
-                    "enum": ["C57BL/6J", "BALB/c"],
-                    "title": "Background strain"
-            },
-            "source": {
-                    "type": "string",
-                    "description": "If the subject was not bred in house, where was it acquired from.",
-                    "title": "Source"
-            },
-            "restrictions": {
-                    "type": "string",
-                    "description": "Any restrictions on use or publishing based on specimen source",
-                    "title": "Restrictions"
-            },
-            "breeding_group": {
-                    "type": "string",
-                    "title": "Breeding Group"
-                    },
-            "maternal_id": {
-                    "type": "string",
-                    "title": "Maternal specimen ID"
-            },
-            "maternal_genotype": {
-                    "type": "string",
-                    "title": "Maternal genotype"
-            },
-            "paternal_id": {
-                    "type": "string",
-                    "title": "Paternal specimen ID"
-            },
-            "paternal_genotype": {
-                    "type": "string",
-                    "title": "Paternal genotype"
-            },
-            "light_cycle": {
-                    "type": "string",
-                    "enum": ["regular", "reverse"],
-                    "title": "Light cycle"
-            },
-            "home_cage_enrichment": {
-                    "type": "string",
-                    "enum": [
-                            "none", 
-                            "running wheel", 
-                            "social housing",
-                            "plastic tube", 
-                            "plastic shelter", 
-                            "other"
-                    ],
-                    "title": "Home cage enrichment"
-            },
-            "notes": {
-                    "type": "string",
-                    "title": "Notes"
+   "title": "Subject",
+   "description": "Description of a subject of data collection",
+   "type": "object",
+   "properties": {
+      "describedBy": {
+         "title": "Described by",
+         "description": "The URL reference to the schema.",
+         "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.py",
+         "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.py",
+         "type": "string"
+      },
+      "schema_version": {
+         "title": "Version",
+         "description": "schema version",
+         "default": "0.2.0",
+         "const": "0.2.0",
+         "type": "string"
+      },
+      "species": {
+         "title": "Species",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Species"
             }
-        },
-        "required": [
-                "describedBy",
-                "version",
-                "species",
-                "specimen_id",
-                "sex",
-                "date_of_birth",
-                "genotype",
-                "light_cycle"
-        ]
+         ]
+      },
+      "subject_id": {
+         "title": "Specimen ID",
+         "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes.",
+         "type": "string"
+      },
+      "sex": {
+         "title": "Sex",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Sex"
+            }
+         ]
+      },
+      "date_of_birth": {
+         "title": "Date of birth",
+         "type": "string",
+         "format": "date"
+      },
+      "genotype": {
+         "title": "Genotype",
+         "description": "Genotype of the animal providing both alleles",
+         "type": "string"
+      },
+      "background_strain": {
+         "title": "Background strain",
+         "allOf": [
+            {
+               "$ref": "#/definitions/BackgroundStrain"
+            }
+         ]
+      },
+      "source": {
+         "title": "Source",
+         "description": "If the subject was not bred in house, where was it acquired from.",
+         "type": "string"
+      },
+      "restrictions": {
+         "title": "Restrictions",
+         "description": "Any restrictions on use or publishing based on specimen source",
+         "type": "string"
+      },
+      "breeding_group": {
+         "title": "Breeding Group",
+         "type": "string"
+      },
+      "maternal_id": {
+         "title": "Maternal specimen ID",
+         "type": "string"
+      },
+      "maternal_genotype": {
+         "title": "Maternal genotype",
+         "type": "string"
+      },
+      "paternal_id": {
+         "title": "Paternal specimen ID",
+         "type": "string"
+      },
+      "paternal_genotype": {
+         "title": "Paternal genotype",
+         "type": "string"
+      },
+      "light_cycle": {
+         "title": "Light cycle",
+         "allOf": [
+            {
+               "$ref": "#/definitions/LightCycle"
+            }
+         ]
+      },
+      "home_cage_enrichment": {
+         "title": "Home cage enrichment",
+         "allOf": [
+            {
+               "$ref": "#/definitions/HomeCageEnrichment"
+            }
+         ]
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "species",
+      "subject_id",
+      "sex",
+      "date_of_birth",
+      "genotype"
+   ],
+   "definitions": {
+      "Species": {
+         "title": "Species",
+         "description": "Species latin name",
+         "enum": [
+            "Mus musculus",
+            "Callithrix jacchus",
+            "Macaca mulatta",
+            "Homo sapiens"
+         ]
+      },
+      "Sex": {
+         "title": "Sex",
+         "description": "Subject sex name",
+         "enum": [
+            "Female",
+            "Male"
+         ]
+      },
+      "BackgroundStrain": {
+         "title": "BackgroundStrain",
+         "description": "Animal background strain name",
+         "enum": [
+            "C57BL/6J",
+            "BALB/c"
+         ]
+      },
+      "LightCycle": {
+         "title": "LightCycle",
+         "description": "Description of vivarium light cycle times",
+         "type": "object",
+         "properties": {
+            "lights_on_time": {
+               "title": "Lights on time",
+               "description": "Time in UTC that lights were turned on",
+               "type": "string",
+               "format": "time"
+            },
+            "lights_off_time": {
+               "title": "Lights off time",
+               "description": "Time in UTC that lights were turned off",
+               "type": "string",
+               "format": "time"
+            }
+         },
+         "required": [
+            "lights_on_time",
+            "lights_off_time"
+         ]
+      },
+      "HomeCageEnrichment": {
+         "title": "HomeCageEnrichment",
+         "description": "Materials provided in animal home cage",
+         "enum": [
+            "none",
+            "running wheel",
+            "social housing",
+            "plastic tube",
+            "plastic shelter",
+            "other"
+         ]
+      }
+   }
 }

@@ -1,69 +1,120 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties": {
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/data_description.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "version": {
-            "type": "string",
-            "const": "0.1.1",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "license": {
-            "type": "string",
-            "const": "CC-BY-4.0",
-            "title": "License"
-        },
-        "data_level": {
-            "type": "string",
-            "description": "level of processing that data has undergone",
-            "enum": ["raw data", "derived data"],
-            "title": "Data Level"            
-        },
-        "name": {
-            "type": "string",
-            "description": "name of data, conventionally also the name of the directory containing all data and metadata",
-            "title": "Name"
-        },
-        "institution": {
-            "type": "string",
-            "enum": ["AIND", "AIBS"],
-            "description": "An established society, corporation, foundation or other organization that collected this data",
-            "title": "Institution"
-        },
-        "group": {
-            "type": "string",
-            "enum": ["ephys", "ophys", "MSMA", "behavior"],
-            "description": "A short name for the group of individuals that collected this data",
-            "title": "Group"
-        },
-        "modality": {
-            "type": "string",
-            "enum": ["ecephys", "ExASPIM", "SmartSPIM", "mesoSPIM", "ophys"],
-            "description": "A short name for the specific manner, characteristic, pattern of application, or the employment of any technology or formal procedure to generate data for a study",
-            "title": "Modality"
-        },
-        "project_name": {
-            "type": "string",
-            "title": "Project Name",
-            "description": "A name for a set of coordinated activities intended to achieve one or more objectives"
-        },
-        "project_id": {
-            "type": "string",
-            "title": "Project ID",
-            "description": "A database or other identifier for a project"
-        }
-    },
-    "required": [
-        "describedBy",
-        "version",
-        "license",
-        "data_level",
-        "institution"
-    ]
+   "title": "DataDescription",
+   "description": "Description of a logical collection of data files",
+   "type": "object",
+   "properties": {
+      "schema_version": {
+         "title": "Schema Version",
+         "default": "0.1.0",
+         "const": "0.1.0",
+         "type": "string"
+      },
+      "license": {
+         "title": "License",
+         "default": "CC-BY-4.0",
+         "const": "CC-BY-4.0",
+         "type": "string"
+      },
+      "describedBy": {
+         "title": "Described by",
+         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/schemas/data_description.py",
+         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/schemas/data_description.py",
+         "type": "string"
+      },
+      "creation_time": {
+         "title": "Creation Time",
+         "description": "Time in UTC that data files were created, used to uniquely identify the data",
+         "type": "string",
+         "format": "time"
+      },
+      "creation_date": {
+         "title": "Creation Date",
+         "description": "Date in UTC that data files were created, used to uniquely identify the data",
+         "type": "string",
+         "format": "date"
+      },
+      "label": {
+         "title": "Label",
+         "description": "Label describing provenance of data",
+         "type": "string"
+      },
+      "name": {
+         "title": "Name",
+         "description": "Name of data, conventionally also the name of the directory containing all data and metadata",
+         "type": "string"
+      },
+      "institution": {
+         "title": "Institution",
+         "description": "An established society, corporation, foundation or other organization that collected this data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Institution"
+            }
+         ]
+      },
+      "data_level": {
+         "title": "Data Level",
+         "description": "level of processing that data has undergone",
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataLevel"
+            }
+         ]
+      },
+      "group": {
+         "title": "Group",
+         "description": "A short name for the group of individuals that collected this data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Group"
+            }
+         ]
+      },
+      "project_name": {
+         "title": "Project Name",
+         "description": "A name for a set of coordinated activities intended to achieve one or more objectives",
+         "type": "string"
+      },
+      "project_id": {
+         "title": "Project ID",
+         "description": "A database or other identifier for a project",
+         "type": "string"
+      }
+   },
+   "required": [
+      "creation_time",
+      "creation_date",
+      "label",
+      "name",
+      "institution",
+      "data_level"
+   ],
+   "definitions": {
+      "Institution": {
+         "title": "Institution",
+         "description": "Institution name",
+         "enum": [
+            "AIND",
+            "AIBS"
+         ]
+      },
+      "DataLevel": {
+         "title": "DataLevel",
+         "description": "Data level name",
+         "enum": [
+            "raw data",
+            "derived data"
+         ]
+      },
+      "Group": {
+         "title": "Group",
+         "description": "Data collection group name",
+         "enum": [
+            "ephys",
+            "ophys",
+            "MSMA",
+            "behavior"
+         ]
+      }
+   }
 }

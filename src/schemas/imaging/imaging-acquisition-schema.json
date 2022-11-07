@@ -1,291 +1,273 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties":{
-        "version": {
-            "type": "string",
-            "const": "0.1.0",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ophys/ophys_session.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "institution": {
-            "type": "string",
-            "enum": ["AIND", "MSP"],
-            "title": "Institution"
-        },
-        "experimenter_full_name": {
-                "type": "string",
-                "title": "Experimenter full name",
-                "description": "First and last name of the experimenter."
-        },
-        "session_start_time": {
-            "type": "string", 
-            "format": "date-time",
-            "title": "Session start time"
-        },
-        "session_end_time": {
-            "type": "string", 
-            "format": "date-time",
-            "title": "Session end time"
-        },	
-        "specimen_id": {
-            "type": "integer",
-            "title": "Specimen ID"
-        },
-        "project_name": {
-            "type": "string",
-            "title": "Project name"
-        },
-        "project_id": {
-            "type": "string",
-            "title": "Project ID"
-        },
-        "session_type": {
-            "type": "string", 
-            "enum": ["Test", "Foraging A", "Spontaneous", "Foraging B"],
-            "title": "Session type"
-        },
-        "stimulus_protocol_id": {
-            "type": "string",
-            "title": "Stimulus protocol ID"
-        },
-        "rig_id": {
-            "type": "string",
-            "title": "Rig ID"
-        },
-        "photometry_probes": {
-            "type": "array",
-            "items": { "$ref": "#/$defs/probe" },
-            "uniqueItems": true,
-            "title": "Photometry probes"
-        },
-        "lasers": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/laser"},
-            "uniqueItems": true,
-            "title": "Lasers"
-        },
-        "ccf_version": {
-            "type": "string",
-            "enum": ["CCFv3"],
-            "title": "CCF version"
-        },
-        "coordinate_transform": {
-            "type": "string",
-            "title": "Coordinate transform",
-            "description": "Path to file that details the coordinate transform."
-        },
-        "notes": {
-            "type": "string"
-        }
-    },
-    "$defs": {
-        "ccf_coords": {
-            "type": "object",
-            "properties": {
-                "direction": {
-                    "type": "string",
-                    "enum": ["ML", "AP", "DV"],
-                    "title": "Direction"
-                },
-                "value": {
-                    "type": "number",
-                    "title": "Value (um)",
-                    "units": "um"
-                }
+   "title": "Acquisition",
+   "description": "Description of an imaging acquisition session",
+   "type": "object",
+   "properties": {
+      "version": {
+         "title": "Version",
+         "description": "schema version",
+         "default": "0.1.1",
+         "const": "0.1.1",
+         "type": "string"
+      },
+      "describedBy": {
+         "title": "Described by",
+         "description": "The URL reference to the schema.",
+         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/acquisition.py",
+         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/acquisition.py",
+         "type": "string"
+      },
+      "experimenter_full_name": {
+         "title": "Experimenter full name",
+         "description": "First and last name of the experimenter.",
+         "type": "string"
+      },
+      "session_start_time": {
+         "title": "Session start time",
+         "type": "string",
+         "format": "date-time"
+      },
+      "specimen_id": {
+         "title": "Specimen ID",
+         "type": "integer"
+      },
+      "instrument_id": {
+         "title": "Instrument ID",
+         "type": "string"
+      },
+      "session_end_time": {
+         "title": "Session end time",
+         "type": "string",
+         "format": "date-time"
+      },
+      "local_storage_directory": {
+         "title": "Local storage directory",
+         "type": "string"
+      },
+      "external_storage_directory": {
+         "title": "External storage directory",
+         "type": "string"
+      },
+      "tile_prefix": {
+         "title": "Tile prefix",
+         "description": "Zstacks will be named: <tile_prefix>_<x>_<y>_<wavelength>.tiff",
+         "type": "string"
+      },
+      "tile_overlap_x": {
+         "title": "Tile overlap x (percent)",
+         "type": "number"
+      },
+      "tile_overlap_y": {
+         "title": "Tile overlap y (percent)",
+         "type": "number"
+      },
+      "step_size_z": {
+         "title": "Step size z (um)",
+         "type": "number"
+      },
+      "axes": {
+         "title": "Axes",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Axis"
+         }
+      },
+      "additional_parameters": {
+         "title": "Additional parameters",
+         "type": "string"
+      },
+      "positions": {
+         "title": "Positions",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Position"
+         }
+      },
+      "lasers": {
+         "title": "Lasers",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Laser"
+         }
+      },
+      "daqs": {
+         "title": "DAQ",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "type": "object"
+         }
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "experimenter_full_name",
+      "session_start_time",
+      "specimen_id",
+      "instrument_id",
+      "session_end_time",
+      "positions",
+      "lasers"
+   ],
+   "definitions": {
+      "AxisName": {
+         "title": "AxisName",
+         "description": "Image axis name",
+         "enum": [
+            "X",
+            "Y",
+            "Z"
+         ]
+      },
+      "Direction": {
+         "title": "Direction",
+         "description": "Anatomical direction name",
+         "enum": [
+            "Left_to_right",
+            "Right_to_left",
+            "Anterior_to_posterior",
+            "Posterior_to_anterior",
+            "Inferior_to_superior",
+            "Superior_to_inferior",
+            "Other"
+         ]
+      },
+      "Axis": {
+         "title": "Axis",
+         "description": "Description of an image axis",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AxisName"
+                  }
+               ]
             },
-            "required": ["direction", "value"]
-        },
-        "3d_coordinates_mm": {
-            "type": "object",
-            "properties": {
-                "direction": {
-                    "type": "string",
-                    "enum": ["X", "Y", "Z"],
-                    "title": "Direction"
-                },
-                "value": {
-                    "type": "number",
-                    "title": "Value (mm)",
-                    "units": "mm"
-                }
+            "dimension": {
+               "title": "Dimension",
+               "description": "Reference axis number for stitching",
+               "type": "integer"
             },
-            "required": ["direction", "value"]
-        },
-        "manipulator_angles": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["XY", "XZ", "YZ"],
-                    "title": "Name"
-                },
-                "value": {
-                    "type": "number",
-                    "units": "deg",
-                    "title": "Value (deg)"
-                }
+            "direction": {
+               "description": "Tissue direction as the value of axis increases. If Other describe in notes.",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Direction"
+                  }
+               ]
             },
-            "required": ["name", "value"]
-        },
-        "probe": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "Name"
-                },
-                "position_start_time": {
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Position start time"
-                },
-                "position_end_time": {
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Position end time"
-                },
-                "targeted_structure": {
-                    "type": "string"
-                },
-                "targeted_ccf_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/ccf_coords"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Targeted CCF coordinates"
-                },
-                "targeted_lab_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/3d_coordinates_mm"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Targeted lab coordinates",
-                    "description": "Targeted coordinates relative to the headframe"
-                },
-                "manipulator_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/3d_coordinates_mm"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Manipulator coordinates"
-                },
-                "manipulator_angles": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/manipulator_angles"},
-                    "uniqueItems": true,
-                    "title": "Manipulator angles"
-                }
+            "voxel_size": {
+               "title": "Voxel size (um)",
+               "type": "number"
             },
-            "required": [
-                "name",
-                "position_start_time",
-                "position_end_time",
-                "targeted_structure",
-                "targeted_ccf_coordinates",
-                "targeted_lab_coordinates",
-                "manipulator_coordinates",
-                "manipulator_angles"
-            ]
-        },
-        "laser": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "Name"
-                },
-                "wavelength": {
-                    "type": "integer",
-                    "title": "Wavelength (nm)",
-                    "units": "nm"
-                },
-                "power": {
-                    "type": "number",
-                    "units": "mW",
-                    "title": "Power (mW)"
-                },
-                "position_start_time": {
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Position start time"
-                },
-                "position_end_time": {
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Position end time"
-                },
-                "targeted_structure": {
-                    "type": "string",
-                    "title": "Targeted structure"
-                },
-                "targeted_ccf_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/ccf_coords"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Targeted CCF coordinates"
-                },
-                "targeted_lab_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/3d_coordinates_mm"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Targeted lab coordinates",
-                    "description": "Targeted coordinates relative to the headframe"
-                },
-                "manipulator_coordinates": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/3d_coordinates_mm"},
-                    "uniqueItems": true,
-                    "minItems": 3,
-                    "maxItems": 3,
-                    "title": "Manipulator coordinates"
-                },
-                "manipulator_angles": {
-                    "type": "array",
-                    "items": {"$ref": "#/$defs/manipulator_angles"},
-                    "uniqueItems": true,
-                    "title": "Manipulator angles"
-                }
+            "volume_size": {
+               "title": "Volume size (um)",
+               "description": "Size of the volume for this dimension.",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "dimension",
+            "direction",
+            "voxel_size",
+            "volume_size"
+         ]
+      },
+      "Position": {
+         "title": "Position",
+         "description": "Description of stage position",
+         "type": "object",
+         "properties": {
+            "x_start_um": {
+               "title": "X Start Um",
+               "type": "number"
             },
-            "required": [
-                    "name",
-                    "wavelength",
-                    "power",
-                    "position_start_time",
-                    "position_end_time",
-                    "targeted_structure",
-                    "targeted_ccf_coordinates",
-                    "targeted_lab_coordinates",
-                    "manipulator_coordinates",
-                    "manipulator_angles"
-                ]
-        }
-    },
-    "required": [
-        "version",
-        "institution",
-        "experimenter_full_name",
-        "session_start_time",
-        "session_end_time",
-        "specimen_id",
-        "project_id",
-        "session_type",
-        "rig_id",
-        "probes",
-        "lasers",
-        "ccf_version"
-    ]
+            "x_end_um": {
+               "title": "X End Um",
+               "type": "number"
+            },
+            "x_step_um": {
+               "title": "X Step Um",
+               "type": "number"
+            },
+            "y_start_um": {
+               "title": "Y Start Um",
+               "type": "number"
+            },
+            "y_end_um": {
+               "title": "Y End Um",
+               "type": "number"
+            },
+            "y_step_um": {
+               "title": "Y Step Um",
+               "type": "number"
+            },
+            "z_start_um": {
+               "title": "Z Start Um",
+               "type": "number"
+            },
+            "z_end_um": {
+               "title": "Z End Um",
+               "type": "number"
+            },
+            "z_step_um": {
+               "title": "Z Step Um",
+               "type": "number"
+            }
+         },
+         "required": [
+            "x_start_um",
+            "x_end_um",
+            "x_step_um",
+            "y_start_um",
+            "y_end_um",
+            "y_step_um",
+            "z_start_um",
+            "z_end_um",
+            "z_step_um"
+         ]
+      },
+      "Laser": {
+         "title": "Laser",
+         "description": "Description of a laser",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "type": "string"
+            },
+            "channel": {
+               "title": "Channel",
+               "type": "integer"
+            },
+            "enabled": {
+               "title": "Enabled",
+               "type": "boolean"
+            },
+            "wavelength": {
+               "title": "Wavelength (nm)",
+               "type": "integer"
+            },
+            "power": {
+               "title": "Power",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "channel",
+            "wavelength",
+            "power"
+         ]
+      }
+   }
 }

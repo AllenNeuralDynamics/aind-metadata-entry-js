@@ -1,418 +1,754 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties": {
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/procedures.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "version": {
-            "type": "string",
-            "const": "0.2.0",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "specimen_id": {
-            "type": "string",
-            "title": "Specimen ID",
-            "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes."
-        },
-        "headframes": {
-            "type": "array",
-            "items": { "$ref": "#/$defs/headframe" },
-            "uniqueItems": true,
-            "title": "Headframes"
-        },
-        "craniotomies": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/craniotomy" },
-            "uniqueItems": true,
-            "title": "Craniotomies"
-        },
-        "mri_scans": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/mris"},
-            "uniqueItems": true,
-            "title": "MRI scans"
-        },
-        "injections": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/injection" },
-            "uniqueItems": true,
-            "title": "Injections"
-        },
-        "water_restriction_protocol_id": {
-            "type": "string",
-            "title": "Water restriction protocol number"
-        },
-        "water_restriction_start_date": {
-            "type": "string",
-            "format": "date",
-            "title": "Water restriction start date"
-        },
-        "water_restriction_end_date": {
-            "type": "string",
-            "format": "date",
-            "title": "Water restriction end date"
-        },
-        "training_protocols":{
-            "type": "array",
-            "items": {"$ref": "#/$defs/training_protocol"},
-            "uniqueItems": true,
-            "title": "Training protocols"
-        },
-        "tissue_preparations": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/tissue_prep"},
-            "uniqueItems": true,
-            "title": "Tissue preparations"
-        },
-        "notes": {
-            "type": "string",
-            "title": "Notes"
-        }
-    },
-    
-    "$defs": {
-        "mris": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date"
-                },
-                "experimenter_full_name": {
-                    "type": "string",
-                    "title": "Experimenter full name",
-                    "description": "First and last name of the experimenter."
-                },
-                "scan_type": {
-                    "type": "string",
-                    "title": "Scan type",
-                    "enum": ["RARE"]
-                },
-                "scanner_location": {
-                    "type": "string",
-                    "title": "Scanner location",
-                    "enum": ["UW SLU", "Fred Hutch"]
-                },
-                "magnetic_strength": {
-                    "type": "integer",
-                    "title": "Magnetic strength (T)",
-                    "enum": [7, 14],
-                    "units": "T"
-                },
-                "resolution": {
-                    "type": "number",
-                    "title": "Resolution"
-                },
-                "protocol_id": {
-                    "type": "string",
-                    "title": "Protocol ID"
-                }
+   "title": "Procedures",
+   "description": "Description of all procedures performed on a subject",
+   "type": "object",
+   "properties": {
+      "describedBy": {
+         "title": "Described by",
+         "description": "The URL reference to the schema.",
+         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/procedures.py",
+         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/procedures.py",
+         "type": "string"
+      },
+      "schema_version": {
+         "title": "Version",
+         "description": "schema version",
+         "default": "0.3.1",
+         "const": "0.3.1",
+         "type": "string"
+      },
+      "specimen_id": {
+         "title": "Specimen ID",
+         "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes.",
+         "type": "string"
+      },
+      "headframes": {
+         "title": "Headframes",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Headframe"
+         }
+      },
+      "craniotomies": {
+         "title": "Craniotomies",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Craniotomy"
+         }
+      },
+      "mri_scans": {
+         "title": "MRI scans",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/MriScan"
+         }
+      },
+      "injections": {
+         "title": "Injections",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Injection"
+         }
+      },
+      "fiber_implants": {
+         "title": "Fiber implants",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/FiberImplant"
+         }
+      },
+      "water_restriction": {
+         "title": "Water restriction",
+         "allOf": [
+            {
+               "$ref": "#/definitions/WaterRestriction"
+            }
+         ]
+      },
+      "training_protocols": {
+         "title": "Training protocols",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/TrainingProtocol"
+         }
+      },
+      "tissue_preparations": {
+         "title": "Tissue preparations",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/TissuePrep"
+         }
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "specimen_id"
+   ],
+   "definitions": {
+      "HeadframeMaterial": {
+         "title": "HeadframeMaterial",
+         "description": "Headframe material name",
+         "enum": [
+            "Titanium",
+            "Steel"
+         ]
+      },
+      "Headframe": {
+         "title": "Headframe",
+         "description": "Description of headframe procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
             },
-            "required": [
-                "date",
-                "experimenter_full_name",
-                "scan_type",
-                "resolution",
-                "protocol_id"
-            ]
-        },
-        "tissue_prep": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": [
-                        "Perfusion",
-                        "Fixation",
-                        "Double delipidation",
-                        "DCM delipidation",
-                        "Immunostaining",
-                        "Gelation"
-                    ],
-                    "title": "Name"
-                },
-                "date_started": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date started"
-                },
-                "date_ended": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date ended"
-                },
-                "experimenter_full_name": {
-                    "type": "string",
-                    "title": "Experimenter full name",
-                    "description": "First and last name of the experimenter."
-                },
-                "protocol_id": {
-                    "type": "string",
-                    "title": "Protocol ID"
-                },
-                "notes": {
-                    "type": "string"
-                }
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
             },
-            "required": ["name", "date_started", "protocol_id"]
-        },
-        "training_protocol": {
-            "type": "object",
-            "properties": {
-                "training_protocol_id": {
-                    "type": "string",
-                    "title": "Training protocol ID"
-                },
-                "training_protocol_start_date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Training protocol start date"
-                },
-                "training_protocol_end_date":{
-                    "type": "string",
-                    "format": "date",
-                    "title": "Training protocol end date"
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                }
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
             },
-            "required": [
-                "training_protocol_id",
-                "training_protocol_start_date"
-            ]
-        },
-        "headframe": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date"
-                },
-                "experimenter_full_name": {
-                    "type": "string",
-                    "title": "Experimenter full name",
-                    "description": "First and last name of the experimenter."
-                },
-                "headframe_protocol_id": {
-                    "type": "string",
-                    "title": "Headframe protocol ID"
-                },
-                "headframe_part_number": {
-                    "type": "string",
-                    "title": "Headframe part number"
-                },
-                "headframe_material": {
-                    "type": "string",
-                    "title": "Headframe material",
-                    "enum": ["Titanium", "Steel"]
-                },
-                "well_part_number": {
-                    "type": "string",
-                    "title": "Well part number"
-                },
-                "well_type": {
-                    "type": "string",
-                    "title": "Well type",
-                    "enum": ["A","B"]
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                }
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
             },
-            "required": [
-                "date",
-                "experimenter_full_name",
-                "headframe_protocol_id",
-                "headframe_part_number",
-                "headframe_material" 
-            ]
-        },
-        "craniotomy": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date"
-                },
-                "experimenter_full_name": {
-                    "type": "string",
-                    "title": "Experimenter full name",
-                    "description": "First and last name of the experimenter."
-                },
-                "craniotomy_protocol_id": {
-                    "type": "string",
-                    "title": "Craniotomy protocol ID"
-                },
-                "craniotomy_coordinate_ml": {
-                    "type": "number",
-                    "title": "Craniotomy coordinate ML (mm)",
-                    "units": "mm"
-                },
-                "craniotomy_coordinates_ap": {
-                    "type": "number",
-                    "title": "Craniotomy coordinates AP (mm)",
-                    "units": "mm"
-                },
-                "craniotomy_size": {
-                    "type": "number",
-                    "title": "Craniotomy size (mm)",
-                    "units": "mm"
-                },
-                "implant_part_number": {
-                    "type": "string",
-                    "title": "Implant part number"
-                },
-                "dura_removed": {
-                    "type": "boolean",
-                    "title": "Dura removed"
-                },
-                "protective_material": {
-                    "type": "string",
-                    "title": "Protective material",
-                    "enum": [
-                        "Duragel", 
-                        "SORTA-clear", 
-                        "Kwik-Cast",
-                        "Other - see notes"
-                    ]
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                }
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "type": "number"
             },
-            "required": [
-                "date",
-                "experimenter_full_name",
-                "craniotomy_protocol_id",
-                "craniotomy_coordinates_ml",
-                "craniotomy_coordinates_ap",
-                "craniotomy_size"
-            ]
-        },
-        "injection": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Date"
-                },
-                "experimenter_full_name": {
-                    "type": "string",
-                    "title": "Experimenter full name",
-                    "description": "First and last name of the experimenter."
-                },
-                "injection_protocol_id": {
-                    "type": "string",
-                    "title": "Injection protocol ID"
-                },
-                "injection_hemisphere": {
-                    "type": "string",
-                    "title": "Injection hemisphere",
-                    "enum": ["left", "right"]
-                },
-                "injection_coordinate_ml": {
-                    "type": "number",
-                    "title": "Injection coordinate ML (mm)",
-                    "units": "mm"
-                },
-                "injection_coordinate_ap": {
-                    "type": "number",
-                    "title": "Injection coordinate AP (mm)",
-                    "units": "mm"
-                },
-                "injection_coordinate_depth": {
-                    "type": "number",
-                    "title": "Injection coodinate depth (mm)",
-                    "units": "mm"
-                },
-                "injection_angle": {
-                    "type": "number",
-                    "title": "Injection angle (deg)",
-                    "units": "deg"
-                },
-                "injection_virus": {
-                    "type": "string",
-                    "title": "Injection virus"
-                },
-                "injection_virus_id": {
-                    "type": "string",
-                    "title": "Injection virus ID"
-                },
-                "injection_duration": {
-                    "type": "string",
-                    "format": "time",
-                    "title": "Injection duration"
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                },
-                "injection_class": {
-                    "anyOf": [
-                        {
-                            "type": "object",
-                            "title": "Nanoject",
-                            "properties": {
-                                "injection_volume": {
-                                    "type": "number",
-                                    "title": "Injection volume (nL)",
-                                    "units": "nL"
-                                }
-                            },
-                            "required": ["injection_volume"]
-                        },
-                        {
-                            "type": "object",
-                            "title": "Iontophoresis",
-                            "properties": {
-                                "injection_current": {
-                                    "type": "number",
-                                    "title": "Injection current (uA)",
-                                    "units": "uA"
-                                },
-                                "alternating_current": {
-                                    "type": "string",
-                                    "title": "Alternating current"
-                                }
-                            },
-                            "required": [
-                                "injection_current",
-                                "alternating_current"
-                            ]
-                        }
-                    ]
-                }
-            },            
-            "required": [
-                "date",
-                "experimenter_full_name",
-                "injection_protocol_id",
-                "injection_coordinate_ml",
-                "injection_coordinate_ap",
-                "injection_coordinate_depth",
-                "injection_angle",
-                "injection_virus",
-                "injection_duration",
-                "injection_class"
-            ]
-        }
-    },
-    "required": [
-        "describedBy",
-        "version",
-        "specimen_id"
-        ]
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "headframe_part_number": {
+               "title": "Headframe part number",
+               "type": "string"
+            },
+            "headframe_material": {
+               "title": "Headframe material",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/HeadframeMaterial"
+                  }
+               ]
+            },
+            "well_part_number": {
+               "title": "Well part number",
+               "type": "string"
+            },
+            "well_type": {
+               "title": "Well type",
+               "type": "string"
+            }
+         },
+         "required": [
+            "date",
+            "experimenter_full_name",
+            "protocol_id",
+            "headframe_part_number",
+            "headframe_material"
+         ]
+      },
+      "ProtectiveMaterial": {
+         "title": "ProtectiveMaterial",
+         "description": "Name of material applied to craniotomy",
+         "enum": [
+            "Duragel",
+            "SORTA-clear",
+            "Kwik-Cast",
+            "Other - see notes"
+         ]
+      },
+      "Craniotomy": {
+         "title": "Craniotomy",
+         "description": "Description of craniotomy procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "type": "number"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "craniotomy_coordinates_ml": {
+               "title": "Craniotomy coordinate ML (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "craniotomy_coordinates_ap": {
+               "title": "Craniotomy coordinates AP (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "craniotomy_size": {
+               "title": "Craniotomy size (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "implant_part_number": {
+               "title": "Implant part number",
+               "type": "string"
+            },
+            "dura_removed": {
+               "title": "Dura removed",
+               "type": "boolean"
+            },
+            "protective_material": {
+               "title": "Protective material",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/ProtectiveMaterial"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "date",
+            "experimenter_full_name",
+            "protocol_id",
+            "craniotomy_coordinates_ml",
+            "craniotomy_coordinates_ap",
+            "craniotomy_size"
+         ]
+      },
+      "MriScanSequence": {
+         "title": "MriScanSequence",
+         "description": "MRI scan sequence",
+         "enum": [
+            "RARE"
+         ]
+      },
+      "ScannerLocation": {
+         "title": "ScannerLocation",
+         "description": "location of scanner",
+         "enum": [
+            "UW SLU",
+            "Fred Hutch"
+         ]
+      },
+      "MagneticStrength": {
+         "title": "MagneticStrength",
+         "description": "Strength of magnet",
+         "enum": [
+            7,
+            14
+         ]
+      },
+      "MriScan": {
+         "title": "MriScan",
+         "description": "Description of an MRI scan",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "type": "number"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "scan_sequence": {
+               "title": "Scan sequence",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/MriScanSequence"
+                  }
+               ]
+            },
+            "scanner_location": {
+               "title": "Scanner location",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/ScannerLocation"
+                  }
+               ]
+            },
+            "magnetic_strength": {
+               "title": "Magnetic strength (T)",
+               "units": "T",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/MagneticStrength"
+                  }
+               ]
+            },
+            "resolution": {
+               "title": "Resolution",
+               "type": "number"
+            }
+         },
+         "required": [
+            "date",
+            "experimenter_full_name",
+            "protocol_id",
+            "scan_sequence",
+            "resolution"
+         ]
+      },
+      "Hemisphere": {
+         "title": "Hemisphere",
+         "description": "Brain hemisphere",
+         "enum": [
+            "left",
+            "right"
+         ]
+      },
+      "NanojectInjection": {
+         "title": "NanojectInjection",
+         "description": "Description of a nanoject injection procedure",
+         "type": "object",
+         "properties": {
+            "injection_type": {
+               "title": "Injection type",
+               "default": "Nanoject",
+               "const": "Nanoject",
+               "type": "string"
+            },
+            "injection_volume": {
+               "title": "Injection volume (nL)",
+               "units": "nL",
+               "type": "number"
+            }
+         },
+         "required": [
+            "injection_volume"
+         ]
+      },
+      "IontophoresisInjection": {
+         "title": "IontophoresisInjection",
+         "description": "Description of an iotophoresis injection procedure",
+         "type": "object",
+         "properties": {
+            "injection_type": {
+               "title": "Injection type",
+               "default": "Iontophoresis",
+               "const": "Iontophoresis",
+               "type": "string"
+            },
+            "injection_current": {
+               "title": "Injection current (\u03bcA)",
+               "units": "\u03bcA",
+               "type": "number"
+            },
+            "alternating_current": {
+               "title": "Alternating current",
+               "type": "string"
+            }
+         },
+         "required": [
+            "injection_current",
+            "alternating_current"
+         ]
+      },
+      "Injection": {
+         "title": "Injection",
+         "description": "Description of an injection procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "type": "number"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Hemisphere"
+                  }
+               ]
+            },
+            "injection_coordinate_ml": {
+               "title": "Injection coordinate ML (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_ap": {
+               "title": "Injection coordinate AP (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_depth": {
+               "title": "Injection coodinate depth (mm)",
+               "type": "number"
+            },
+            "injection_angle": {
+               "title": "Injection angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "injection_virus": {
+               "title": "Injection virus",
+               "type": "string"
+            },
+            "injection_virus_id": {
+               "title": "Injection virus ID",
+               "type": "string"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
+            },
+            "injection_class": {
+               "title": "Injection Class",
+               "anyOf": [
+                  {
+                     "$ref": "#/definitions/NanojectInjection"
+                  },
+                  {
+                     "$ref": "#/definitions/IontophoresisInjection"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "date",
+            "experimenter_full_name",
+            "protocol_id",
+            "injection_coordinate_ml",
+            "injection_coordinate_ap",
+            "injection_coordinate_depth",
+            "injection_angle",
+            "injection_virus",
+            "injection_duration",
+            "injection_class"
+         ]
+      },
+      "ProbeName": {
+         "title": "ProbeName",
+         "description": "Probe name",
+         "enum": [
+            "Probe A",
+            "Probe B",
+            "Probe C"
+         ]
+      },
+      "FerruleMaterial": {
+         "title": "FerruleMaterial",
+         "description": "Probe ferrule material type name",
+         "enum": [
+            "Ceramic",
+            "Stainless steel"
+         ]
+      },
+      "OphysProbe": {
+         "title": "OphysProbe",
+         "description": "Description of an ophys probe",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/ProbeName"
+                  }
+               ]
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "type": "string"
+            },
+            "part_number": {
+               "title": "Part number",
+               "type": "string"
+            },
+            "core_diameter": {
+               "title": "Core diameter (\u03bcm)",
+               "units": "\u03bcm",
+               "type": "number"
+            },
+            "numerical_aperture": {
+               "title": "Numerical aperture",
+               "type": "number"
+            },
+            "ferrule_material": {
+               "title": "Ferrule material",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FerruleMaterial"
+                  }
+               ]
+            },
+            "targeted_structure": {
+               "title": "Targeted structure",
+               "type": "string"
+            },
+            "stereotactic_coordinate_ap": {
+               "title": "Stereotactic coordinate A/P (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "stereotactic_coordinate_ml": {
+               "title": "Stereotactic coodinate M/L (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "stereotactic_coordinate_dv": {
+               "title": "Stereotactic coordinate D/V (mm)",
+               "units": "mm",
+               "type": "number"
+            },
+            "angle": {
+               "title": "Angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            }
+         },
+         "required": [
+            "name",
+            "manufacturer",
+            "part_number",
+            "core_diameter",
+            "numerical_aperture",
+            "targeted_structure",
+            "stereotactic_coordinate_ap",
+            "stereotactic_coordinate_ml",
+            "stereotactic_coordinate_dv",
+            "angle"
+         ]
+      },
+      "FiberImplant": {
+         "title": "FiberImplant",
+         "description": "Description of an implant procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "type": "number"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "probes": {
+               "title": "Ophys Probes",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/OphysProbe"
+               }
+            }
+         },
+         "required": [
+            "date",
+            "experimenter_full_name",
+            "protocol_id",
+            "probes"
+         ]
+      },
+      "WaterRestriction": {
+         "title": "WaterRestriction",
+         "description": "Description of a water restriction procedure",
+         "type": "object",
+         "properties": {
+            "protocol_id": {
+               "title": "Water restriction protocol number",
+               "type": "string"
+            },
+            "baseline_weight": {
+               "title": "Baseline weight (g)",
+               "description": "Weight at start of water restriction",
+               "type": "number"
+            },
+            "start_date": {
+               "title": "Water restriction start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "Water restriction end date",
+               "type": "string",
+               "format": "date"
+            }
+         },
+         "required": [
+            "baseline_weight",
+            "start_date",
+            "end_date"
+         ]
+      },
+      "TrainingProtocol": {
+         "title": "TrainingProtocol",
+         "description": "Description of an animal training protocol",
+         "type": "object",
+         "properties": {
+            "protocol_id": {
+               "title": "Training protocol ID",
+               "type": "string"
+            },
+            "training_protocol_start_date": {
+               "title": "Training protocol start date",
+               "type": "string",
+               "format": "date"
+            },
+            "training_protocol_end_date": {
+               "title": "Training protocol end date",
+               "type": "string",
+               "format": "date"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            }
+         },
+         "required": [
+            "protocol_id",
+            "training_protocol_start_date"
+         ]
+      },
+      "TissuePrepName": {
+         "title": "TissuePrepName",
+         "description": "Tissue preparation type name",
+         "enum": [
+            "Perfusion",
+            "Fixation",
+            "Double delipidation",
+            "DCM delipidation",
+            "Immunostaining",
+            "Gelation"
+         ]
+      },
+      "TissuePrep": {
+         "title": "TissuePrep",
+         "description": "Description of a tissue preparation procedure",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TissuePrepName"
+                  }
+               ]
+            },
+            "date_started": {
+               "title": "Date-time procedure started",
+               "type": "string",
+               "format": "date"
+            },
+            "date_ended": {
+               "title": "Date-time procedure ended",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            }
+         },
+         "required": [
+            "name",
+            "date_started",
+            "protocol_id"
+         ]
+      }
+   }
 }
