@@ -8,7 +8,6 @@ import imaging_instrument from '../schemas/imaging/imaging-instrument-schema.jso
 import ophys_rig from '../schemas/ophys/ophys-rig-schema.json';
 import ophys_session from '../schemas/ophys/ophys-session-schema.json';
 import imaging_acquisition from '../schemas/imaging/imaging-acquisition-schema.json';
-import sample from '../schemas/sample-schema.json';
 
 const schema_map = {
     'data description': data_description,
@@ -20,8 +19,7 @@ const schema_map = {
     'imaging instrument': imaging_instrument,
     'ophys rig': ophys_rig,
     'ophys session': ophys_session,
-    'imaging acquisition': imaging_acquisition, 
-    'sample': sample
+    'imaging acquisition': imaging_acquisition
 }
 
 export default schema_map; 
