@@ -3,18 +3,17 @@
    "description": "Description of an imaging acquisition session",
    "type": "object",
    "properties": {
+      "describedBy": {
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/imaging/acquisition.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/imaging/acquisition.py",
+         "type": "string"
+      },
       "version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.1.1",
-         "const": "0.1.1",
-         "type": "string"
-      },
-      "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/acquisition.py",
-         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/imaging/acquisition.py",
+         "default": "0.3.0",
+         "const": "0.3.0",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -27,8 +26,8 @@
          "type": "string",
          "format": "date-time"
       },
-      "specimen_id": {
-         "title": "Specimen ID",
+      "subject_id": {
+         "title": "Subject ID",
          "type": "integer"
       },
       "instrument_id": {
@@ -55,10 +54,14 @@
       },
       "tile_overlap_x": {
          "title": "Tile overlap x (percent)",
+         "minimum": 0,
+         "maximum": 100,
          "type": "number"
       },
       "tile_overlap_y": {
          "title": "Tile overlap y (percent)",
+         "minimum": 0,
+         "maximum": 100,
          "type": "number"
       },
       "step_size_z": {
@@ -85,12 +88,12 @@
             "$ref": "#/definitions/Position"
          }
       },
-      "lasers": {
-         "title": "Lasers",
+      "channels": {
+         "title": "Channels",
          "uniqueItems": true,
          "type": "array",
          "items": {
-            "$ref": "#/definitions/Laser"
+            "$ref": "#/definitions/Channel"
          }
       },
       "daqs": {
@@ -109,12 +112,13 @@
    "required": [
       "experimenter_full_name",
       "session_start_time",
-      "specimen_id",
+      "subject_id",
       "instrument_id",
       "session_end_time",
       "positions",
-      "lasers"
+      "channels"
    ],
+   "additionalProperties": false,
    "definitions": {
       "AxisName": {
          "title": "AxisName",
@@ -180,7 +184,8 @@
             "direction",
             "voxel_size",
             "volume_size"
-         ]
+         ],
+         "additionalProperties": false
       },
       "Position": {
          "title": "Position",
@@ -234,17 +239,14 @@
             "z_start_um",
             "z_end_um",
             "z_step_um"
-         ]
+         ],
+         "additionalProperties": false
       },
-      "Laser": {
-         "title": "Laser",
-         "description": "Description of a laser",
+      "Channel": {
+         "title": "Channel",
+         "description": "Description of a channel",
          "type": "object",
          "properties": {
-            "name": {
-               "title": "Name",
-               "type": "string"
-            },
             "channel": {
                "title": "Channel",
                "type": "integer"
@@ -253,21 +255,31 @@
                "title": "Enabled",
                "type": "boolean"
             },
-            "wavelength": {
+            "laser_wavelength": {
                "title": "Wavelength (nm)",
+               "minimum": 300,
+               "maximum": 1000,
+               "units": "nm",
                "type": "integer"
             },
-            "power": {
-               "title": "Power",
+            "laser_power": {
+               "title": "Power (mW)",
+               "maximum": 2000,
+               "units": "mW",
                "type": "number"
+            },
+            "filter_wheel_index": {
+               "title": "Filter wheel index",
+               "type": "integer"
             }
          },
          "required": [
-            "name",
             "channel",
-            "wavelength",
-            "power"
-         ]
+            "laser_wavelength",
+            "laser_power",
+            "filter_wheel_index"
+         ],
+         "additionalProperties": false
       }
    }
 }

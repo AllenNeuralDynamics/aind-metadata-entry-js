@@ -4,10 +4,9 @@
    "type": "object",
    "properties": {
       "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/processing.py",
-         "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/processing.py",
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/processing.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/processing.py",
          "type": "string"
       },
       "schema_version": {
@@ -39,6 +38,7 @@
    "required": [
       "data_processes"
    ],
+   "additionalProperties": false,
    "definitions": {
       "ProcessName": {
          "title": "ProcessName",
@@ -117,7 +117,8 @@
             "output_location",
             "code_url",
             "parameters"
-         ]
+         ],
+         "additionalProperties": false
       }
    }
 }

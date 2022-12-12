@@ -3,18 +3,17 @@
    "description": "Description of an ephys recording session",
    "type": "object",
    "properties": {
+      "describedBy": {
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ephys/ephys_session.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ephys/ephys_session.py",
+         "type": "string"
+      },
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.2.0",
-         "const": "0.2.0",
-         "type": "string"
-      },
-      "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_session.py",
-         "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_session.py",
+         "default": "0.2.1",
+         "const": "0.2.1",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -44,8 +43,16 @@
             }
          ]
       },
+      "session_description": {
+         "title": "Session description",
+         "type": "string"
+      },
       "stimulus_protocol_id": {
          "title": "Stimulus protocol ID",
+         "type": "string"
+      },
+      "iacuc_protocol": {
+         "title": "IACUC protocol",
          "type": "string"
       },
       "rig_id": {
@@ -66,9 +73,9 @@
             "$ref": "#/definitions/Stream"
          }
       },
-      "coordinate_transform": {
-         "title": "Coordinate transform",
-         "description": "Path to file that details the coordinate transform.",
+      "ccf_coordinate_transform": {
+         "title": "CCF coordinate transform",
+         "description": "Path to file that details the CCF-to-lab coordinate transform.",
          "type": "string"
       },
       "notes": {
@@ -85,15 +92,15 @@
       "rig_id",
       "probe_streams"
    ],
+   "additionalProperties": false,
    "definitions": {
       "SessionType": {
          "title": "SessionType",
          "description": "Session type name",
          "enum": [
             "Test",
-            "Foraging A",
-            "Spontaneous",
-            "Foraging B"
+            "Optotagging",
+            "Visual Orientation"
          ]
       },
       "ExpectedDataStream": {
@@ -150,7 +157,8 @@
             "ml",
             "ap",
             "dv"
-         ]
+         ],
+         "additionalProperties": false
       },
       "Coordinates3d": {
          "title": "Coordinates3d",
@@ -177,40 +185,8 @@
             "x",
             "y",
             "z"
-         ]
-      },
-      "AngleName": {
-         "title": "AngleName",
-         "description": "Euler angle name",
-         "enum": [
-            "XY",
-            "XZ",
-            "YZ"
-         ]
-      },
-      "ManipulatorAngles": {
-         "title": "ManipulatorAngles",
-         "description": "Description of manipulator angle",
-         "type": "object",
-         "properties": {
-            "name": {
-               "title": "AngleName",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/AngleName"
-                  }
-               ]
-            },
-            "value": {
-               "title": "Value (deg)",
-               "units": "deg",
-               "type": "number"
-            }
-         },
-         "required": [
-            "name",
-            "value"
-         ]
+         ],
+         "additionalProperties": false
       },
       "EphysProbe": {
          "title": "EphysProbe",
@@ -227,7 +203,10 @@
             },
             "other_targeted_structures": {
                "title": "Other Targeted Structures",
-               "type": "string"
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
             },
             "targeted_ccf_coordinates": {
                "title": "Targeted CCF coordinates",
@@ -244,26 +223,17 @@
                      "$ref": "#/definitions/Coordinates3d"
                   }
                ]
-            },
-            "manipulator_angles": {
-               "title": "Manipulator angles",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/ManipulatorAngles"
-               }
             }
          },
          "required": [
             "name",
             "tip_targeted_structure",
-            "targeted_ccf_coordinates",
-            "manipulator_coordinates",
-            "manipulator_angles"
-         ]
+            "manipulator_coordinates"
+         ],
+         "additionalProperties": false
       },
-      "Laser": {
-         "title": "Laser",
+      "LaserModule": {
+         "title": "LaserModule",
          "description": "Description of a laser",
          "type": "object",
          "properties": {
@@ -300,14 +270,6 @@
                      "$ref": "#/definitions/Coordinates3d"
                   }
                ]
-            },
-            "manipulator_angles": {
-               "title": "Manipulator angles",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/ManipulatorAngles"
-               }
             }
          },
          "required": [
@@ -316,9 +278,9 @@
             "power",
             "targeted_structure",
             "targeted_ccf_coordinates",
-            "manipulator_coordinates",
-            "manipulator_angles"
-         ]
+            "manipulator_coordinates"
+         ],
+         "additionalProperties": false
       },
       "Stream": {
          "title": "Stream",
@@ -348,7 +310,7 @@
                "uniqueItems": true,
                "type": "array",
                "items": {
-                  "$ref": "#/definitions/Laser"
+                  "$ref": "#/definitions/LaserModule"
                }
             }
          },
@@ -357,7 +319,8 @@
             "stream_stop_time",
             "probes",
             "lasers"
-         ]
+         ],
+         "additionalProperties": false
       }
    }
 }

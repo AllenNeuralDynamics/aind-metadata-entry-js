@@ -3,22 +3,22 @@
    "description": "Description of a logical collection of data files",
    "type": "object",
    "properties": {
+      "describedBy": {
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/data_description.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/data_description.py",
+         "type": "string"
+      },
       "schema_version": {
          "title": "Schema Version",
-         "default": "0.1.0",
-         "const": "0.1.0",
+         "default": "0.2.0",
+         "const": "0.2.0",
          "type": "string"
       },
       "license": {
          "title": "License",
          "default": "CC-BY-4.0",
          "const": "CC-BY-4.0",
-         "type": "string"
-      },
-      "describedBy": {
-         "title": "Described by",
-         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/schemas/data_description.py",
-         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/schemas/data_description.py",
          "type": "string"
       },
       "creation_time": {
@@ -33,11 +33,6 @@
          "type": "string",
          "format": "date"
       },
-      "label": {
-         "title": "Label",
-         "description": "Label describing provenance of data",
-         "type": "string"
-      },
       "name": {
          "title": "Name",
          "description": "Name of data, conventionally also the name of the directory containing all data and metadata",
@@ -51,6 +46,14 @@
                "$ref": "#/definitions/Institution"
             }
          ]
+      },
+      "funding_source": {
+         "title": "Funding source",
+         "description": "Funding sources. If internal label as Institution.",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Funding"
+         }
       },
       "data_level": {
          "title": "Data Level",
@@ -79,24 +82,55 @@
          "title": "Project ID",
          "description": "A database or other identifier for a project",
          "type": "string"
+      },
+      "restrictions": {
+         "title": "Restrictions",
+         "description": "Detail any restrictions on publishing or sharing these data",
+         "type": "string"
       }
    },
    "required": [
       "creation_time",
       "creation_date",
-      "label",
       "name",
       "institution",
+      "funding_source",
       "data_level"
    ],
+   "additionalProperties": false,
    "definitions": {
       "Institution": {
          "title": "Institution",
          "description": "Institution name",
          "enum": [
             "AIND",
-            "AIBS"
+            "AIBS",
+            "HUST"
          ]
+      },
+      "Funding": {
+         "title": "Funding",
+         "description": "Description of funding sources",
+         "type": "object",
+         "properties": {
+            "funder": {
+               "title": "Funder",
+               "type": "string"
+            },
+            "grant_number": {
+               "title": "Grant number",
+               "type": "string"
+            },
+            "fundee": {
+               "title": "Fundee",
+               "description": "Person(s) funded by this mechanism",
+               "type": "string"
+            }
+         },
+         "required": [
+            "funder"
+         ],
+         "additionalProperties": false
       },
       "DataLevel": {
          "title": "DataLevel",

@@ -1,177 +1,236 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties":{
-        "version": {
-            "type": "string",
-            "const": "0.1.0",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ophys/ophys_session.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "institution": {
-            "type": "string",
-            "enum": ["AIND", "MSP"],
-            "title": "Institution"
-        },
-        "experimenter_full_name": {
-            "type": "string",
-            "title": "Experimenter full name",
-            "description": "First and last name of the experimenter."
-        },
-        "session_start_time": {
-            "type": "string", 
-            "format": "date-time",
-            "title": "Session start time"
-        },
-        "session_end_time": {
-            "type": "string", 
-            "format": "date-time",
-            "title": "Session end time"
-        },	
-        "specimen_id": {
-            "type": "integer",
-            "title": "Specimen ID"
-        },
-        "project_name": {
-            "type": "string",
-            "title": "Project name"
-        },
-        "project_id": {
-            "type": "string",
-            "title": "Project ID"
-        },
-        "session_type": {
-            "type": "string", 
-            "title": "Session type"
-        },
-        "stimulus_protocol_id": {
-            "type": "string",
-            "title": "Stimulus protocol ID"
-        },
-        "rig_id": {
-            "type": "string",
-            "title": "Rig ID"
-        },
-        "patch_cords": {
-            "type": "array",
-            "items": { "$ref": "#/$defs/patch" },
-            "uniqueItems": true,
-            "title": "Patch cords"
-        },
-        "lasers": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/laser"},
-            "uniqueItems": true,
-            "title": "Lasers"
-        },
-        "coupling_array": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/coupling"},
-            "uniqueItems": true,
-            "title": "Coupling array"
-        },
-        "detectors": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/detector"},
-            "uniqueItems": true,
-            "title": "Detectors"
-        },
-        "notes": {
-            "type": "string"
-        }
-    },
-    "$defs": {
-        "patch": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Patch Cord A", "Patch Cord B", "Patch Cord C"],
-                    "title": "Name"
-                },
-                "output_power": {
-                    "type": "number",
-                    "title": "Output power (uW)",
-                    "units": "uW"
-                }
+   "title": "OphysSession",
+   "description": "Description of an ophys session",
+   "type": "object",
+   "properties": {
+      "describedBy": {
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ophys/ophys_session.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ophys/ophys_session.py",
+         "type": "string"
+      },
+      "schema_version": {
+         "title": "Schema Version",
+         "description": "schema version",
+         "default": "0.0.1",
+         "const": "0.0.1",
+         "type": "string"
+      },
+      "experimenter_full_name": {
+         "title": "Experimenter full name",
+         "description": "First and last name of the experimenter.",
+         "type": "string"
+      },
+      "session_start_time": {
+         "title": "Session start time",
+         "type": "string",
+         "format": "date-time"
+      },
+      "session_end_time": {
+         "title": "Session end time",
+         "type": "string",
+         "format": "date-time"
+      },
+      "subject_id": {
+         "title": "Subject ID",
+         "type": "integer"
+      },
+      "session_type": {
+         "title": "Session type",
+         "type": "string"
+      },
+      "stimulus_protocol_id": {
+         "title": "Stimulus protocol ID",
+         "type": "string"
+      },
+      "iacuc_protocol": {
+         "title": "IACUC protocol",
+         "type": "string"
+      },
+      "rig_id": {
+         "title": "Rig ID",
+         "type": "string"
+      },
+      "patch_cords": {
+         "title": "Patch cords",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Patch"
+         }
+      },
+      "lasers": {
+         "title": "Lasers",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Laser"
+         }
+      },
+      "coupling_array": {
+         "title": "Coupling array",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Coupling"
+         }
+      },
+      "detectors": {
+         "title": "Detectors",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Detector"
+         }
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "experimenter_full_name",
+      "session_start_time",
+      "session_end_time",
+      "subject_id",
+      "session_type",
+      "rig_id",
+      "patch_cords",
+      "lasers",
+      "coupling_array"
+   ],
+   "additionalProperties": false,
+   "definitions": {
+      "PatchCordName": {
+         "title": "PatchCordName",
+         "description": "Patch cord name",
+         "enum": [
+            "Patch Cord A",
+            "Patch Cord B",
+            "Patch Cord C"
+         ]
+      },
+      "Patch": {
+         "title": "Patch",
+         "description": "Description of a patch",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PatchCordName"
+                  }
+               ]
             },
-            "required": ["name", "output_power"]
-        },
-        "laser": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Laser A", "Laser B", "Laser C", "Laser D", "Laser E"],
-                    "title": "Name"
-                },
-                "wavelength": {
-                    "type": "integer",
-                    "title": "Wavelength (nm)",
-                    "units": "nm"
-                },
-                "excitation_power": {
-                    "type": "number",
-                    "units": "mW",
-                    "title": "Excitation power (mW)"
-                }
+            "output_power": {
+               "title": "Output power (uW)",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "output_power"
+         ],
+         "additionalProperties": false
+      },
+      "LaserName": {
+         "title": "LaserName",
+         "description": "Laser name",
+         "enum": [
+            "Laser A",
+            "Laser B",
+            "Laser C",
+            "Laser D",
+            "Laser E"
+         ]
+      },
+      "Laser": {
+         "title": "Laser",
+         "description": "Description of a laser",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/LaserName"
+                  }
+               ]
             },
-            "required": [
-                "name",
-                "wavelength",
-                "power"
-            ]
-        },
-        "coupling": {
-            "type": "object",
-            "properties": {
-                "fiber_name": {
-                    "type": "string",
-                    "title": "Fiber name",
-                    "enum": ["Laser A", "Laser B", "Laser C", "Laser D", "Laser E"]
-                },
-                "patch_cord_name": {
-                    "type": "string",
-                    "title": "Patch cord name",
-                    "enum": ["Patch Cord A", "Patch Cord B", "Patch Cord C"]
-                }
+            "wavelength": {
+               "title": "Wavelength (nm)",
+               "type": "integer"
             },
-            "required": ["fiber_name", "patch_cord_name"]
-        },
-        "detector": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "Name"
-                },
-                "exposure_time": {
-                    "type": "number",
-                    "title": "Exposure time (ms)",
-                    "units": "ms"
-                }
+            "excitation_power": {
+               "title": "Excitation power (mW)",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "wavelength"
+         ],
+         "additionalProperties": false
+      },
+      "FiberName": {
+         "title": "FiberName",
+         "description": "Fiber name",
+         "enum": [
+            "Laser A",
+            "Laser B",
+            "Laser C",
+            "Laser D",
+            "Laser E"
+         ]
+      },
+      "Coupling": {
+         "title": "Coupling",
+         "description": "Description of fiber coupling",
+         "type": "object",
+         "properties": {
+            "fiber_name": {
+               "title": "Fiber name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FiberName"
+                  }
+               ]
             },
-            "required": ["name", "exposure_time"]
-        }
-    },
-    "required": [
-        "version",
-        "institution",
-        "experimenter_full_name",
-        "session_start_time",
-        "session_end_time",
-        "specimen_id",
-        "project_id",
-        "session_type",
-        "rig_id",
-        "patch_cords",
-        "lasers",
-        "coupling_array"
-    ]
+            "patch_cord_name": {
+               "title": "Patch cord name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PatchCordName"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "fiber_name",
+            "patch_cord_name"
+         ],
+         "additionalProperties": false
+      },
+      "Detector": {
+         "title": "Detector",
+         "description": "Description of detector",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "type": "string"
+            },
+            "exposure_time": {
+               "title": "Exposure time (ms)",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "exposure_time"
+         ],
+         "additionalProperties": false
+      }
+   }
 }

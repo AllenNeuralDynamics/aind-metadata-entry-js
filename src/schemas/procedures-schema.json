@@ -4,21 +4,20 @@
    "type": "object",
    "properties": {
       "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/procedures.py",
-         "const": "https://github.com/AllenNeuralDynamics/aind-data-schema/blob/main/src/aind-data-schema/procedures.py",
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/procedures.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/procedures.py",
          "type": "string"
       },
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.3.1",
-         "const": "0.3.1",
+         "default": "0.4.4",
+         "const": "0.4.4",
          "type": "string"
       },
-      "specimen_id": {
-         "title": "Specimen ID",
+      "subject_id": {
+         "title": "Subject ID",
          "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes.",
          "type": "string"
       },
@@ -86,15 +85,53 @@
             "$ref": "#/definitions/TissuePrep"
          }
       },
+      "other_procedures": {
+         "title": "Other procedures",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Procedure"
+         }
+      },
       "notes": {
          "title": "Notes",
          "type": "string"
       }
    },
    "required": [
-      "specimen_id"
+      "subject_id"
    ],
+   "additionalProperties": false,
    "definitions": {
+      "Anaesthetic": {
+         "title": "Anaesthetic",
+         "description": "Description of an anaestheic",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Type",
+               "type": "string"
+            },
+            "duration": {
+               "title": "Duration (hours)",
+               "units": "hours",
+               "type": "number"
+            },
+            "level": {
+               "title": "Level (percent)",
+               "minimum": 1,
+               "maximum": 5,
+               "units": "percent",
+               "type": "number"
+            }
+         },
+         "required": [
+            "type",
+            "duration",
+            "level"
+         ],
+         "additionalProperties": false
+      },
       "HeadframeMaterial": {
          "title": "HeadframeMaterial",
          "description": "Headframe material name",
@@ -113,8 +150,13 @@
                "description": "Procedure type",
                "type": "string"
             },
-            "date": {
-               "title": "Date",
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -125,11 +167,26 @@
             },
             "protocol_id": {
                "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
                "type": "string"
             },
             "animal_weight": {
                "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
                "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -157,12 +214,14 @@
             }
          },
          "required": [
-            "date",
+            "start_date",
+            "end_date",
             "experimenter_full_name",
             "protocol_id",
             "headframe_part_number",
             "headframe_material"
-         ]
+         ],
+         "additionalProperties": false
       },
       "ProtectiveMaterial": {
          "title": "ProtectiveMaterial",
@@ -184,8 +243,13 @@
                "description": "Procedure type",
                "type": "string"
             },
-            "date": {
-               "title": "Date",
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -196,11 +260,26 @@
             },
             "protocol_id": {
                "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
                "type": "string"
             },
             "animal_weight": {
                "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
                "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -236,16 +315,22 @@
                      "$ref": "#/definitions/ProtectiveMaterial"
                   }
                ]
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
             }
          },
          "required": [
-            "date",
+            "start_date",
+            "end_date",
             "experimenter_full_name",
             "protocol_id",
             "craniotomy_coordinates_ml",
             "craniotomy_coordinates_ap",
             "craniotomy_size"
-         ]
+         ],
+         "additionalProperties": false
       },
       "MriScanSequence": {
          "title": "MriScanSequence",
@@ -280,8 +365,13 @@
                "description": "Procedure type",
                "type": "string"
             },
-            "date": {
-               "title": "Date",
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -294,9 +384,23 @@
                "title": "Protocol ID",
                "type": "string"
             },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
             "animal_weight": {
                "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
                "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -333,67 +437,78 @@
             }
          },
          "required": [
-            "date",
+            "start_date",
+            "end_date",
             "experimenter_full_name",
             "protocol_id",
             "scan_sequence",
             "resolution"
-         ]
+         ],
+         "additionalProperties": false
       },
-      "Hemisphere": {
-         "title": "Hemisphere",
-         "description": "Brain hemisphere",
+      "VirusPrepType": {
+         "title": "VirusPrepType",
+         "description": "Type of virus preparation",
          "enum": [
-            "left",
-            "right"
+            "Crude",
+            "Purified"
          ]
       },
-      "NanojectInjection": {
-         "title": "NanojectInjection",
-         "description": "Description of a nanoject injection procedure",
+      "InjectionMaterial": {
+         "title": "InjectionMaterial",
+         "description": "Description of injection material",
          "type": "object",
          "properties": {
-            "injection_type": {
-               "title": "Injection type",
-               "default": "Nanoject",
-               "const": "Nanoject",
+            "name": {
+               "title": "Name",
                "type": "string"
             },
-            "injection_volume": {
-               "title": "Injection volume (nL)",
-               "units": "nL",
+            "material_id": {
+               "title": "Material ID",
+               "type": "string"
+            },
+            "full_genome_name": {
+               "title": "Full genome name",
+               "description": "Full genome for virus construct",
+               "type": "string"
+            },
+            "plasmid_name": {
+               "title": "Plasmid name",
+               "description": "Short name used to reference the plasmid",
+               "type": "string"
+            },
+            "genome_copy": {
+               "title": "Genome copy",
                "type": "number"
+            },
+            "titer": {
+               "title": "Titer (gc/mL",
+               "units": "gc/mL",
+               "type": "number"
+            },
+            "prep_lot_number": {
+               "title": "Preparation lot number",
+               "type": "string"
+            },
+            "prep_date": {
+               "title": "Preparation lot date",
+               "description": "Date this prep lot was titered",
+               "type": "string",
+               "format": "date"
+            },
+            "prep_type": {
+               "title": "Viral prep type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/VirusPrepType"
+                  }
+               ]
             }
          },
          "required": [
-            "injection_volume"
-         ]
-      },
-      "IontophoresisInjection": {
-         "title": "IontophoresisInjection",
-         "description": "Description of an iotophoresis injection procedure",
-         "type": "object",
-         "properties": {
-            "injection_type": {
-               "title": "Injection type",
-               "default": "Iontophoresis",
-               "const": "Iontophoresis",
-               "type": "string"
-            },
-            "injection_current": {
-               "title": "Injection current (\u03bcA)",
-               "units": "\u03bcA",
-               "type": "number"
-            },
-            "alternating_current": {
-               "title": "Alternating current",
-               "type": "string"
-            }
-         },
-         "required": [
-            "injection_current",
-            "alternating_current"
-         ]
+            "name"
+         ],
+         "additionalProperties": false
       },
       "Injection": {
          "title": "Injection",
@@ -405,8 +520,13 @@
                "description": "Procedure type",
                "type": "string"
             },
-            "date": {
-               "title": "Date",
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -417,78 +537,67 @@
             },
             "protocol_id": {
                "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
                "type": "string"
             },
             "animal_weight": {
                "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
                "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
                "type": "string"
             },
-            "injection_hemisphere": {
-               "title": "Injection hemisphere",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Hemisphere"
-                  }
-               ]
-            },
-            "injection_coordinate_ml": {
-               "title": "Injection coordinate ML (mm)",
-               "type": "number"
-            },
-            "injection_coordinate_ap": {
-               "title": "Injection coordinate AP (mm)",
-               "type": "number"
-            },
-            "injection_coordinate_depth": {
-               "title": "Injection coodinate depth (mm)",
-               "type": "number"
-            },
-            "injection_angle": {
-               "title": "Injection angle (deg)",
-               "units": "deg",
-               "type": "number"
-            },
-            "injection_virus": {
-               "title": "Injection virus",
-               "type": "string"
-            },
-            "injection_virus_id": {
-               "title": "Injection virus ID",
-               "type": "string"
+            "injection_materials": {
+               "title": "Injection material",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/InjectionMaterial"
+               }
             },
             "injection_duration": {
                "title": "Injection duration",
                "type": "string",
                "format": "time"
             },
-            "injection_class": {
-               "title": "Injection Class",
-               "anyOf": [
-                  {
-                     "$ref": "#/definitions/NanojectInjection"
-                  },
-                  {
-                     "$ref": "#/definitions/IontophoresisInjection"
-                  }
-               ]
+            "recovery_time": {
+               "title": "Recovery time (min)",
+               "units": "min",
+               "type": "number"
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
+            },
+            "instrument_id": {
+               "title": "Instrument ID",
+               "type": "string"
             }
          },
          "required": [
-            "date",
+            "start_date",
+            "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "injection_coordinate_ml",
-            "injection_coordinate_ap",
-            "injection_coordinate_depth",
-            "injection_angle",
-            "injection_virus",
             "injection_duration",
-            "injection_class"
-         ]
+            "recovery_time"
+         ],
+         "additionalProperties": false
       },
       "ProbeName": {
          "title": "ProbeName",
@@ -585,7 +694,8 @@
             "stereotactic_coordinate_ml",
             "stereotactic_coordinate_dv",
             "angle"
-         ]
+         ],
+         "additionalProperties": false
       },
       "FiberImplant": {
          "title": "FiberImplant",
@@ -597,8 +707,13 @@
                "description": "Procedure type",
                "type": "string"
             },
-            "date": {
-               "title": "Date",
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -609,11 +724,26 @@
             },
             "protocol_id": {
                "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
                "type": "string"
             },
             "animal_weight": {
                "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
                "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -629,11 +759,13 @@
             }
          },
          "required": [
-            "date",
+            "start_date",
+            "end_date",
             "experimenter_full_name",
             "protocol_id",
             "probes"
-         ]
+         ],
+         "additionalProperties": false
       },
       "WaterRestriction": {
          "title": "WaterRestriction",
@@ -664,7 +796,8 @@
             "baseline_weight",
             "start_date",
             "end_date"
-         ]
+         ],
+         "additionalProperties": false
       },
       "TrainingProtocol": {
          "title": "TrainingProtocol",
@@ -693,7 +826,8 @@
          "required": [
             "protocol_id",
             "training_protocol_start_date"
-         ]
+         ],
+         "additionalProperties": false
       },
       "TissuePrepName": {
          "title": "TissuePrepName",
@@ -712,21 +846,18 @@
          "description": "Description of a tissue preparation procedure",
          "type": "object",
          "properties": {
-            "name": {
-               "title": "Name",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/TissuePrepName"
-                  }
-               ]
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
             },
-            "date_started": {
-               "title": "Date-time procedure started",
+            "start_date": {
+               "title": "Start date",
                "type": "string",
                "format": "date"
             },
-            "date_ended": {
-               "title": "Date-time procedure ended",
+            "end_date": {
+               "title": "End date",
                "type": "string",
                "format": "date"
             },
@@ -737,7 +868,104 @@
             },
             "protocol_id": {
                "title": "Protocol ID",
+               "description": "DOI for protocols.io",
                "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TissuePrepName"
+                  }
+               ]
+            },
+            "specimen_id": {
+               "title": "Specimen ID",
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
+            }
+         },
+         "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id",
+            "name",
+            "specimen_id"
+         ],
+         "additionalProperties": false
+      },
+      "Procedure": {
+         "title": "Procedure",
+         "description": "Description of surgical or other procedure performed on a subject",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -745,10 +973,12 @@
             }
          },
          "required": [
-            "name",
-            "date_started",
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
             "protocol_id"
-         ]
+         ],
+         "additionalProperties": false
       }
    }
 }
