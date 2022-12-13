@@ -1,448 +1,757 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "properties": {
-        "describedBy": {
-            "type": "string",
-            "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ophys/ophys_rig.json",
-            "description": "The URL reference to the schema.",
-            "title": "Described by"
-        },
-        "version": {
-            "type": "string",
-            "const": "0.0.1",
-            "description": "schema version",
-            "title": "Version"
-        },
-        "rig_id": {
-            "type": "string",
-            "const": "0_0_0",
-            "description": "room number_stim apparatus_version",
-            "title": "Rig ID"
-        },
-        "rig_location": {
-            "type": "string",
-            "title": "Rig location"
-        },
-        "temperature_control": {
-            "type": "boolean",
-            "title": "Temperature control"
-        },
-        "humidity_control": {
-            "type": "boolean",
-            "title": "Humidity control"
-        },
-        "vibration_control": {
-            "type": "boolean",
-            "title": "Vibration control"
-        },
-        "patch_cords": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/patch"},
-            "uniqueItems": true,
-            "title":"Patch cords"
-        },
-        "cameras": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/camera" },
-            "uniqueItems": true,
-            "title": "Cameras"
-        },
-        "lasers": {
-            "type": "array",
-            "items": {"$ref": "#/$defs/laser" },
-            "uniqueItems": true,
-            "title": "Lasers"
-        },
-        "detectors": {
-            "type": "array",
-            "title": "Detectors",
-            "items": { "$ref": "#/$defs/detector"},
-            "uniqueItems": true
-        },
-        "filters": {
-            "type": "array",
-            "title": "Filters",
-            "items": { "$ref": "#/$defs/filter"},
-            "uniqueItems": true
-        },
-        "lenses": {
-            "type": "array",
-            "title": "Lenses",
-            "items": { "$ref": "#/$defs/lens"},
-            "uniqueItems": true
-        },
-        "devices": {
-            "type": "array",
-            "title": "Devices",
-            "items": {"$ref": "#/$defs/device"},
-            "uniqueItems": true
-        },
-        "light_path_diagram": {
-            "type": "string",
-            "title": "Light path diagram",
-            "description": "Path to diagram of the light path."
-        },
-        "notes": {
-            "type": "string",
-            "title": "Notes"
-        }
-
-    },
-    "required": [
-        "describedBy",
-        "version",
-        "rig_id",
-        "patch_cords",
-        "lasers"
-    ],
-    "$defs": {
-        "patch": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Patch Cord A", "Patch Cord B", "Patch Cord C"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "part_number": {
-                    "type": "string",
-                    "title": "model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "core_diameter": {
-                    "type": "number",
-                    "title": "Core diameter (um)",
-                    "units": "um"
-                },
-                "numerical_aperture": {
-                    "type": "number",
-                    "title": "Numerical aperture"
-                },
-                "photobleaching_date": {
-                    "type": "string",
-                    "format": "date",
-                    "title": "Photobleaching date"
-                }
+   "title": "OphysRig",
+   "description": "Description of an optical physiology rig",
+   "type": "object",
+   "properties": {
+      "describedBy": {
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ophys/ophys_rig.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ophys/ophys_rig.py",
+         "type": "string"
+      },
+      "schema_version": {
+         "title": "Schema Version",
+         "description": "schema version",
+         "default": "0.2.0",
+         "const": "0.2.0",
+         "type": "string"
+      },
+      "rig_id": {
+         "title": "Rig ID",
+         "description": "room number_stim apparatus_version",
+         "type": "string"
+      },
+      "rig_location": {
+         "title": "Rig location",
+         "type": "string"
+      },
+      "temperature_control": {
+         "title": "Temperature control",
+         "type": "boolean"
+      },
+      "humidity_control": {
+         "title": "Humidity control",
+         "type": "boolean"
+      },
+      "vibration_control": {
+         "title": "Vibration control",
+         "type": "boolean"
+      },
+      "patch_cords": {
+         "title": "Patch cords",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Patch"
+         }
+      },
+      "cameras": {
+         "title": "Cameras",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Camera"
+         }
+      },
+      "lasers": {
+         "title": "Lasers",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Laser"
+         }
+      },
+      "detectors": {
+         "title": "Detectors",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Detector"
+         }
+      },
+      "filters": {
+         "title": "Filters",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Filter"
+         }
+      },
+      "lenses": {
+         "title": "Lenses",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Lens"
+         }
+      },
+      "additional_devices": {
+         "title": "Additional devices",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Device"
+         }
+      },
+      "light_path_diagram": {
+         "title": "Light path diagram",
+         "description": "Path to diagram of the light path.",
+         "type": "string"
+      },
+      "notes": {
+         "title": "Notes",
+         "type": "string"
+      }
+   },
+   "required": [
+      "rig_id",
+      "patch_cords",
+      "lasers"
+   ],
+   "additionalProperties": false,
+   "definitions": {
+      "Manufacturer": {
+         "title": "Manufacturer",
+         "description": "Device manufacturer name",
+         "enum": [
+            "Thorlabs",
+            "Optotune",
+            "Cambridge Technology",
+            "Nikon",
+            "Edmund Optics",
+            "Ealing",
+            "Hamamatsu",
+            "Olympus",
+            "Leica",
+            "LifeCanvas",
+            "Custom",
+            "Chroma",
+            "Semrock",
+            "Neuropixels",
+            "MPI",
+            "Vortran",
+            "Coherent Scientific",
+            "MKS Newport",
+            "Applied Scientific Instrumentation",
+            "IR Robot Co",
+            "Vieworks",
+            "Oxxius",
+            "National Instruments",
+            "Other"
+         ]
+      },
+      "DaqChannelType": {
+         "title": "DaqChannelType",
+         "description": "DAQ Channel type",
+         "enum": [
+            "Digital Output",
+            "Analog Output"
+         ]
+      },
+      "DaqChannel": {
+         "title": "DaqChannel",
+         "description": "Description of a DAQ Channel",
+         "type": "object",
+         "properties": {
+            "index": {
+               "title": "index",
+               "type": "integer"
             },
-            "required": ["name", "part_number", "serial_number", "core_diameter", "numerical_aperture"]
-        },
-        "laser": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Laser A", "Laser B", "Laser C", "Laser D", "Laser E"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "item_number": {
-                    "type": "string",
-                    "title": "Item number"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "wavelength": {
-                    "type": "integer",
-                    "title": "Wavelength (nm)",
-                    "units": "nm"
-                },
-                "maximum_power": {
-                    "type": "number",
-                    "title": "Maximum power (mW)",
-                    "units": "mW"
-                },
-                "coupling": {
-                    "type": "string",
-                    "title": "Coupling",
-                    "enum": ["Free-space", "SMF", "MMF", "other"]
-                },
-                "coupling_efficiency": {
-                    "type": "number",
-                    "title": "Coupling efficiency (percent)",
-                    "units": "percent"
-                },
-                "calibration_data": {
-                    "type": "string",
-                    "description": "path to calibration data",
-                    "title": "Calibration data"
-                },
-                "calibration_date":{
-                    "type": "string",
-                    "format": "date-time",
-                    "title": "Calibration date"
-                }
+            "type": {
+               "title": "DAQ channel type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannelType"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "index",
+            "type"
+         ],
+         "additionalProperties": false
+      },
+      "PatchName": {
+         "title": "PatchName",
+         "description": "Patch name",
+         "enum": [
+            "Patch Cord A",
+            "Patch Cord B",
+            "Patch Cord C"
+         ]
+      },
+      "Patch": {
+         "title": "Patch",
+         "description": "Description of a patch",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
             },
-            "required": [
-                "name",
-                "manufacturer",
-                "model",
-                "serial_number",
-                "wavelength",
-                "maximum_power"
-            ]
-        },
-        "filter": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "title": "Type",
-                    "enum": ["Long pass", "Band pass"]
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer",
-                    "enum": ["Chroma", "Semrock"]
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "size": {
-                    "type": "integer",
-                    "title": "Size (mm)",
-                    "units": "mm",
-                    "enum": [25, 32]
-                },
-                "cut_off_frequency": {
-                    "type": "integer",
-                    "title": "Cut off frequency"
-                },
-                "cut_on_frequency": {
-                    "type": "integer",
-                    "title": "Cut on frequency"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "Where/how filter is being used"
-                }
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
             },
-            "required": [
-                "type",
-                "manufacturer",
-                "model"
-            ]
-        },
-        "lens": {
-            "type": "object",
-            "properties": {
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "focal_length": {
-                    "type": "number",
-                    "title": "Focal length (mm)",
-                    "units": "mm"
-                },
-                "size" : {
-                    "type": "integer",
-                    "title": "Size (inches)",
-                    "units": "inches",
-                    "enum": [1,2]
-                },
-                "optimized_wavelength_range": {
-                    "type" : "string",
-                    "title": "Optimized wavelength range (nm)",
-                    "units": "nm"
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                }
+            "model": {
+               "title": "Model",
+               "type": "string"
             },
-            "required": [
-                "Manufacturer",
-                "Model"
-            ]
-        },
-        "device": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "Diffuser", 
-                        "Galvo", 
-                        "Beam expander", 
-                        "Laser coupler", 
-                        "Prism", 
-                        "Objective",
-                        "Slit",
-                        "Other"
-                    ],
-                    "title": "Type",
-                    "description": "Type of device. If Other please describe in Notes."
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer",
-                    "enum": [
-                        "Thorlabs", 
-                        "Optotune", 
-                        "Cambridge Technology", 
-                        "Nikon",
-                        "Edmund Optics",
-                        "Ealing",
-                        "Hamamatsu",
-                        "Other"
-                    ]
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "notes": {
-                    "type": "string",
-                    "title": "Notes"
-                }
+            "notes": {
+               "title": "Notes",
+               "type": "string"
             },
-            "required": ["type", "manufacturer"]
-        },
-        "detector": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "Name",
-                    "description": "Brief name to identify detector to match with session information"
-                },
-                "type": {
-                    "type": "string",
-                    "title": "Type",
-                    "enum": ["Camera", "PMT", "other"]
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer",
-                    "enum": ["Hamamatsu", "PCOS", "other"]
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "data_interface": {
-                    "type": "string",
-                    "title": "Data interface",
-                    "enum": ["USB", "CameraLink", "Coax", "other"]
-                },
-                "cooling": {
-                    "type": "string",
-                    "title": "Cooling",
-                    "enum": ["air", "water"]
-                },
-                "immersion": {
-                    "type": "string",
-                    "title": "Immersion",
-                    "enum": ["air","water", "oil"]
-                }
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
             },
-            "required": [
-                "type",
-                "manufacturer",
-                "model",
-                "data_interface",
-                "cooling"
-            ]
-        },
-        "camera": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "enum": ["Body Camera", "Eye Camera", "Face Camera"],
-                    "title": "Name"
-                },
-                "manufacturer": {
-                    "type": "string",
-                    "title": "Manufacturer"
-                },
-                "model": {
-                    "type": "string",
-                    "title": "Model"
-                },
-                "serial_number": {
-                    "type": "string",
-                    "title": "Serial number"
-                },
-                "position_x": {
-                    "type": "number",
-                    "title": "Position X"
-                },
-                "position_y": {
-                    "type": "number",
-                    "title": "Position Y"
-                },
-                "position_z": {
-                    "type": "number",
-                    "title": "Position Z"
-                },
-                "angle_pitch": {
-                    "type": "number",
-                    "title": "Angle pitch (deg)",
-                    "units": "deg"
-                },
-                "angle_yaw": {
-                    "type": "number",
-                    "title": "Angle yaw (deg)",
-                    "units": "deg"
-                },
-                "angle_roll": {
-                    "type": "number",
-                    "title": "Angle roll (deg)",
-                    "units": "deg"
-                },
-                "recording_software": {
-                    "type": "string",
-                    "title": "Recording software"
-                },
-                "recording_software_version": {
-                    "type": "string",
-                    "title": "Recording software version"
-                }
+            "name": {
+               "title": "Patch Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PatchName"
+                  }
+               ]
             },
-            "required": [
-                "name",
-                "manufacturer",
-                "model",
-                "serial_number",
-                "position_x",
-                "position_y",
-                "position_z",
-                "angle_pitch",
-                "angle_yaw",
-                "angle_roll"
-            ]	
-        }
-    }
+            "core_diameter": {
+               "title": "Core diameter (um)",
+               "type": "number"
+            },
+            "numerical_aperture": {
+               "title": "Numerical aperture",
+               "type": "number"
+            },
+            "photobleaching_date": {
+               "title": "Photobleaching date",
+               "type": "string",
+               "format": "date"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "name",
+            "core_diameter",
+            "numerical_aperture"
+         ],
+         "additionalProperties": false
+      },
+      "CameraName": {
+         "title": "CameraName",
+         "description": "Camera name",
+         "enum": [
+            "Body Camera",
+            "Eye Camera",
+            "Face Camera"
+         ]
+      },
+      "Camera": {
+         "title": "Camera",
+         "description": "Description of an ophys camera",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "name": {
+               "title": "Camera Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CameraName"
+                  }
+               ]
+            },
+            "position_x": {
+               "title": "Position X",
+               "type": "number"
+            },
+            "position_y": {
+               "title": "Position Y",
+               "type": "number"
+            },
+            "position_z": {
+               "title": "Position Z",
+               "type": "number"
+            },
+            "angle_pitch": {
+               "title": "Angle pitch (deg)",
+               "type": "number"
+            },
+            "angle_yaw": {
+               "title": "Angle yaw (deg)",
+               "type": "number"
+            },
+            "angle_roll": {
+               "title": "Angle roll (deg)",
+               "type": "number"
+            },
+            "recording_software": {
+               "title": "Recording software",
+               "type": "string"
+            },
+            "recording_software_version": {
+               "title": "Recording software version",
+               "type": "string"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "name",
+            "position_x",
+            "position_y",
+            "position_z",
+            "angle_pitch",
+            "angle_yaw",
+            "angle_roll"
+         ],
+         "additionalProperties": false
+      },
+      "LaserName": {
+         "title": "LaserName",
+         "description": "Laser name",
+         "enum": [
+            "Laser A",
+            "Laser B",
+            "Laser C",
+            "Laser D",
+            "Laser E"
+         ]
+      },
+      "Coupling": {
+         "title": "Coupling",
+         "description": "Coupling type name",
+         "enum": [
+            "Free-space",
+            "SMF",
+            "MMF",
+            "other"
+         ]
+      },
+      "Laser": {
+         "title": "Laser",
+         "description": "Description of a laser",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "name": {
+               "title": "Laser Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/LaserName"
+                  }
+               ]
+            },
+            "item_number": {
+               "title": "Item number",
+               "type": "string"
+            },
+            "wavelength": {
+               "title": "Wavelength (nm)",
+               "type": "integer"
+            },
+            "maximum_power": {
+               "title": "Maximum power (mW)",
+               "type": "number"
+            },
+            "coupling": {
+               "title": "Coupling",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Coupling"
+                  }
+               ]
+            },
+            "coupling_efficiency": {
+               "title": "Coupling efficiency (percent)",
+               "type": "number"
+            },
+            "calibration_data": {
+               "title": "Calibration data",
+               "description": "path to calibration data",
+               "type": "string"
+            },
+            "calibration_date": {
+               "title": "Calibration date",
+               "type": "string",
+               "format": "date-time"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "name",
+            "wavelength",
+            "maximum_power"
+         ],
+         "additionalProperties": false
+      },
+      "CameraType": {
+         "title": "CameraType",
+         "description": "Camera type name",
+         "enum": [
+            "Camera",
+            "PMT",
+            "other"
+         ]
+      },
+      "DataInterface": {
+         "title": "DataInterface",
+         "description": "Data interface name",
+         "enum": [
+            "USB",
+            "CameraLink",
+            "Coax",
+            "other"
+         ]
+      },
+      "Cooling": {
+         "title": "Cooling",
+         "description": "Cooling medium name",
+         "enum": [
+            "air",
+            "water"
+         ]
+      },
+      "Immersion": {
+         "title": "Immersion",
+         "description": "Immersion medium name",
+         "enum": [
+            "air",
+            "water",
+            "oil"
+         ]
+      },
+      "Detector": {
+         "title": "Detector",
+         "description": "Description of a generic detector",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "name": {
+               "title": "Name",
+               "description": "Brief name to identify detector to match with session information",
+               "type": "string"
+            },
+            "type": {
+               "title": "Camera Type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CameraType"
+                  }
+               ]
+            },
+            "data_interface": {
+               "title": "Data interface",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "cooling": {
+               "title": "Cooling",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Cooling"
+                  }
+               ]
+            },
+            "immersion": {
+               "title": "Immersion",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Immersion"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "type",
+            "data_interface",
+            "cooling"
+         ],
+         "additionalProperties": false
+      },
+      "FilterType": {
+         "title": "FilterType",
+         "description": "Filter type name",
+         "enum": [
+            "Long pass",
+            "Band pass"
+         ]
+      },
+      "FilterSize": {
+         "title": "FilterSize",
+         "description": "Filter size value",
+         "enum": [
+            25,
+            32
+         ]
+      },
+      "Filter": {
+         "title": "Filter",
+         "description": "Description of a filter",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "type": {
+               "title": "Filter Type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FilterType"
+                  }
+               ]
+            },
+            "size": {
+               "title": "Size (mm)",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FilterSize"
+                  }
+               ]
+            },
+            "cut_off_frequency": {
+               "title": "Cut off frequency",
+               "type": "integer"
+            },
+            "cut_on_frequency": {
+               "title": "Cut on frequency",
+               "type": "integer"
+            },
+            "description": {
+               "title": "Description",
+               "description": "Where/how filter is being used",
+               "type": "string"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "type"
+         ],
+         "additionalProperties": false
+      },
+      "LensSize": {
+         "title": "LensSize",
+         "description": "Lens size value",
+         "enum": [
+            1,
+            2
+         ]
+      },
+      "Lens": {
+         "title": "Lens",
+         "description": "Description of a lens",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "focal_length": {
+               "title": "Focal length (mm)",
+               "type": "number"
+            },
+            "size": {
+               "title": "Size (inches)",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/LensSize"
+                  }
+               ]
+            },
+            "optimized_wavelength_range": {
+               "title": "Optimized wavelength range (nm)",
+               "type": "string"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number"
+         ],
+         "additionalProperties": false
+      },
+      "Device": {
+         "title": "Device",
+         "description": "Description of a device that communicates with a DAQ",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number"
+         ],
+         "additionalProperties": false
+      }
+   }
 }

@@ -4,17 +4,16 @@
    "type": "object",
    "properties": {
       "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.py",
-         "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.py",
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/subject.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/subject.py",
          "type": "string"
       },
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.2.0",
-         "const": "0.2.0",
+         "default": "0.2.2",
+         "const": "0.2.2",
          "type": "string"
       },
       "species": {
@@ -26,7 +25,7 @@
          ]
       },
       "subject_id": {
-         "title": "Specimen ID",
+         "title": "Subject ID",
          "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes.",
          "type": "string"
       },
@@ -48,6 +47,13 @@
          "description": "Genotype of the animal providing both alleles",
          "type": "string"
       },
+      "mgi_allele_ids": {
+         "title": "MGI allele ids",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/MgiAlleleId"
+         }
+      },
       "background_strain": {
          "title": "Background strain",
          "allOf": [
@@ -61,9 +67,14 @@
          "description": "If the subject was not bred in house, where was it acquired from.",
          "type": "string"
       },
+      "rrid": {
+         "title": "RRID",
+         "description": "RRID of mouse if acquired from supplier",
+         "type": "string"
+      },
       "restrictions": {
          "title": "Restrictions",
-         "description": "Any restrictions on use or publishing based on specimen source",
+         "description": "Any restrictions on use or publishing based on subject source",
          "type": "string"
       },
       "breeding_group": {
@@ -102,6 +113,13 @@
             }
          ]
       },
+      "wellness_reports": {
+         "title": "Wellness Report",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/WellnessReport"
+         }
+      },
       "notes": {
          "title": "Notes",
          "type": "string"
@@ -114,6 +132,7 @@
       "date_of_birth",
       "genotype"
    ],
+   "additionalProperties": false,
    "definitions": {
       "Species": {
          "title": "Species",
@@ -132,6 +151,26 @@
             "Female",
             "Male"
          ]
+      },
+      "MgiAlleleId": {
+         "title": "MgiAlleleId",
+         "description": "Mouse Genome Informatics IDs for genotype alleles",
+         "type": "object",
+         "properties": {
+            "allele_name": {
+               "title": "Name",
+               "type": "string"
+            },
+            "mgi_id": {
+               "title": "MGI ID",
+               "type": "string"
+            }
+         },
+         "required": [
+            "allele_name",
+            "mgi_id"
+         ],
+         "additionalProperties": false
       },
       "BackgroundStrain": {
          "title": "BackgroundStrain",
@@ -162,7 +201,8 @@
          "required": [
             "lights_on_time",
             "lights_off_time"
-         ]
+         ],
+         "additionalProperties": false
       },
       "HomeCageEnrichment": {
          "title": "HomeCageEnrichment",
@@ -175,6 +215,27 @@
             "plastic shelter",
             "other"
          ]
+      },
+      "WellnessReport": {
+         "title": "WellnessReport",
+         "description": "Wellness report on animal health",
+         "type": "object",
+         "properties": {
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "report": {
+               "title": "Report",
+               "type": "string"
+            }
+         },
+         "required": [
+            "date",
+            "report"
+         ],
+         "additionalProperties": false
       }
    }
 }

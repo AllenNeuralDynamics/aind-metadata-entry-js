@@ -4,17 +4,16 @@
    "type": "object",
    "properties": {
       "describedBy": {
-         "title": "Described by",
-         "description": "The URL reference to the schema.",
-         "default": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.py",
-         "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/ephys/ephys_rig.py",
+         "title": "Describedby",
+         "default": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ephys/ephys_rig.py",
+         "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/ephys/ephys_rig.py",
          "type": "string"
       },
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.2.0",
-         "const": "0.2.0",
+         "default": "0.4.2",
+         "const": "0.4.2",
          "type": "string"
       },
       "rig_id": {
@@ -22,15 +21,144 @@
          "description": "room_stim apparatus_version",
          "type": "string"
       },
-      "devices": {
-         "$ref": "#/definitions/Devices"
+      "probes": {
+         "title": "Ephys probes",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/EphysProbe"
+         }
+      },
+      "cameras": {
+         "title": "Cameras",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Camera"
+         }
+      },
+      "lasers": {
+         "title": "Lasers",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/LaserModule"
+         }
+      },
+      "visual_monitors": {
+         "title": "Visual monitor",
+         "uniqueItems": true,
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Monitor"
+         }
+      },
+      "mouse_platform": {
+         "title": "Mouse platform",
+         "allOf": [
+            {
+               "$ref": "#/definitions/MousePlatform"
+            }
+         ]
+      },
+      "harp_devices": {
+         "title": "Harp devices",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/HarpDevice"
+         }
+      },
+      "daq": {
+         "title": "DAQ",
+         "allOf": [
+            {
+               "$ref": "#/definitions/DAQ"
+            }
+         ]
       }
    },
    "required": [
-      "rig_id",
-      "devices"
+      "rig_id"
    ],
+   "additionalProperties": false,
    "definitions": {
+      "Manufacturer": {
+         "title": "Manufacturer",
+         "description": "Device manufacturer name",
+         "enum": [
+            "Thorlabs",
+            "Optotune",
+            "Cambridge Technology",
+            "Nikon",
+            "Edmund Optics",
+            "Ealing",
+            "Hamamatsu",
+            "Olympus",
+            "Leica",
+            "LifeCanvas",
+            "Custom",
+            "Chroma",
+            "Semrock",
+            "Neuropixels",
+            "MPI",
+            "Vortran",
+            "Coherent Scientific",
+            "MKS Newport",
+            "Applied Scientific Instrumentation",
+            "IR Robot Co",
+            "Vieworks",
+            "Oxxius",
+            "National Instruments",
+            "Other"
+         ]
+      },
+      "ProbeModel": {
+         "title": "ProbeModel",
+         "description": "Probe model name",
+         "enum": [
+            "Neuropixels 1.0",
+            "Neuropixels UHD (Fixed)",
+            "Neuropixels UHD (Switchable)",
+            "Neuropixels 2.0 (Single Shank)",
+            "Neuropixels 2.0 (Multi Shank)",
+            "Neuropixels 2.0 (Quad Base)",
+            "Neuropixels Opto (Demonstrator)",
+            "Michigan uLED Probe (Version 1)",
+            "MPI Photonic Probe (Version 1)"
+         ]
+      },
+      "DaqChannelType": {
+         "title": "DaqChannelType",
+         "description": "DAQ Channel type",
+         "enum": [
+            "Digital Output",
+            "Analog Output"
+         ]
+      },
+      "DaqChannel": {
+         "title": "DaqChannel",
+         "description": "Description of a DAQ Channel",
+         "type": "object",
+         "properties": {
+            "index": {
+               "title": "index",
+               "type": "integer"
+            },
+            "type": {
+               "title": "DAQ channel type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannelType"
+                  }
+               ]
+            }
+         },
+         "required": [
+            "index",
+            "type"
+         ],
+         "additionalProperties": false
+      },
       "ProbeName": {
          "title": "ProbeName",
          "description": "Probe name",
@@ -47,26 +175,126 @@
             "Probe J"
          ]
       },
-      "ProbeType": {
-         "title": "ProbeType",
-         "description": "Probe type name",
+      "AngleName": {
+         "title": "AngleName",
+         "description": "Euler angle name",
          "enum": [
-            "Neuropixels 1.0",
-            "Neuropixels UHD (Fixed)",
-            "Neuropixels UHD (Switchable)",
-            "Neuropixels 2.0 (Single Shank)",
-            "Neuropixels 2.0 (Multi Shank)",
-            "Neuropixels 2.0 (Quad Base)",
-            "Neuropixels Opto (Demonstrator)",
-            "Michigan uLED Probe (Version 1)",
-            "MPI Photonic Probe (Version 1)"
+            "XY",
+            "XZ",
+            "YZ"
          ]
       },
-      "Probe": {
-         "title": "Probe",
+      "ManipulatorAngle": {
+         "title": "ManipulatorAngle",
+         "description": "Description of manipulator angle",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "AngleName",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleName"
+                  }
+               ]
+            },
+            "value": {
+               "title": "Value (deg)",
+               "units": "deg",
+               "type": "number"
+            }
+         },
+         "required": [
+            "name",
+            "value"
+         ],
+         "additionalProperties": false
+      },
+      "Manipulator": {
+         "title": "Manipulator",
+         "description": "Description of manipulator",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "manipulator_angles": {
+               "title": "Manipulator angles",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/ManipulatorAngle"
+               }
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "manipulator_angles"
+         ],
+         "additionalProperties": false
+      },
+      "EphysProbe": {
+         "title": "EphysProbe",
          "description": "Description of an ephys probe",
          "type": "object",
          "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/ProbeModel"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
             "name": {
                "title": "Name",
                "allOf": [
@@ -75,24 +303,34 @@
                   }
                ]
             },
-            "type": {
-               "title": "Type",
+            "probe_manipulator": {
+               "title": "Manipulator",
                "allOf": [
                   {
-                     "$ref": "#/definitions/ProbeType"
+                     "$ref": "#/definitions/Manipulator"
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
+            "calibration_data": {
+               "title": "Calibration data",
+               "description": "Path to calibration data",
                "type": "string"
+            },
+            "calibration_date": {
+               "title": "Calibration date",
+               "type": "string",
+               "format": "date-time"
             }
          },
          "required": [
+            "manufacturer",
+            "serial_number",
+            "model",
             "name",
-            "type",
-            "serial_number"
-         ]
+            "probe_manipulator",
+            "calibration_data"
+         ],
+         "additionalProperties": false
       },
       "CameraName": {
          "title": "CameraName",
@@ -108,6 +346,34 @@
          "description": "Description of camera",
          "type": "object",
          "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
             "name": {
                "title": "Name",
                "allOf": [
@@ -115,18 +381,6 @@
                      "$ref": "#/definitions/CameraName"
                   }
                ]
-            },
-            "manufacturer": {
-               "title": "Manufacturer",
-               "type": "string"
-            },
-            "model": {
-               "title": "Model",
-               "type": "string"
-            },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
             },
             "position_x": {
                "title": "Position X",
@@ -142,16 +396,22 @@
             },
             "angle_pitch": {
                "title": "Angle pitch (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
             "angle_yaw": {
                "title": "Angle yaw (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
             "angle_roll": {
                "title": "Angle roll (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
@@ -165,31 +425,61 @@
             }
          },
          "required": [
-            "name",
             "manufacturer",
-            "model",
             "serial_number",
+            "name",
             "position_x",
             "position_y",
             "position_z",
             "angle_pitch",
             "angle_yaw",
             "angle_roll"
-         ]
+         ],
+         "additionalProperties": false
       },
       "LaserName": {
          "title": "LaserName",
          "description": "Laser name",
          "enum": [
             "Laser A",
-            "Laser B"
+            "Laser B",
+            "Laser C",
+            "Laser D"
          ]
       },
-      "Laser": {
-         "title": "Laser",
+      "LaserModule": {
+         "title": "LaserModule",
          "description": "Description of lasers used in ephys recordings",
          "type": "object",
          "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
             "name": {
                "title": "Laser Name",
                "allOf": [
@@ -198,20 +488,10 @@
                   }
                ]
             },
-            "manufacturer": {
-               "title": "Manufacturer",
-               "type": "string"
-            },
-            "model": {
-               "title": "Model",
-               "type": "string"
-            },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "wavelength": {
                "title": "Wavelength (nm)",
+               "minimum": 300,
+               "maximum": 1000,
                "units": "nm",
                "type": "integer"
             },
@@ -222,6 +502,8 @@
             },
             "coupling_efficiency": {
                "title": "Coupling efficiency (percent)",
+               "minimum": 0,
+               "maximum": 100,
                "units": "percent",
                "type": "number"
             },
@@ -234,14 +516,23 @@
                "title": "Calibration date",
                "type": "string",
                "format": "date-time"
+            },
+            "laser_manipulator": {
+               "title": "Manipulator",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manipulator"
+                  }
+               ]
             }
          },
          "required": [
-            "name",
             "manufacturer",
-            "model",
-            "serial_number"
-         ]
+            "serial_number",
+            "name",
+            "laser_manipulator"
+         ],
+         "additionalProperties": false
       },
       "Monitor": {
          "title": "Monitor",
@@ -250,18 +541,35 @@
          "properties": {
             "manufacturer": {
                "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
                "type": "string"
             },
             "model": {
                "title": "Model",
                "type": "string"
             },
-            "serial_number": {
-               "title": "Serial number",
+            "notes": {
+               "title": "Notes",
                "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
             },
             "refresh_rate": {
                "title": "Refresh rate (Hz)",
+               "minimum": 60,
                "units": "Hz",
                "type": "integer"
             },
@@ -294,34 +602,43 @@
             },
             "angle_pitch": {
                "title": "Angle pitch (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
             "angle_yaw": {
                "title": "Angle yaw (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
             "angle_roll": {
                "title": "Angle roll (deg)",
+               "minimum": 0,
+               "maximum": 360,
                "units": "deg",
                "type": "number"
             },
             "contrast": {
                "title": "Contrast (percent)",
                "description": "Monitor's contrast setting",
+               "minimum": 0,
+               "maximum": 100,
                "units": "percent",
                "type": "integer"
             },
             "brightness": {
                "title": "Brightness",
                "description": "Monitor's brightness setting",
+               "minimum": 0,
+               "maximum": 100,
                "type": "integer"
             }
          },
          "required": [
             "manufacturer",
-            "model",
             "serial_number",
             "refresh_rate",
             "width",
@@ -335,46 +652,55 @@
             "angle_roll",
             "contrast",
             "brightness"
-         ]
+         ],
+         "additionalProperties": false
       },
-      "Surface": {
-         "title": "Surface",
-         "description": "Running disc surface name",
-         "enum": [
-            "none",
-            "foam"
-         ]
-      },
-      "Disc": {
-         "title": "Disc",
-         "description": "Description of a running disc",
+      "MousePlatform": {
+         "title": "MousePlatform",
+         "description": "Description of a mouse platform",
          "type": "object",
          "properties": {
-            "radius": {
-               "title": "Radius (cm)",
-               "units": "cm",
-               "type": "number"
-            },
-            "surface": {
-               "title": "Surface",
+            "manufacturer": {
+               "title": "Manufacturer",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Surface"
+                     "$ref": "#/definitions/Manufacturer"
                   }
                ]
             },
-            "date_surface_replaced": {
-               "title": "Date surface replaced",
-               "type": "string",
-               "format": "date-time"
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "surface_material": {
+               "title": "Surface material",
+               "type": "string"
             }
          },
          "required": [
-            "radius"
-         ]
+            "manufacturer",
+            "serial_number"
+         ],
+         "additionalProperties": false
       },
-      "HarpDevice": {
-         "title": "HarpDevice",
+      "HarpDeviceName": {
+         "title": "HarpDeviceName",
          "description": "Harp device name",
          "enum": [
             "Behavior",
@@ -385,58 +711,107 @@
             "Input Expander"
          ]
       },
-      "Devices": {
-         "title": "Devices",
-         "description": "All of the devices in the rig",
+      "HarpDevice": {
+         "title": "HarpDevice",
+         "description": "Describes a Harp device",
          "type": "object",
          "properties": {
-            "probes": {
-               "title": "Probes",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Probe"
-               }
-            },
-            "cameras": {
-               "title": "Cameras",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Camera"
-               }
-            },
-            "lasers": {
-               "title": "Lasers",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Laser"
-               }
-            },
-            "visual_monitors": {
-               "title": "Visual monitor",
-               "uniqueItems": true,
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/Monitor"
-               }
-            },
-            "running_disc": {
-               "title": "Running disc",
+            "manufacturer": {
+               "title": "Manufacturer",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Disc"
+                     "$ref": "#/definitions/Manufacturer"
                   }
                ]
             },
-            "harp_devices": {
-               "type": "array",
-               "items": {
-                  "$ref": "#/definitions/HarpDevice"
-               }
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "daq_channel": {
+               "title": "DAQ channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DaqChannel"
+                  }
+               ]
+            },
+            "name": {
+               "title": "Name",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/HarpDeviceName"
+                  }
+               ]
+            },
+            "device_version": {
+               "title": "Device version",
+               "type": "string"
             }
-         }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "name",
+            "device_version"
+         ],
+         "additionalProperties": false
+      },
+      "DAQ": {
+         "title": "DAQ",
+         "description": "Description of DAQ system",
+         "type": "object",
+         "properties": {
+            "manufacturer": {
+               "title": "Manufacturer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "device_name": {
+               "title": "PC device name",
+               "type": "string"
+            },
+            "update_frequency": {
+               "title": "DAQ update frequency (Hz)",
+               "units": "Hz",
+               "type": "number"
+            },
+            "number_active_channels": {
+               "title": "Number of active channels",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "manufacturer",
+            "serial_number",
+            "device_name",
+            "update_frequency",
+            "number_active_channels"
+         ],
+         "additionalProperties": false
       }
    }
 }
