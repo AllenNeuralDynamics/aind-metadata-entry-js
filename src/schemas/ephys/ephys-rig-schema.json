@@ -78,7 +78,17 @@
          "title": "Data acquisition devices",
          "type": "array",
          "items": {
-            "$ref": "#/definitions/DAQDevice"
+            "anyOf": [
+               {
+                  "$ref": "#/definitions/HarpDevice"
+               },
+               {
+                  "$ref": "#/definitions/NeuropixelsBasestation"
+               },
+               {
+                  "$ref": "#/definitions/OpenEphysAcquisitionBoard"
+               }
+            ]
          }
       }
    },
@@ -1180,9 +1190,21 @@
          ],
          "additionalProperties": false
       },
-      "DAQDevice": {
-         "title": "DAQDevice",
-         "description": "Data acquisition device containing multiple I/O channels",
+      "HarpDeviceType": {
+         "title": "HarpDeviceType",
+         "description": "Harp device type",
+         "enum": [
+            "Behavior",
+            "Camera Controller",
+            "Load Cells",
+            "Sound Board",
+            "Timestamp Generator",
+            "Input Expander"
+         ]
+      },
+      "HarpDevice": {
+         "title": "HarpDevice",
+         "description": "DAQ that uses the Harp protocol for synchronization and data transmission",
          "type": "object",
          "properties": {
             "name": {
@@ -1194,14 +1216,12 @@
                "type": "string"
             },
             "manufacturer": {
-               "title": "Manufacturer",
-               "enum": [
-                  "National Instruments",
-                  "IMEC",
-                  "OEPS",
-                  "Other"
-               ],
-               "type": "string"
+               "default": "OEPS",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
             },
             "model": {
                "title": "Model",
@@ -1212,7 +1232,7 @@
                "type": "string"
             },
             "data_interface": {
-               "title": "Type of connection to PC",
+               "default": "USB",
                "allOf": [
                   {
                      "$ref": "#/definitions/DataInterface"
@@ -1229,12 +1249,186 @@
                "items": {
                   "$ref": "#/definitions/DAQChannel"
                }
+            },
+            "harp_device_type": {
+               "title": "Type of Harp device",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/HarpDeviceType"
+                  }
+               ]
+            },
+            "harp_device_version": {
+               "title": "Device version",
+               "type": "string"
             }
          },
          "required": [
-            "manufacturer",
-            "data_interface",
-            "computer_name"
+            "computer_name",
+            "harp_device_type",
+            "harp_device_version"
+         ],
+         "additionalProperties": false
+      },
+      "ProbePort": {
+         "title": "ProbePort",
+         "description": "Port for a probe connection",
+         "type": "object",
+         "properties": {
+            "index": {
+               "title": "Zero-based port index",
+               "type": "integer"
+            },
+            "probes": {
+               "title": "Names of probes connected to this port",
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
+            }
+         },
+         "required": [
+            "index",
+            "probes"
+         ],
+         "additionalProperties": false
+      },
+      "NeuropixelsBasestation": {
+         "title": "NeuropixelsBasestation",
+         "description": "PXI-based Neuropixels DAQ",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "manufacturer": {
+               "default": "IMEC",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "data_interface": {
+               "default": "PXI",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "computer_name": {
+               "title": "Name of computer controlling this DAQ",
+               "type": "string"
+            },
+            "channels": {
+               "title": "DAQ channels",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/DAQChannel"
+               }
+            },
+            "basestation_firmware_version": {
+               "title": "Basestation firmware version",
+               "type": "string"
+            },
+            "bsc_firmware_version": {
+               "title": "Basestation connect board firmware",
+               "type": "string"
+            },
+            "slot": {
+               "title": "Slot number for this basestation",
+               "type": "integer"
+            },
+            "ports": {
+               "title": "Basestation ports",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/ProbePort"
+               }
+            }
+         },
+         "required": [
+            "computer_name",
+            "basestation_firmware_version",
+            "bsc_firmware_version",
+            "slot",
+            "ports"
+         ],
+         "additionalProperties": false
+      },
+      "OpenEphysAcquisitionBoard": {
+         "title": "OpenEphysAcquisitionBoard",
+         "description": "Multichannel electrophysiology DAQ",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "manufacturer": {
+               "default": "OEPS",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Manufacturer"
+                  }
+               ]
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "data_interface": {
+               "default": "USB",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "computer_name": {
+               "title": "Name of computer controlling this DAQ",
+               "type": "string"
+            },
+            "channels": {
+               "title": "DAQ channels",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/DAQChannel"
+               }
+            },
+            "ports": {
+               "title": "Acquisition board ports",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/ProbePort"
+               }
+            }
+         },
+         "required": [
+            "computer_name",
+            "ports"
          ],
          "additionalProperties": false
       }
