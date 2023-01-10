@@ -109,7 +109,7 @@
          "uniqueItems": true,
          "type": "array",
          "items": {
-            "$ref": "#/definitions/DAQ"
+            "$ref": "#/definitions/DAQDevice"
          }
       },
       "additional_devices": {
@@ -171,69 +171,52 @@
          "title": "Manufacturer",
          "description": "Device manufacturer name",
          "enum": [
-            "Thorlabs",
-            "Optotune",
-            "Cambridge Technology",
-            "Nikon",
-            "Edmund Optics",
-            "Ealing",
-            "Hamamatsu",
-            "Olympus",
-            "Leica",
-            "LifeCanvas",
-            "Custom",
-            "Chroma",
-            "Semrock",
-            "Neuropixels",
-            "MPI",
-            "Vortran",
-            "Coherent Scientific",
-            "MKS Newport",
+            "Allied",
             "Applied Scientific Instrumentation",
+            "Basler",
+            "Cambridge Technology",
+            "Chroma",
+            "Coherent Scientific",
+            "Custom",
+            "Ealing",
+            "Edmund Optics",
+            "FLIR",
+            "Hamamatsu",
+            "IMEC",
+            "Leica",
+            "LG",
+            "LifeCanvas",
             "IR Robot Co",
-            "Vieworks",
-            "Oxxius",
+            "MKS Newport",
+            "MPI",
             "National Instruments",
-            "Other"
+            "New Scale Technologies",
+            "Nikon",
+            "OEPS",
+            "Olympus",
+            "Optotune",
+            "Other",
+            "Oxxius",
+            "Quantifi",
+            "Semrock",
+            "Thorlabs",
+            "Vieworks",
+            "Vortran"
          ]
-      },
-      "DaqChannelType": {
-         "title": "DaqChannelType",
-         "description": "DAQ Channel type",
-         "enum": [
-            "Digital Output",
-            "Analog Output"
-         ]
-      },
-      "DaqChannel": {
-         "title": "DaqChannel",
-         "description": "Description of a DAQ Channel",
-         "type": "object",
-         "properties": {
-            "index": {
-               "title": "index",
-               "type": "integer"
-            },
-            "type": {
-               "title": "DAQ channel type",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannelType"
-                  }
-               ]
-            }
-         },
-         "required": [
-            "index",
-            "type"
-         ],
-         "additionalProperties": false
       },
       "OpticalTable": {
          "title": "OpticalTable",
          "description": "Description of Optical Table",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -242,10 +225,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -253,14 +232,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "length": {
                "title": "Length (inches)",
@@ -279,10 +250,6 @@
                "type": "boolean"
             }
          },
-         "required": [
-            "manufacturer",
-            "serial_number"
-         ],
          "additionalProperties": false
       },
       "Immersion": {
@@ -301,6 +268,14 @@
          "description": "Description of an objective device",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -309,10 +284,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -320,14 +291,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "numerical_aperture": {
                "title": "Numerical aperture (in air)",
@@ -347,8 +310,6 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "numerical_aperture",
             "magnification",
             "immersion"
@@ -366,12 +327,15 @@
       },
       "DataInterface": {
          "title": "DataInterface",
-         "description": "Data interface name",
+         "description": "Connection between a device and a PC",
          "enum": [
             "USB",
             "CameraLink",
             "Coax",
-            "other"
+            "PCIe",
+            "PXI",
+            "Ethernet",
+            "Other"
          ]
       },
       "Cooling": {
@@ -387,6 +351,14 @@
          "description": "Description of a detector device",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -395,10 +367,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -406,14 +374,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "type": {
                "title": "Detector type",
@@ -441,8 +401,6 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "type",
             "data_interface",
             "cooling"
@@ -461,12 +419,12 @@
       },
       "Coupling": {
          "title": "Coupling",
-         "description": "Coupling method name",
+         "description": "Laser coupling type",
          "enum": [
             "Free-space",
             "SMF",
             "MMF",
-            "other"
+            "Other"
          ]
       },
       "Lightsource": {
@@ -474,6 +432,14 @@
          "description": "Description of lightsource device",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -482,10 +448,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -493,14 +455,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "type": {
                "title": "Lightsource Type",
@@ -532,8 +486,6 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "type",
             "coupling",
             "wavelength",
@@ -543,29 +495,39 @@
       },
       "FilterType": {
          "title": "FilterType",
-         "description": "Filter type name",
+         "description": "Filter type",
          "enum": [
-            "Long pass",
             "Band pass",
+            "Long pass",
             "Short pass",
-            "Multiband"
+            "Multiband",
+            "Dichroic",
+            "Neutral density",
+            "Notch"
          ]
       },
       "Filter": {
          "title": "Filter",
-         "description": "Description of a filter device",
+         "description": "Filter used in a light path",
          "type": "object",
          "properties": {
-            "manufacturer": {
-               "title": "Manufacturer",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Manufacturer"
-                  }
-               ]
+            "name": {
+               "title": "Device name",
+               "type": "string"
             },
             "serial_number": {
                "title": "Serial number",
+               "type": "string"
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "enum": [
+                  "Edmund Optics",
+                  "Chroma",
+                  "Semrock",
+                  "Thorlabs",
+                  "Other"
+               ],
                "type": "string"
             },
             "model": {
@@ -576,16 +538,8 @@
                "title": "Notes",
                "type": "string"
             },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
-            },
-            "type": {
-               "title": "Filter Type",
+            "filter_type": {
+               "title": "Type of filter",
                "allOf": [
                   {
                      "$ref": "#/definitions/FilterType"
@@ -594,7 +548,7 @@
             },
             "diameter": {
                "title": "Size (mm)",
-               "minimum": 0,
+               "units": "mm",
                "type": "number"
             },
             "thickness": {
@@ -606,19 +560,23 @@
                "title": "Filter wheel index",
                "type": "integer"
             },
+            "cut_off_frequency": {
+               "title": "Cut-off frequency",
+               "type": "integer"
+            },
+            "cut_on_frequency": {
+               "title": "Cut-on frequency",
+               "type": "integer"
+            },
             "description": {
                "title": "Description",
-               "description": "Where/how filter is being used",
+               "description": "More details about filter properties and where/how it is being used",
                "type": "string"
             }
          },
          "required": [
             "manufacturer",
-            "serial_number",
-            "type",
-            "diameter",
-            "thickness",
-            "filter_wheel_index"
+            "filter_type"
          ],
          "additionalProperties": false
       },
@@ -627,6 +585,14 @@
          "description": "Description of motorized stage",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -634,10 +600,6 @@
                      "$ref": "#/definitions/Manufacturer"
                   }
                ]
-            },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
             },
             "model": {
                "title": "Model",
@@ -647,14 +609,6 @@
                "title": "Notes",
                "type": "string"
             },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
-            },
             "travel": {
                "title": "Travel of device (mm)",
                "units": "mm",
@@ -662,8 +616,6 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "travel"
          ],
          "additionalProperties": false
@@ -691,6 +643,14 @@
          "description": "Description of a scanning motorized stages",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -699,10 +659,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -710,14 +666,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "travel": {
                "title": "Travel of device (mm)",
@@ -742,29 +690,90 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "travel",
             "stage_axis_direction",
             "stage_axis_name"
          ],
          "additionalProperties": false
       },
-      "DAQ": {
-         "title": "DAQ",
-         "description": "Description of DAQ system",
+      "DaqChannelType": {
+         "title": "DaqChannelType",
+         "description": "DAQ Channel type",
+         "enum": [
+            "Digital Output",
+            "Analog Output",
+            "Digital Input",
+            "Analog Input"
+         ]
+      },
+      "DAQChannel": {
+         "title": "DAQChannel",
+         "description": "Named input or output channel on a DAQ device",
          "type": "object",
          "properties": {
-            "manufacturer": {
-               "title": "Manufacturer",
+            "channel_name": {
+               "title": "DAQ channel name",
+               "type": "string"
+            },
+            "device_name": {
+               "title": "Name of connected device",
+               "type": "string"
+            },
+            "channel_type": {
+               "title": "DAQ channel type",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Manufacturer"
+                     "$ref": "#/definitions/DaqChannelType"
                   }
                ]
             },
+            "port": {
+               "title": "DAQ port",
+               "type": "integer"
+            },
+            "channel_index": {
+               "title": "DAQ channel index",
+               "type": "integer"
+            },
+            "sample_rate": {
+               "title": "DAQ channel sample rate (Hz)",
+               "units": "Hz",
+               "type": "number"
+            },
+            "event_based_sampling": {
+               "title": "Set to true if DAQ channel is sampled at irregular intervals",
+               "default": false,
+               "type": "boolean"
+            }
+         },
+         "required": [
+            "channel_name",
+            "device_name",
+            "channel_type"
+         ],
+         "additionalProperties": false
+      },
+      "DAQDevice": {
+         "title": "DAQDevice",
+         "description": "Data acquisition device containing multiple I/O channels",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
             "serial_number": {
                "title": "Serial number",
+               "type": "string"
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "enum": [
+                  "National Instruments",
+                  "IMEC",
+                  "OEPS",
+                  "Other"
+               ],
                "type": "string"
             },
             "model": {
@@ -775,26 +784,30 @@
                "title": "Notes",
                "type": "string"
             },
-            "device_name": {
-               "title": "PC device name",
+            "data_interface": {
+               "title": "Type of connection to PC",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "computer_name": {
+               "title": "Name of computer controlling this DAQ",
                "type": "string"
             },
-            "update_frequency": {
-               "title": "DAQ update frequency (Hz)",
-               "units": "Hz",
-               "type": "number"
-            },
-            "number_active_channels": {
-               "title": "Number of active channels",
-               "type": "integer"
+            "channels": {
+               "title": "DAQ channels",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/DAQChannel"
+               }
             }
          },
          "required": [
             "manufacturer",
-            "serial_number",
-            "device_name",
-            "update_frequency",
-            "number_active_channels"
+            "data_interface",
+            "computer_name"
          ],
          "additionalProperties": false
       },
@@ -820,6 +833,14 @@
          "description": "Description of additional devices",
          "type": "object",
          "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
             "manufacturer": {
                "title": "Manufacturer",
                "allOf": [
@@ -828,10 +849,6 @@
                   }
                ]
             },
-            "serial_number": {
-               "title": "Serial number",
-               "type": "string"
-            },
             "model": {
                "title": "Model",
                "type": "string"
@@ -839,14 +856,6 @@
             "notes": {
                "title": "Notes",
                "type": "string"
-            },
-            "daq_channel": {
-               "title": "DAQ channel",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/DaqChannel"
-                  }
-               ]
             },
             "type": {
                "title": "Device type",
@@ -858,8 +867,6 @@
             }
          },
          "required": [
-            "manufacturer",
-            "serial_number",
             "type"
          ],
          "additionalProperties": false

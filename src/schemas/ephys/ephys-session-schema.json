@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.2.1",
-         "const": "0.2.1",
+         "default": "0.3.0",
+         "const": "0.3.0",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -33,7 +33,7 @@
       },
       "subject_id": {
          "title": "Subject ID",
-         "type": "integer"
+         "type": "string"
       },
       "session_type": {
          "title": "Session type",
@@ -59,14 +59,9 @@
          "title": "Rig ID",
          "type": "string"
       },
-      "expected_data_streams": {
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/ExpectedDataStream"
-         }
-      },
-      "probe_streams": {
-         "title": "Probe streams",
+      "data_streams": {
+         "title": "Data streams",
+         "description": "A data stream is a collection of devices that are recorded simultaneously. Each session can include multiple streams (e.g., if the manipulators are moved to a new location)",
          "uniqueItems": true,
          "type": "array",
          "items": {
@@ -75,7 +70,7 @@
       },
       "ccf_coordinate_transform": {
          "title": "CCF coordinate transform",
-         "description": "Path to file that details the CCF-to-lab coordinate transform.",
+         "description": "Path to file that details the CCF-to-lab coordinate transform",
          "type": "string"
       },
       "notes": {
@@ -90,7 +85,7 @@
       "subject_id",
       "session_type",
       "rig_id",
-      "probe_streams"
+      "data_streams"
    ],
    "additionalProperties": false,
    "definitions": {
@@ -100,20 +95,20 @@
          "enum": [
             "Test",
             "Optotagging",
-            "Visual Orientation"
+            "Receptive field mapping"
          ]
       },
-      "ExpectedDataStream": {
-         "title": "ExpectedDataStream",
-         "description": "Names of data streams to expect in recording",
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
          "enum": [
-            "Neuropixels probes",
-            "Body camera",
-            "Face camera",
-            "Eye camera",
-            "Bonsai file",
-            "Harp bin file",
-            "Other"
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
          ]
       },
       "CcfVersion": {
@@ -129,19 +124,25 @@
          "type": "object",
          "properties": {
             "ml": {
-               "title": "ML (um)",
-               "units": "um",
+               "title": "ML",
                "type": "number"
             },
             "ap": {
-               "title": "AP (um)",
-               "units": "um",
+               "title": "AP",
                "type": "number"
             },
             "dv": {
-               "title": "DV (um)",
-               "units": "um",
+               "title": "DV",
                "type": "number"
+            },
+            "unit": {
+               "title": "Coordinate unit",
+               "default": "micrometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "ccf_version": {
                "title": "CCF version",
@@ -162,23 +163,29 @@
       },
       "Coordinates3d": {
          "title": "Coordinates3d",
-         "description": "Description of 3d coordinates in mm",
+         "description": "Coordinates in a 3D grid",
          "type": "object",
          "properties": {
             "x": {
-               "title": "X (mm)",
-               "units": "mm",
+               "title": "Position X",
                "type": "number"
             },
             "y": {
-               "title": "Y (mm)",
-               "units": "mm",
+               "title": "Position Y",
                "type": "number"
             },
             "z": {
-               "title": "Z (mm)",
-               "units": "mm",
+               "title": "Position Z",
                "type": "number"
+            },
+            "unit": {
+               "title": "Position unit",
+               "default": "micrometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -190,68 +197,10 @@
       },
       "EphysProbe": {
          "title": "EphysProbe",
-         "description": "Description of an ephys probe",
+         "description": "Probe recorded in a Stream",
          "type": "object",
          "properties": {
-            "name": {
-               "title": "Name",
-               "type": "string"
-            },
-            "tip_targeted_structure": {
-               "title": "Tip Targeted Structure",
-               "type": "string"
-            },
-            "other_targeted_structures": {
-               "title": "Other Targeted Structures",
-               "type": "array",
-               "items": {
-                  "type": "string"
-               }
-            },
-            "targeted_ccf_coordinates": {
-               "title": "Targeted CCF coordinates",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/CcfCoords"
-                  }
-               ]
-            },
-            "manipulator_coordinates": {
-               "title": "Manipulator coordinates",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Coordinates3d"
-                  }
-               ]
-            }
-         },
-         "required": [
-            "name",
-            "tip_targeted_structure",
-            "manipulator_coordinates"
-         ],
-         "additionalProperties": false
-      },
-      "LaserModule": {
-         "title": "LaserModule",
-         "description": "Description of a laser",
-         "type": "object",
-         "properties": {
-            "name": {
-               "title": "Name",
-               "type": "string"
-            },
-            "wavelength": {
-               "title": "Wavelength (nm)",
-               "units": "nm",
-               "type": "integer"
-            },
-            "power": {
-               "title": "Power (mW)",
-               "units": "mW",
-               "type": "number"
-            },
-            "targeted_structure": {
+            "primary_targeted_structure": {
                "title": "Targeted structure",
                "type": "string"
             },
@@ -270,15 +219,114 @@
                      "$ref": "#/definitions/Coordinates3d"
                   }
                ]
+            },
+            "name": {
+               "title": "Ephys probe name (must match rig JSON)",
+               "type": "string"
+            },
+            "other_targeted_structures": {
+               "title": "Other Targeted Structures",
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
+            }
+         },
+         "required": [
+            "primary_targeted_structure",
+            "manipulator_coordinates",
+            "name"
+         ],
+         "additionalProperties": false
+      },
+      "Laser": {
+         "title": "Laser",
+         "description": "Laser used in a LaserModule",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Laser name (must match rig JSON)",
+               "type": "string"
+            },
+            "power_level": {
+               "title": "Power level used in this session",
+               "units": "mW",
+               "type": "number"
             }
          },
          "required": [
             "name",
-            "wavelength",
-            "power",
-            "targeted_structure",
-            "targeted_ccf_coordinates",
-            "manipulator_coordinates"
+            "power_level"
+         ],
+         "additionalProperties": false
+      },
+      "LaserModule": {
+         "title": "LaserModule",
+         "description": "Laser Module used in a Stream",
+         "type": "object",
+         "properties": {
+            "primary_targeted_structure": {
+               "title": "Targeted structure",
+               "type": "string"
+            },
+            "targeted_ccf_coordinates": {
+               "title": "Targeted CCF coordinates",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CcfCoords"
+                  }
+               ]
+            },
+            "manipulator_coordinates": {
+               "title": "Manipulator coordinates",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Coordinates3d"
+                  }
+               ]
+            },
+            "lasers": {
+               "title": "Active lasers in this module",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/Laser"
+               }
+            }
+         },
+         "required": [
+            "primary_targeted_structure",
+            "manipulator_coordinates",
+            "lasers"
+         ],
+         "additionalProperties": false
+      },
+      "DAQDevice": {
+         "title": "DAQDevice",
+         "description": "Data acquisition device recorded in a Stream",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "DAQ device name (must match rig JSON)",
+               "type": "string"
+            }
+         },
+         "required": [
+            "name"
+         ],
+         "additionalProperties": false
+      },
+      "Camera": {
+         "title": "Camera",
+         "description": "Camera recorded in a Stream",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Camera name (must match rig JSON)",
+               "type": "string"
+            }
+         },
+         "required": [
+            "name"
          ],
          "additionalProperties": false
       },
@@ -292,7 +340,7 @@
                "type": "string",
                "format": "date-time"
             },
-            "stream_stop_time": {
+            "stream_end_time": {
                "title": "Stream stop time",
                "type": "string",
                "format": "date-time"
@@ -305,20 +353,38 @@
                   "$ref": "#/definitions/EphysProbe"
                }
             },
-            "lasers": {
-               "title": "Lasers",
+            "laser_modules": {
+               "title": "Laser modules",
                "uniqueItems": true,
                "type": "array",
                "items": {
                   "$ref": "#/definitions/LaserModule"
                }
+            },
+            "daqs": {
+               "title": "DAQ devices",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/DAQDevice"
+               }
+            },
+            "cameras": {
+               "title": "Cameras",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/Camera"
+               }
             }
          },
          "required": [
             "stream_start_time",
-            "stream_stop_time",
+            "stream_end_time",
             "probes",
-            "lasers"
+            "laser_modules",
+            "daqs",
+            "cameras"
          ],
          "additionalProperties": false
       }

@@ -11,8 +11,8 @@
       },
       "schema_version": {
          "title": "Schema Version",
-         "default": "0.2.0",
-         "const": "0.2.0",
+         "default": "0.3.0",
+         "const": "0.3.0",
          "type": "string"
       },
       "license": {
@@ -87,15 +87,28 @@
          "title": "Restrictions",
          "description": "Detail any restrictions on publishing or sharing these data",
          "type": "string"
+      },
+      "modality": {
+         "title": "Modality",
+         "description": "A short name for the specific manner, characteristic, pattern of application, or the employment of any technology or formal procedure to generate data for a study",
+         "pattern": "^[^_]+$",
+         "type": "string"
+      },
+      "subject_id": {
+         "title": "Subject Id",
+         "description": "Unique identifier for the subject of data acquisition",
+         "pattern": "^[^_]+$",
+         "type": "string"
       }
    },
    "required": [
       "creation_time",
       "creation_date",
-      "name",
       "institution",
       "funding_source",
-      "data_level"
+      "data_level",
+      "modality",
+      "subject_id"
    ],
    "additionalProperties": false,
    "definitions": {
