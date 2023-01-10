@@ -12,8 +12,8 @@
       "version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.3.0",
-         "const": "0.3.0",
+         "default": "0.4.0",
+         "const": "0.4.0",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -21,23 +21,60 @@
          "description": "First and last name of the experimenter.",
          "type": "string"
       },
-      "session_start_time": {
-         "title": "Session start time",
-         "type": "string",
-         "format": "date-time"
-      },
       "subject_id": {
          "title": "Subject ID",
-         "type": "integer"
+         "type": "string"
       },
       "instrument_id": {
          "title": "Instrument ID",
          "type": "string"
       },
+      "session_start_time": {
+         "title": "Session start time",
+         "type": "string",
+         "format": "date-time"
+      },
       "session_end_time": {
          "title": "Session end time",
          "type": "string",
          "format": "date-time"
+      },
+      "tiles": {
+         "title": "Acquisition tiles",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Tile"
+         }
+      },
+      "axes": {
+         "title": "Acquisition axes",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Axis"
+         }
+      },
+      "chamber_immersion": {
+         "title": "Acquisition chamber immersion data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Immersion"
+            }
+         ]
+      },
+      "sample_immersion": {
+         "title": "Acquisition sample immersion data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Immersion"
+            }
+         ]
+      },
+      "active_objectives": {
+         "title": "List of objectives used in this acquisition.",
+         "type": "array",
+         "items": {
+            "type": "string"
+         }
       },
       "local_storage_directory": {
          "title": "Local storage directory",
@@ -46,80 +83,165 @@
       "external_storage_directory": {
          "title": "External storage directory",
          "type": "string"
-      },
-      "tile_prefix": {
-         "title": "Tile prefix",
-         "description": "Zstacks will be named: <tile_prefix>_<x>_<y>_<wavelength>.tiff",
-         "type": "string"
-      },
-      "tile_overlap_x": {
-         "title": "Tile overlap x (percent)",
-         "minimum": 0,
-         "maximum": 100,
-         "type": "number"
-      },
-      "tile_overlap_y": {
-         "title": "Tile overlap y (percent)",
-         "minimum": 0,
-         "maximum": 100,
-         "type": "number"
-      },
-      "step_size_z": {
-         "title": "Step size z (um)",
-         "type": "number"
-      },
-      "axes": {
-         "title": "Axes",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Axis"
-         }
-      },
-      "additional_parameters": {
-         "title": "Additional parameters",
-         "type": "string"
-      },
-      "positions": {
-         "title": "Positions",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Position"
-         }
-      },
-      "channels": {
-         "title": "Channels",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Channel"
-         }
-      },
-      "daqs": {
-         "title": "DAQ",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "type": "object"
-         }
-      },
-      "notes": {
-         "title": "Notes",
-         "type": "string"
       }
    },
    "required": [
       "experimenter_full_name",
-      "session_start_time",
       "subject_id",
       "instrument_id",
+      "session_start_time",
       "session_end_time",
-      "positions",
-      "channels"
+      "tiles",
+      "axes",
+      "chamber_immersion"
    ],
    "additionalProperties": false,
    "definitions": {
+      "Scale3dTransform": {
+         "title": "Scale3dTransform",
+         "description": "Values to be vector-multiplied with a 3D position, equivalent to the diagonals of a 3x3 transform matrix.\nRepresents voxel spacing if used as the first applied coordinate transform.",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "transformation type",
+               "default": "scale",
+               "type": "string"
+            },
+            "scale": {
+               "title": "3D scale parameters",
+               "minItems": 3,
+               "maxItems": 3,
+               "type": "array",
+               "items": {
+                  "type": "number"
+               }
+            }
+         },
+         "required": [
+            "scale"
+         ],
+         "additionalProperties": false
+      },
+      "Translation3dTransform": {
+         "title": "Translation3dTransform",
+         "description": "Values to be vector-added to a 3D position. Often needed to specify a Tile's origin.",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "transformation type",
+               "default": "translation",
+               "type": "string"
+            },
+            "translation": {
+               "title": "3D translation parameters",
+               "minItems": 3,
+               "maxItems": 3,
+               "type": "array",
+               "items": {
+                  "type": "number"
+               }
+            }
+         },
+         "required": [
+            "translation"
+         ],
+         "additionalProperties": false
+      },
+      "Channel": {
+         "title": "Channel",
+         "description": "Description of a channel",
+         "type": "object",
+         "properties": {
+            "channel_name": {
+               "title": "Channel",
+               "type": "string"
+            },
+            "laser_wavelength": {
+               "title": "Wavelength",
+               "minimum": 300,
+               "maximum": 1000,
+               "type": "integer"
+            },
+            "laser_wavelength_unit": {
+               "title": "Laser wavelength unit",
+               "default": "nanometer",
+               "type": "string"
+            },
+            "laser_power": {
+               "title": "Laser power",
+               "maximum": 2000,
+               "type": "number"
+            },
+            "laser_power_unit": {
+               "title": "Laser power unit",
+               "default": "milliwatt",
+               "type": "number"
+            },
+            "filter_wheel_index": {
+               "title": "Filter wheel index",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "channel_name",
+            "laser_wavelength",
+            "laser_power",
+            "filter_wheel_index"
+         ],
+         "additionalProperties": false
+      },
+      "Tile": {
+         "title": "Tile",
+         "description": "Description of an image tile",
+         "type": "object",
+         "properties": {
+            "coordinate_transformations": {
+               "title": "Tile coordinate transformations",
+               "type": "array",
+               "items": {
+                  "anyOf": [
+                     {
+                        "$ref": "#/definitions/Scale3dTransform"
+                     },
+                     {
+                        "$ref": "#/definitions/Translation3dTransform"
+                     }
+                  ]
+               }
+            },
+            "channel": {
+               "title": "Channel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Channel"
+                  }
+               ]
+            },
+            "file_name": {
+               "title": "File name",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "imaging_angle": {
+               "title": "Imaging angle",
+               "default": 0,
+               "type": "integer"
+            },
+            "imaging_angle_unit": {
+               "title": "Imaging angle unit",
+               "default": "degree",
+               "type": "string"
+            }
+         },
+         "required": [
+            "coordinate_transformations",
+            "channel"
+         ],
+         "additionalProperties": false
+      },
       "AxisName": {
          "title": "AxisName",
          "description": "Image axis name",
@@ -168,116 +290,36 @@
                   }
                ]
             },
-            "voxel_size": {
-               "title": "Voxel size (um)",
-               "type": "number"
-            },
-            "volume_size": {
-               "title": "Volume size (um)",
-               "description": "Size of the volume for this dimension.",
-               "type": "number"
+            "unit": {
+               "title": "Axis physical units",
+               "default": "micrometer",
+               "type": "string"
             }
          },
          "required": [
             "name",
             "dimension",
-            "direction",
-            "voxel_size",
-            "volume_size"
+            "direction"
          ],
          "additionalProperties": false
       },
-      "Position": {
-         "title": "Position",
-         "description": "Description of stage position",
+      "Immersion": {
+         "title": "Immersion",
+         "description": "Description of immersion media",
          "type": "object",
          "properties": {
-            "x_start_um": {
-               "title": "X Start Um",
-               "type": "number"
+            "medium": {
+               "title": "Immersion medium",
+               "type": "string"
             },
-            "x_end_um": {
-               "title": "X End Um",
-               "type": "number"
-            },
-            "x_step_um": {
-               "title": "X Step Um",
-               "type": "number"
-            },
-            "y_start_um": {
-               "title": "Y Start Um",
-               "type": "number"
-            },
-            "y_end_um": {
-               "title": "Y End Um",
-               "type": "number"
-            },
-            "y_step_um": {
-               "title": "Y Step Um",
-               "type": "number"
-            },
-            "z_start_um": {
-               "title": "Z Start Um",
-               "type": "number"
-            },
-            "z_end_um": {
-               "title": "Z End Um",
-               "type": "number"
-            },
-            "z_step_um": {
-               "title": "Z Step Um",
+            "refractive_index": {
+               "title": "Index of refraction",
                "type": "number"
             }
          },
          "required": [
-            "x_start_um",
-            "x_end_um",
-            "x_step_um",
-            "y_start_um",
-            "y_end_um",
-            "y_step_um",
-            "z_start_um",
-            "z_end_um",
-            "z_step_um"
-         ],
-         "additionalProperties": false
-      },
-      "Channel": {
-         "title": "Channel",
-         "description": "Description of a channel",
-         "type": "object",
-         "properties": {
-            "channel": {
-               "title": "Channel",
-               "type": "integer"
-            },
-            "enabled": {
-               "title": "Enabled",
-               "type": "boolean"
-            },
-            "laser_wavelength": {
-               "title": "Wavelength (nm)",
-               "minimum": 300,
-               "maximum": 1000,
-               "units": "nm",
-               "type": "integer"
-            },
-            "laser_power": {
-               "title": "Power (mW)",
-               "maximum": 2000,
-               "units": "mW",
-               "type": "number"
-            },
-            "filter_wheel_index": {
-               "title": "Filter wheel index",
-               "type": "integer"
-            }
-         },
-         "required": [
-            "channel",
-            "laser_wavelength",
-            "laser_power",
-            "filter_wheel_index"
+            "medium",
+            "refractive_index"
          ],
          "additionalProperties": false
       }
