@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.4.4",
-         "const": "0.4.4",
+         "default": "0.5.0",
+         "const": "0.5.0",
          "type": "string"
       },
       "subject_id": {
@@ -50,7 +50,23 @@
          "uniqueItems": true,
          "type": "array",
          "items": {
-            "$ref": "#/definitions/Injection"
+            "anyOf": [
+               {
+                  "$ref": "#/definitions/RetroOrbitalInjection"
+               },
+               {
+                  "$ref": "#/definitions/NanojectInjection"
+               },
+               {
+                  "$ref": "#/definitions/IontophoresisInjection"
+               },
+               {
+                  "$ref": "#/definitions/IntraCerebellarVentricleInjection"
+               },
+               {
+                  "$ref": "#/definitions/IntraCisternalMagnaInjection"
+               }
+            ]
          }
       },
       "fiber_implants": {
@@ -61,13 +77,12 @@
             "$ref": "#/definitions/FiberImplant"
          }
       },
-      "water_restriction": {
+      "water_restrictions": {
          "title": "Water restriction",
-         "allOf": [
-            {
-               "$ref": "#/definitions/WaterRestriction"
-            }
-         ]
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/WaterRestriction"
+         }
       },
       "training_protocols": {
          "title": "Training protocols",
@@ -510,9 +525,17 @@
          ],
          "additionalProperties": false
       },
-      "Injection": {
-         "title": "Injection",
-         "description": "Description of an injection procedure",
+      "Side": {
+         "title": "Side",
+         "description": "Side of animal",
+         "enum": [
+            "Left",
+            "Right"
+         ]
+      },
+      "RetroOrbitalInjection": {
+         "title": "RetroOrbitalInjection",
+         "description": "Description of a retro-orbital injection procedure",
          "type": "object",
          "properties": {
             "type": {
@@ -570,15 +593,15 @@
                   "$ref": "#/definitions/InjectionMaterial"
                }
             },
-            "injection_duration": {
-               "title": "Injection duration",
-               "type": "string",
-               "format": "time"
-            },
             "recovery_time": {
                "title": "Recovery time (min)",
                "units": "min",
                "type": "number"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -587,6 +610,25 @@
             "instrument_id": {
                "title": "Instrument ID",
                "type": "string"
+            },
+            "injection_type": {
+               "title": "Injection type",
+               "default": "Retro-orbital",
+               "const": "Retro-orbital",
+               "type": "string"
+            },
+            "injection_volume": {
+               "title": "Injection volume (nL)",
+               "units": "nL",
+               "type": "number"
+            },
+            "injection_eye": {
+               "title": "Injection eye",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
             }
          },
          "required": [
@@ -594,8 +636,530 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "injection_duration",
-            "recovery_time"
+            "recovery_time",
+            "injection_volume",
+            "injection_eye"
+         ],
+         "additionalProperties": false
+      },
+      "NanojectInjection": {
+         "title": "NanojectInjection",
+         "description": "Description of a nanoject injection procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "injection_materials": {
+               "title": "Injection material",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/InjectionMaterial"
+               }
+            },
+            "recovery_time": {
+               "title": "Recovery time (min)",
+               "units": "min",
+               "type": "number"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
+            },
+            "instrument_id": {
+               "title": "Instrument ID",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "injection_coordinate_ml": {
+               "title": "Injection coordinate ML (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_ap": {
+               "title": "Injection coordinate AP (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_depth": {
+               "title": "Injection coodinate depth (mm)",
+               "type": "number"
+            },
+            "injection_angle": {
+               "title": "Injection angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "injection_type": {
+               "title": "Injection type",
+               "default": "Nanoject",
+               "const": "Nanoject",
+               "type": "string"
+            },
+            "injection_volume": {
+               "title": "Injection volume (nL)",
+               "units": "nL",
+               "type": "number"
+            }
+         },
+         "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id",
+            "recovery_time",
+            "injection_coordinate_ml",
+            "injection_coordinate_ap",
+            "injection_coordinate_depth",
+            "injection_angle",
+            "injection_volume"
+         ],
+         "additionalProperties": false
+      },
+      "IontophoresisInjection": {
+         "title": "IontophoresisInjection",
+         "description": "Description of an iotophoresis injection procedure",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "injection_materials": {
+               "title": "Injection material",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/InjectionMaterial"
+               }
+            },
+            "recovery_time": {
+               "title": "Recovery time (min)",
+               "units": "min",
+               "type": "number"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
+            },
+            "instrument_id": {
+               "title": "Instrument ID",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "injection_coordinate_ml": {
+               "title": "Injection coordinate ML (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_ap": {
+               "title": "Injection coordinate AP (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_depth": {
+               "title": "Injection coodinate depth (mm)",
+               "type": "number"
+            },
+            "injection_angle": {
+               "title": "Injection angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "injection_type": {
+               "title": "Injection type",
+               "default": "Iontophoresis",
+               "const": "Iontophoresis",
+               "type": "string"
+            },
+            "injection_current": {
+               "title": "Injection current (\u03bcA)",
+               "units": "\u03bcA",
+               "type": "number"
+            },
+            "alternating_current": {
+               "title": "Alternating current",
+               "type": "string"
+            }
+         },
+         "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id",
+            "recovery_time",
+            "injection_coordinate_ml",
+            "injection_coordinate_ap",
+            "injection_coordinate_depth",
+            "injection_angle",
+            "injection_current",
+            "alternating_current"
+         ],
+         "additionalProperties": false
+      },
+      "IntraCerebellarVentricleInjection": {
+         "title": "IntraCerebellarVentricleInjection",
+         "description": "Description of an interacerebellar ventricle injection",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "injection_materials": {
+               "title": "Injection material",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/InjectionMaterial"
+               }
+            },
+            "recovery_time": {
+               "title": "Recovery time (min)",
+               "units": "min",
+               "type": "number"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
+            },
+            "instrument_id": {
+               "title": "Instrument ID",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "injection_coordinate_ml": {
+               "title": "Injection coordinate ML (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_ap": {
+               "title": "Injection coordinate AP (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_depth": {
+               "title": "Injection coodinate depth (mm)",
+               "type": "number"
+            },
+            "injection_angle": {
+               "title": "Injection angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "injection_type": {
+               "title": "Injection type",
+               "default": "ICV",
+               "const": "ICV",
+               "type": "string"
+            },
+            "injection_volume": {
+               "title": "Injection volume (nL)",
+               "units": "nL",
+               "type": "number"
+            }
+         },
+         "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id",
+            "recovery_time",
+            "injection_coordinate_ml",
+            "injection_coordinate_ap",
+            "injection_coordinate_depth",
+            "injection_angle",
+            "injection_volume"
+         ],
+         "additionalProperties": false
+      },
+      "IntraCisternalMagnaInjection": {
+         "title": "IntraCisternalMagnaInjection",
+         "description": "Description of an interacisternal magna injection",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "Procedure Type",
+               "description": "Procedure type",
+               "type": "string"
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "iacuc_protocol": {
+               "title": "IACUC protocol",
+               "type": "string"
+            },
+            "animal_weight": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight before procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "anaesthesia": {
+               "title": "Anaesthesia",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Anaesthetic"
+                  }
+               ]
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "injection_materials": {
+               "title": "Injection material",
+               "uniqueItems": true,
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/InjectionMaterial"
+               }
+            },
+            "recovery_time": {
+               "title": "Recovery time (min)",
+               "units": "min",
+               "type": "number"
+            },
+            "injection_duration": {
+               "title": "Injection duration",
+               "type": "string",
+               "format": "time"
+            },
+            "workstation_id": {
+               "title": "Workstation ID",
+               "type": "string"
+            },
+            "instrument_id": {
+               "title": "Instrument ID",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "injection_coordinate_ml": {
+               "title": "Injection coordinate ML (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_ap": {
+               "title": "Injection coordinate AP (mm)",
+               "type": "number"
+            },
+            "injection_coordinate_depth": {
+               "title": "Injection coodinate depth (mm)",
+               "type": "number"
+            },
+            "injection_angle": {
+               "title": "Injection angle (deg)",
+               "units": "deg",
+               "type": "number"
+            },
+            "injection_type": {
+               "title": "Injection type",
+               "default": "ICM",
+               "const": "ICM",
+               "type": "string"
+            },
+            "injection_volume": {
+               "title": "Injection volume (nL)",
+               "units": "nL",
+               "type": "number"
+            }
+         },
+         "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id",
+            "recovery_time",
+            "injection_coordinate_ml",
+            "injection_coordinate_ap",
+            "injection_coordinate_depth",
+            "injection_angle",
+            "injection_volume"
          ],
          "additionalProperties": false
       },
