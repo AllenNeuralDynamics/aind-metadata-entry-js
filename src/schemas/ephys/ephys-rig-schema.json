@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.5.0",
-         "const": "0.5.0",
+         "default": "0.5.1",
+         "const": "0.5.1",
          "type": "string"
       },
       "rig_id": {
@@ -87,6 +87,9 @@
                },
                {
                   "$ref": "#/definitions/OpenEphysAcquisitionBoard"
+               },
+               {
+                  "$ref": "#/definitions/DAQDevice"
                }
             ]
          }
@@ -1429,6 +1432,64 @@
          "required": [
             "computer_name",
             "ports"
+         ],
+         "additionalProperties": false
+      },
+      "DAQDevice": {
+         "title": "DAQDevice",
+         "description": "Data acquisition device containing multiple I/O channels",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Device name",
+               "type": "string"
+            },
+            "serial_number": {
+               "title": "Serial number",
+               "type": "string"
+            },
+            "manufacturer": {
+               "title": "Manufacturer",
+               "enum": [
+                  "National Instruments",
+                  "IMEC",
+                  "OEPS",
+                  "Other"
+               ],
+               "type": "string"
+            },
+            "model": {
+               "title": "Model",
+               "type": "string"
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            },
+            "data_interface": {
+               "title": "Type of connection to PC",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/DataInterface"
+                  }
+               ]
+            },
+            "computer_name": {
+               "title": "Name of computer controlling this DAQ",
+               "type": "string"
+            },
+            "channels": {
+               "title": "DAQ channels",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/DAQChannel"
+               }
+            }
+         },
+         "required": [
+            "manufacturer",
+            "data_interface",
+            "computer_name"
          ],
          "additionalProperties": false
       }
