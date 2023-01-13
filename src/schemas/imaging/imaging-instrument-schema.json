@@ -9,7 +9,7 @@
          "const": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/imaging/instrument.py",
          "type": "string"
       },
-      "version": {
+      "schema_version": {
          "title": "Version",
          "description": "schema version",
          "default": "0.4.1",

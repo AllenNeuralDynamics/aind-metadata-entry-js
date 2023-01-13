@@ -206,11 +206,10 @@
             },
             "targeted_ccf_coordinates": {
                "title": "Targeted CCF coordinates",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/CcfCoords"
-                  }
-               ]
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/CcfCoords"
+               }
             },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
@@ -271,11 +270,10 @@
             },
             "targeted_ccf_coordinates": {
                "title": "Targeted CCF coordinates",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/CcfCoords"
-                  }
-               ]
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/CcfCoords"
+               }
             },
             "manipulator_coordinates": {
                "title": "Manipulator coordinates",
@@ -380,11 +378,7 @@
          },
          "required": [
             "stream_start_time",
-            "stream_end_time",
-            "probes",
-            "laser_modules",
-            "daqs",
-            "cameras"
+            "stream_end_time"
          ],
          "additionalProperties": false
       }
