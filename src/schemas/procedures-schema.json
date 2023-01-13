@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.5.0",
-         "const": "0.5.0",
+         "default": "0.5.1",
+         "const": "0.5.1",
          "type": "string"
       },
       "subject_id": {
@@ -207,6 +207,10 @@
                "title": "Notes",
                "type": "string"
             },
+            "headframe_type": {
+               "title": "Headframe type",
+               "type": "string"
+            },
             "headframe_part_number": {
                "title": "Headframe part number",
                "type": "string"
@@ -233,8 +237,8 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "headframe_part_number",
-            "headframe_material"
+            "headframe_type",
+            "headframe_part_number"
          ],
          "additionalProperties": false
       },
@@ -341,8 +345,6 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "craniotomy_coordinates_ml",
-            "craniotomy_coordinates_ap",
             "craniotomy_size"
          ],
          "additionalProperties": false
