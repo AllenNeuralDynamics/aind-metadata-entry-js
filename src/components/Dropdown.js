@@ -18,16 +18,16 @@ export default function Dropdown(props) {
     <div>
       <select value={value} onChange={handleChange}>
         <option value=''> Select Schema </option>
-        <option value='data description'>Data Description Schema</option>
-        <option value='procedures'>Procedures Schema</option>
-        <option value='subject'>Subject Schema</option>
-        <option value='processing'>Processing Schema</option>
-        <option value='ephys session'>Ephys Session Schema</option>
-        <option value='ephys rig'> Ephys Rig Schema</option>
-        <option value='imaging instrument'> Imaging Instrument Schema</option>
-        <option value='imaging acquisition'> Imaging Acquisition Schema</option>
-        <option value='ophys rig'> Ophys Rig Schema</option>
-        <option value='ophys session'> Ophys Session Schema</option>
+        <option value='data description'> Data Description Schema </option>
+        <option value='ephys rig'> Ephys Rig Schema </option>
+        <option value='ephys session'> Ephys Session Schema </option>
+        <option value='imaging acquisition'> Imaging Acquisition Schema </option>
+        <option value='imaging instrument'> Imaging Instrument Schema </option>
+        <option value='ophys rig'> Ophys Rig Schema </option>
+        <option value='ophys session'> Ophys Session Schema </option>
+        <option value='procedures'> Procedures Schema </option>
+        <option value='processing'> Processing Schema </option>
+        <option value='subject'> Subject Schema </option>
       </select>
     </div>
   );
