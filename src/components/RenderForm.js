@@ -25,18 +25,27 @@ export default function RenderForm (props) {
   const validator2020 = (rawSchema && checkDraft2020(rawSchema)) ? ajv : undefined;
   const processedSchema = rawSchema ? preProcessing(rawSchema) : undefined;
 
-  const saveFile = (event) => {
-    /* 
-    Saves the input metadata as a json schema on client-server
+  async function saveFilePicker (event) {
+    /*
+    File system access API to select save location
     */
-    alert("Saving filled schema as a json file.")
-    const FileSaver = require('file-saver');
-    const data = event.formData;
-    const fileData = JSON.stringify(data, undefined, 4);
-    const blob = new Blob([fileData], {type: "text/plain"});
-    const filename = JSON.stringify(props.schema);
-    FileSaver.saveAs(blob, `${filename}.json`);
-  };
+   const filename = JSON.stringify(schemaKey);
+   const data = event.formData;
+   const fileData = JSON.stringify(data, undefined, 4);
+   const opts = {
+    suggestedName: `${filename}.json`,
+    types: [
+      {
+        description: "JSON file",
+        accept: {"text/plain": [".json"]}
+      }
+    ]
+   }
+   const handle = await window.showSaveFilePicker(opts);
+   const writer = await handle.createWritable();
+   await writer.write(new Blob([fileData], {type: "text/plain"}));
+   writer.close();
+  }
   
   // TODO: make a function for uiSchema selection based on selectedschema
   if(processedSchema){
@@ -46,7 +55,7 @@ export default function RenderForm (props) {
         formData={formData}
         uiSchema={EphysSessionUISchema}
         validator={validator2020} noHtml5Validate
-        onSubmit={saveFile} >
+        onSubmit={saveFilePicker} >
         </Form>
     )}
     else { 
@@ -54,7 +63,7 @@ export default function RenderForm (props) {
         <Form schema={processedSchema}
         formData={formData}
         validator={validator2020} noHtml5Validate
-        onSubmit={saveFile} >
+        onSubmit={saveFilePicker} >
         </Form>
       )};
  } else {
