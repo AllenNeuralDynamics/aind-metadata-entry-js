@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 import { checkDraft2020, preProcessing } from '../utilities/schemaHandlers';
 import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
+import TimeSelection from '../schemas/ui-schemas/TimeSelectionUISchema';
 
 const Ajv2020 = require("ajv/dist/2020")
 
@@ -62,6 +63,7 @@ export default function RenderForm (props) {
       return (
         <Form schema={processedSchema}
         formData={formData}
+        uiSchema={TimeSelection}
         validator={validator2020} noHtml5Validate
         onSubmit={saveFilePicker} >
         </Form>
