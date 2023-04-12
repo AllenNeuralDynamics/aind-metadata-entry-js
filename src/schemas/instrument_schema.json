@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.4.1",
-         "const": "0.4.1",
+         "default": "0.5.0",
+         "const": "0.5.0",
          "type": "string"
       },
       "instrument_id": {
@@ -21,11 +21,11 @@
          "description": "unique identifier for this instrument configuration",
          "type": "string"
       },
-      "type": {
+      "instrument_type": {
          "title": "Instrument type",
          "allOf": [
             {
-               "$ref": "#/definitions/InstrumentType"
+               "$ref": "#/definitions/ImagingInstrumentType"
             }
          ]
       },
@@ -145,7 +145,7 @@
       }
    },
    "required": [
-      "type",
+      "instrument_type",
       "location",
       "manufacturer",
       "objectives",
@@ -154,17 +154,18 @@
    ],
    "additionalProperties": false,
    "definitions": {
-      "InstrumentType": {
-         "title": "InstrumentType",
-         "description": "Instrument type name",
+      "ImagingInstrumentType": {
+         "title": "ImagingInstrumentType",
+         "description": "Experiment type name",
          "enum": [
-            "mesoSPIM",
-            "exaSPIM",
+            "confocal",
             "diSPIM",
-            "smartSPIM",
-            "Confocal",
-            "Two photon",
-            "Other"
+            "exaSPIM",
+            "ecephys",
+            "mesoSPIM",
+            "Other",
+            "SmartSPIM",
+            "Two photon"
          ]
       },
       "Manufacturer": {
@@ -202,6 +203,19 @@
             "Thorlabs",
             "Vieworks",
             "Vortran"
+         ]
+      },
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
+         "enum": [
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
          ]
       },
       "OpticalTable": {
@@ -244,6 +258,15 @@
                "minimum": 0,
                "units": "inches",
                "type": "number"
+            },
+            "table_size_unit": {
+               "title": "Table size unit",
+               "default": "inch",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "vibration_control": {
                "title": "Vibration control",
@@ -427,6 +450,14 @@
             "Other"
          ]
       },
+      "PowerUnit": {
+         "title": "PowerUnit",
+         "description": "Power units",
+         "enum": [
+            "milliwatt",
+            "microwatt"
+         ]
+      },
       "Lightsource": {
          "title": "Lightsource",
          "description": "Description of lightsource device",
@@ -479,10 +510,28 @@
                "units": "nm",
                "type": "number"
             },
+            "wavelength_unit": {
+               "title": "Wavelength unit",
+               "default": "nanometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "max_power": {
                "title": " Maximum power (mW)",
                "units": "mW",
                "type": "number"
+            },
+            "power_unit": {
+               "title": "Power unit",
+               "default": "milliwatt",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PowerUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -504,6 +553,13 @@
             "Dichroic",
             "Neutral density",
             "Notch"
+         ]
+      },
+      "FrequencyUnit": {
+         "title": "FrequencyUnit",
+         "description": "Frequency units",
+         "enum": [
+            "Hertz"
          ]
       },
       "Filter": {
@@ -547,26 +603,62 @@
                ]
             },
             "diameter": {
-               "title": "Size (mm)",
+               "title": "Diameter (mm)",
                "units": "mm",
                "type": "number"
             },
+            "diameter_unit": {
+               "title": "Diameter unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "thickness": {
-               "title": "Size (mm)",
+               "title": "Thickness (mm)",
                "minimum": 0,
                "type": "number"
+            },
+            "thickness_unit": {
+               "title": "Thickness unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "filter_wheel_index": {
                "title": "Filter wheel index",
                "type": "integer"
             },
             "cut_off_frequency": {
-               "title": "Cut-off frequency",
+               "title": "Cut-off frequency (Hz)",
                "type": "integer"
             },
+            "cut_off_frequency_unit": {
+               "title": "Cut off frequency unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
+            },
             "cut_on_frequency": {
-               "title": "Cut-on frequency",
+               "title": "Cut-on frequency (Hz)",
                "type": "integer"
+            },
+            "cut_on_frequency_unit": {
+               "title": "Cut on frequency unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
             },
             "description": {
                "title": "Description",
@@ -613,6 +705,15 @@
                "title": "Travel of device (mm)",
                "units": "mm",
                "type": "number"
+            },
+            "travel_unit": {
+               "title": "Travel unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -671,6 +772,15 @@
                "title": "Travel of device (mm)",
                "units": "mm",
                "type": "number"
+            },
+            "travel_unit": {
+               "title": "Travel unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "stage_axis_direction": {
                "title": "Direction of stage axis",
@@ -739,6 +849,15 @@
                "title": "DAQ channel sample rate (Hz)",
                "units": "Hz",
                "type": "number"
+            },
+            "sample_rate_unit": {
+               "title": "Sample rate unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
             },
             "event_based_sampling": {
                "title": "Set to true if DAQ channel is sampled at irregular intervals",

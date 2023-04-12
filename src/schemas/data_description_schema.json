@@ -11,8 +11,8 @@
       },
       "schema_version": {
          "title": "Schema Version",
-         "default": "0.3.0",
-         "const": "0.3.0",
+         "default": "0.4.0",
+         "const": "0.4.0",
          "type": "string"
       },
       "license": {
@@ -41,11 +41,23 @@
       "institution": {
          "title": "Institution",
          "description": "An established society, corporation, foundation or other organization that collected this data",
+         "enumNames": [
+            "Allen Institute for Brain Science",
+            "Allen Institute for Neural Dynamics",
+            "Columbia University",
+            "Huazhong University of Science and Technology",
+            "New York University"
+         ],
          "allOf": [
             {
                "$ref": "#/definitions/Institution"
             }
          ]
+      },
+      "ror_id": {
+         "title": "ROR ID",
+         "description": "Institution ID from the Research Organization Registry",
+         "type": "string"
       },
       "funding_source": {
          "title": "Funding source",
@@ -90,14 +102,39 @@
       },
       "modality": {
          "title": "Modality",
-         "description": "A short name for the specific manner, characteristic, pattern of application, or the employment of any technology or formal procedure to generate data for a study",
+         "description": "A short name for the specific manner, characteristic, pattern of application, or the employmentof any technology or formal procedure to generate data for a study",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Modality"
+         }
+      },
+      "experiment_type": {
+         "title": "Experiment Type",
+         "description": "A short name for the experimental technique used to collect this data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/ExperimentType"
+            }
+         ]
+      },
+      "subject_id": {
+         "title": "Subject ID",
+         "description": "Unique identifier for the subject of data acquisition",
          "pattern": "^[^_]+$",
          "type": "string"
       },
-      "subject_id": {
-         "title": "Subject Id",
-         "description": "Unique identifier for the subject of data acquisition",
-         "pattern": "^[^_]+$",
+      "related_data": {
+         "title": "Related data",
+         "description": "Path and description of data assets associated with this asset (eg. reference images)",
+         "default": [],
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/RelatedData"
+         }
+      },
+      "data_summary": {
+         "title": "Data summary",
+         "description": "Semantic summary of experimental goal",
          "type": "string"
       }
    },
@@ -108,6 +145,7 @@
       "funding_source",
       "data_level",
       "modality",
+      "experiment_type",
       "subject_id"
    ],
    "additionalProperties": false,
@@ -116,9 +154,26 @@
          "title": "Institution",
          "description": "Institution name",
          "enum": [
-            "AIND",
-            "AIBS",
-            "HUST"
+            {
+               "name": "Allen Institute for Brain Science",
+               "abbreviation": "AIBS"
+            },
+            {
+               "name": "Allen Institute for Neural Dynamics",
+               "abbreviation": "AIND"
+            },
+            {
+               "name": "Columbia University",
+               "abbreviation": "Columbia"
+            },
+            {
+               "name": "Huazhong University of Science and Technology",
+               "abbreviation": "HUST"
+            },
+            {
+               "name": "New York University",
+               "abbreviation": "NYU"
+            }
          ]
       },
       "Funding": {
@@ -157,11 +212,81 @@
          "title": "Group",
          "description": "Data collection group name",
          "enum": [
+            "behavior",
             "ephys",
-            "ophys",
             "MSMA",
-            "behavior"
+            "ophys"
          ]
+      },
+      "Modality": {
+         "title": "Modality",
+         "description": "Data collection modality name",
+         "enum": [
+            {
+               "name": "Extracellular electrophysiology",
+               "abbreviation": "ecephys"
+            },
+            {
+               "name": "Selective plane illumination microscopy",
+               "abbreviation": "SPIM"
+            },
+            {
+               "name": "Frame-projected independent-fiber photometry",
+               "abbreviation": "FIP"
+            },
+            {
+               "name": "Fluorescence micro-optical sectioning tomography",
+               "abbreviation": "fMOST"
+            },
+            {
+               "name": "Hyperspectral fiber photometry",
+               "abbreviation": "HSFP"
+            },
+            {
+               "name": "Magnetic resonance imaging",
+               "abbreviation": "MRI"
+            },
+            {
+               "name": "Optical physiology",
+               "abbreviation": "ophys"
+            }
+         ]
+      },
+      "ExperimentType": {
+         "title": "ExperimentType",
+         "description": "Experiment type name",
+         "enum": [
+            "confocal",
+            "diSPIM",
+            "exaSPIM",
+            "ecephys",
+            "mesoscope",
+            "mesoSPIM",
+            "ophys",
+            "Other",
+            "SmartSPIM"
+         ]
+      },
+      "RelatedData": {
+         "title": "RelatedData",
+         "description": "Description of related data asset",
+         "type": "object",
+         "properties": {
+            "related_data_path": {
+               "title": "Related data path",
+               "type": "string"
+            },
+            "relation": {
+               "title": "Relation",
+               "description": "Relation of data to this asset",
+               "type": "string"
+            }
+         },
+         "required": [
+            "related_data_path",
+            "relation"
+         ],
+         "additionalProperties": false
       }
    }
 }

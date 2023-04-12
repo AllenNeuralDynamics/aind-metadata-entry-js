@@ -12,13 +12,17 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.4.0",
-         "const": "0.4.0",
+         "default": "0.4.3",
+         "const": "0.4.3",
          "type": "string"
       },
       "experimenter_full_name": {
          "title": "Experimenter full name",
          "description": "First and last name of the experimenter.",
+         "type": "string"
+      },
+      "specimen_id": {
+         "title": "Specimen ID",
          "type": "string"
       },
       "subject_id": {
@@ -39,11 +43,15 @@
          "type": "string",
          "format": "date-time"
       },
+      "session_type": {
+         "title": "Session type",
+         "type": "string"
+      },
       "tiles": {
          "title": "Acquisition tiles",
          "type": "array",
          "items": {
-            "$ref": "#/definitions/Tile"
+            "$ref": "#/definitions/AcquisitionTile"
          }
       },
       "axes": {
@@ -83,11 +91,19 @@
       "external_storage_directory": {
          "title": "External storage directory",
          "type": "string"
+      },
+      "processing_steps": {
+         "title": "Processing steps",
+         "description": "List of downstream processing steps planned for each channel",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/ProcessingSteps"
+         }
       }
    },
    "required": [
       "experimenter_full_name",
-      "subject_id",
+      "specimen_id",
       "instrument_id",
       "session_start_time",
       "session_end_time",
@@ -147,6 +163,77 @@
          ],
          "additionalProperties": false
       },
+      "Rotation3dTransform": {
+         "title": "Rotation3dTransform",
+         "description": "Values to be vector-added to a 3D position. Often needed to specify a Tile's origin.",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "transformation type",
+               "default": "rotation",
+               "type": "string"
+            },
+            "rotation": {
+               "title": "3D rotation matrix values (3x3) ",
+               "minItems": 9,
+               "maxItems": 9,
+               "type": "array",
+               "items": {
+                  "type": "number"
+               }
+            }
+         },
+         "required": [
+            "rotation"
+         ],
+         "additionalProperties": false
+      },
+      "Affine3dTransform": {
+         "title": "Affine3dTransform",
+         "description": "Values to be vector-added to a 3D position. Often needed to specify a Tile's origin.",
+         "type": "object",
+         "properties": {
+            "type": {
+               "title": "transformation type",
+               "default": "affine",
+               "type": "string"
+            },
+            "affine_transform": {
+               "title": "Affine transform matrix values (top 3x4 matrix)",
+               "minItems": 12,
+               "maxItems": 12,
+               "type": "array",
+               "items": {
+                  "type": "number"
+               }
+            }
+         },
+         "required": [
+            "affine_transform"
+         ],
+         "additionalProperties": false
+      },
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
+         "enum": [
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
+         ]
+      },
+      "PowerUnit": {
+         "title": "PowerUnit",
+         "description": "Power units",
+         "enum": [
+            "milliwatt",
+            "microwatt"
+         ]
+      },
       "Channel": {
          "title": "Channel",
          "description": "Description of a channel",
@@ -165,7 +252,11 @@
             "laser_wavelength_unit": {
                "title": "Laser wavelength unit",
                "default": "nanometer",
-               "type": "string"
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "laser_power": {
                "title": "Laser power",
@@ -175,7 +266,11 @@
             "laser_power_unit": {
                "title": "Laser power unit",
                "default": "milliwatt",
-               "type": "number"
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PowerUnit"
+                  }
+               ]
             },
             "filter_wheel_index": {
                "title": "Filter wheel index",
@@ -190,9 +285,16 @@
          ],
          "additionalProperties": false
       },
-      "Tile": {
-         "title": "Tile",
-         "description": "Description of an image tile",
+      "AngleUnit": {
+         "title": "AngleUnit",
+         "description": "orientation units",
+         "enum": [
+            "degree"
+         ]
+      },
+      "AcquisitionTile": {
+         "title": "AcquisitionTile",
+         "description": "Description of acquisition tile",
          "type": "object",
          "properties": {
             "coordinate_transformations": {
@@ -205,9 +307,19 @@
                      },
                      {
                         "$ref": "#/definitions/Translation3dTransform"
+                     },
+                     {
+                        "$ref": "#/definitions/Rotation3dTransform"
+                     },
+                     {
+                        "$ref": "#/definitions/Affine3dTransform"
                      }
                   ]
                }
+            },
+            "file_name": {
+               "title": "File name",
+               "type": "string"
             },
             "channel": {
                "title": "Channel",
@@ -216,10 +328,6 @@
                      "$ref": "#/definitions/Channel"
                   }
                ]
-            },
-            "file_name": {
-               "title": "File name",
-               "type": "string"
             },
             "notes": {
                "title": "Notes",
@@ -233,7 +341,11 @@
             "imaging_angle_unit": {
                "title": "Imaging angle unit",
                "default": "degree",
-               "type": "string"
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -293,7 +405,11 @@
             "unit": {
                "title": "Axis physical units",
                "default": "micrometer",
-               "type": "string"
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -320,6 +436,40 @@
          "required": [
             "medium",
             "refractive_index"
+         ],
+         "additionalProperties": false
+      },
+      "ProcessingSteps": {
+         "title": "ProcessingSteps",
+         "description": "Description of downstream processing steps",
+         "type": "object",
+         "properties": {
+            "channel_name": {
+               "title": "Channel name",
+               "type": "string"
+            },
+            "process_name": {
+               "title": "Process Name",
+               "type": "array",
+               "items": {
+                  "enum": [
+                     "Image importing",
+                     "Image background subtraction",
+                     "Image cell segmentation",
+                     "Image destriping",
+                     "Image thresholding",
+                     "Image tile alignment",
+                     "Image tile fusing",
+                     "Image tile projection",
+                     "File format conversion"
+                  ],
+                  "type": "string"
+               }
+            }
+         },
+         "required": [
+            "channel_name",
+            "process_name"
          ],
          "additionalProperties": false
       }

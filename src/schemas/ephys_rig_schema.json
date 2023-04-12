@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.5.1",
-         "const": "0.5.1",
+         "default": "0.5.3",
+         "const": "0.5.3",
          "type": "string"
       },
       "rig_id": {
@@ -100,6 +100,13 @@
    ],
    "additionalProperties": false,
    "definitions": {
+      "AngleUnit": {
+         "title": "AngleUnit",
+         "description": "orientation units",
+         "enum": [
+            "degree"
+         ]
+      },
       "Manipulator": {
          "title": "Manipulator",
          "description": "Manipulator used on a dome module",
@@ -186,6 +193,27 @@
             "MPI Photonic Probe (Version 1)"
          ]
       },
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
+         "enum": [
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
+         ]
+      },
+      "PowerUnit": {
+         "title": "PowerUnit",
+         "description": "Power units",
+         "enum": [
+            "milliwatt",
+            "microwatt"
+         ]
+      },
       "Coupling": {
          "title": "Coupling",
          "description": "Laser coupling type",
@@ -233,10 +261,28 @@
                "units": "nm",
                "type": "integer"
             },
+            "wavelength_unit": {
+               "title": "Wavelength unit",
+               "default": "nanometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "maximum_power": {
                "title": "Maximum power (mW)",
                "units": "mW",
                "type": "number"
+            },
+            "power_unit": {
+               "title": "Power unit",
+               "default": "milliwatt",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PowerUnit"
+                  }
+               ]
             },
             "coupling": {
                "title": "Coupling",
@@ -252,6 +298,11 @@
                "maximum": 100,
                "units": "percent",
                "type": "number"
+            },
+            "coupling_efficiency_unit": {
+               "title": "Coupling efficiency unit",
+               "default": "percent",
+               "type": "string"
             },
             "item_number": {
                "title": "Item number",
@@ -356,6 +407,15 @@
                "units": "degrees",
                "type": "number"
             },
+            "angle_unit": {
+               "title": "Angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
             "rotation_angle": {
                "title": "Rotation Angle",
                "default": 0.0,
@@ -407,6 +467,13 @@
             "PXI",
             "Ethernet",
             "Other"
+         ]
+      },
+      "FrequencyUnit": {
+         "title": "FrequencyUnit",
+         "description": "Frequency units",
+         "enum": [
+            "Hertz"
          ]
       },
       "CameraChroma": {
@@ -467,6 +534,15 @@
                "units": "Hz",
                "type": "number"
             },
+            "frame_rate_unit": {
+               "title": "Frame rate unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
+            },
             "pixel_width": {
                "title": "Width of the sensor in pixels",
                "units": "Pixels",
@@ -477,6 +553,15 @@
                "units": "Pixels",
                "type": "integer"
             },
+            "size_unit": {
+               "title": "Size unit",
+               "default": "pixel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "chroma": {
                "title": "Color or Monochrome",
                "allOf": [
@@ -486,7 +571,11 @@
                ]
             },
             "sensor_format": {
-               "title": "Size of the sensor (e.g. 1/2.9\")",
+               "title": "Size of the sensor",
+               "type": "string"
+            },
+            "format_unit": {
+               "title": "Format unit",
                "type": "string"
             },
             "recording_software": {
@@ -519,6 +608,15 @@
                "title": "Module Angle",
                "units": "degrees",
                "type": "number"
+            },
+            "angle_unit": {
+               "title": "Angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
             },
             "rotation_angle": {
                "title": "Rotation Angle",
@@ -566,6 +664,15 @@
                "title": "Module Angle",
                "units": "degrees",
                "type": "number"
+            },
+            "angle_unit": {
+               "title": "Angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
             },
             "rotation_angle": {
                "title": "Rotation Angle",
@@ -650,6 +757,15 @@
                "units": "mm",
                "type": "number"
             },
+            "focal_length_unit": {
+               "title": "Focal length unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "size": {
                "title": "Size (inches)",
                "allOf": [
@@ -658,9 +774,27 @@
                   }
                ]
             },
+            "lens_size_unit": {
+               "title": "Lens size unit",
+               "default": "inch",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "optimized_wavelength_range": {
                "title": "Optimized wavelength range (nm)",
                "type": "string"
+            },
+            "wavelength_unit": {
+               "title": "Wavelength unit",
+               "default": "nanometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "max_aperture": {
                "title": "Max aperture (e.g. f/2)",
@@ -726,26 +860,62 @@
                ]
             },
             "diameter": {
-               "title": "Size (mm)",
+               "title": "Diameter (mm)",
                "units": "mm",
                "type": "number"
             },
+            "diameter_unit": {
+               "title": "Diameter unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "thickness": {
-               "title": "Size (mm)",
+               "title": "Thickness (mm)",
                "minimum": 0,
                "type": "number"
+            },
+            "thickness_unit": {
+               "title": "Thickness unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "filter_wheel_index": {
                "title": "Filter wheel index",
                "type": "integer"
             },
             "cut_off_frequency": {
-               "title": "Cut-off frequency",
+               "title": "Cut-off frequency (Hz)",
                "type": "integer"
             },
+            "cut_off_frequency_unit": {
+               "title": "Cut off frequency unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
+            },
             "cut_on_frequency": {
-               "title": "Cut-on frequency",
+               "title": "Cut-on frequency (Hz)",
                "type": "integer"
+            },
+            "cut_on_frequency_unit": {
+               "title": "Cut on frequency unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
             },
             "description": {
                "title": "Description",
@@ -785,6 +955,15 @@
                "units": "deg",
                "type": "number"
             },
+            "angle_unit": {
+               "title": "Angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
             "x": {
                "title": "Position X (mm)",
                "units": "mm",
@@ -799,6 +978,15 @@
                "title": "Position Z (mm)",
                "units": "mm",
                "type": "number"
+            },
+            "position_unit": {
+               "title": "Position unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "coordinate_system": {
                "title": "Description of the coordinate system used",
@@ -900,10 +1088,28 @@
                "units": "pixels",
                "type": "integer"
             },
+            "size_unit": {
+               "title": "Size unit",
+               "default": "pixel",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "viewing_distance": {
                "title": "Viewing distance (cm)",
                "units": "cm",
                "type": "number"
+            },
+            "viewing_distance_unit": {
+               "title": "Viewing distance unit",
+               "default": "centimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "contrast": {
                "title": "Contrast",
@@ -938,19 +1144,6 @@
             "brightness"
          ],
          "additionalProperties": false
-      },
-      "SizeUnit": {
-         "title": "SizeUnit",
-         "description": "units for sizes",
-         "enum": [
-            "pixel",
-            "inch",
-            "centimeter",
-            "millimeter",
-            "micrometer",
-            "nanometer",
-            "none"
-         ]
       },
       "Tube": {
          "title": "Tube",
@@ -1064,6 +1257,15 @@
                "title": "Width of treadmill (mm)",
                "units": "mm",
                "type": "number"
+            },
+            "width_unit": {
+               "title": "Width unit",
+               "default": "centimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -1179,6 +1381,15 @@
                "title": "DAQ channel sample rate (Hz)",
                "units": "Hz",
                "type": "number"
+            },
+            "sample_rate_unit": {
+               "title": "Sample rate unit",
+               "default": "Hertz",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/FrequencyUnit"
+                  }
+               ]
             },
             "event_based_sampling": {
                "title": "Set to true if DAQ channel is sampled at irregular intervals",
