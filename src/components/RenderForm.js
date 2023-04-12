@@ -2,13 +2,10 @@ import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
-import { checkDraft2020, preProcessing } from '../utilities/schemaHandlers';
+import {preProcessing} from '../utilities/schemaHandlers';
 import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
-import TimeSelection from '../schemas/ui-schemas/TimeSelectionUISchema';
+import validator from '@rjsf/validator-ajv8';
 
-const Ajv2020 = require("ajv/dist/2020")
-
-const ajv = new Ajv2020()
 
 export default function RenderForm (props) {
   /*
@@ -23,7 +20,6 @@ export default function RenderForm (props) {
   const formData = props.data
 
   const rawSchema = (schemaKey in schema_map) ? schema_map[schemaKey] : undefined;
-  const validator2020 = (rawSchema && checkDraft2020(rawSchema)) ? ajv : undefined;
   const processedSchema = rawSchema ? preProcessing(rawSchema) : undefined;
 
   async function saveFilePicker (event) {
@@ -55,7 +51,7 @@ export default function RenderForm (props) {
         <Form schema={processedSchema}
         formData={formData}
         uiSchema={EphysSessionUISchema}
-        validator={validator2020} noHtml5Validate
+        validator={validator}
         onSubmit={saveFilePicker} >
         </Form>
     )}
@@ -63,8 +59,7 @@ export default function RenderForm (props) {
       return (
         <Form schema={processedSchema}
         formData={formData}
-        uiSchema={TimeSelection}
-        validator={validator2020} noHtml5Validate
+        validator={validator}
         onSubmit={saveFilePicker} >
         </Form>
       )};
