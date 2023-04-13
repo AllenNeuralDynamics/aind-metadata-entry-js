@@ -1,6 +1,6 @@
 {
    "title": "Processing",
-   "description": "Desription of all processes run on data",
+   "description": "Description of all processes run on data",
    "type": "object",
    "properties": {
       "describedBy": {
@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Schema version",
          "description": "Schema version",
-         "default": "0.1.0",
-         "const": "0.1.0",
+         "default": "0.2.1",
+         "const": "0.2.1",
          "type": "string"
       },
       "pipeline_version": {
@@ -44,15 +44,19 @@
          "title": "ProcessName",
          "description": "Data processing type labels",
          "enum": [
+            "Ephys curation",
             "Ephys preprocessing",
             "Ephys postprocessing",
+            "Ephys visualization",
             "Image importing",
             "Image atlas alignment",
+            "Image background subtraction",
+            "Image cell segmentation",
             "Image destriping",
             "Image thresholding",
+            "Image tile alignment",
             "Image tile fusing",
             "Image tile projection",
-            "Image tile stitching",
             "File format conversion",
             "Other",
             "Spike sorting"
@@ -101,8 +105,18 @@
                "description": "Path to code respository",
                "type": "string"
             },
+            "code_version": {
+               "title": "Code version",
+               "description": "Version of the code",
+               "type": "string"
+            },
             "parameters": {
                "title": "Parameters",
+               "type": "object"
+            },
+            "outputs": {
+               "title": "Outputs",
+               "description": "Output parameters",
                "type": "object"
             },
             "notes": {
