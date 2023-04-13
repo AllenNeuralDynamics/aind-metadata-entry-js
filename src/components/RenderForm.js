@@ -4,10 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import schema_map from '../utilities/constants';
 import {preProcessing} from '../utilities/schemaHandlers';
 import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
-import DataDescriptionUISchema from '../schemas/ui-schemas/DataDescriptionUISchema';
 import validator from '@rjsf/validator-ajv8';
-import uiSchema from '../schemas/ui-schemas/ArrayFieldTemplate';
-import CustomArrayField from '../schemas/ui-schemas/ArrayFieldTemplate';
 
 
 export default function RenderForm (props) {
@@ -54,15 +51,6 @@ export default function RenderForm (props) {
         <Form schema={processedSchema}
         formData={formData}
         uiSchema={EphysSessionUISchema}
-        validator={validator}
-        onSubmit={saveFilePicker} >
-        </Form>
-    )}
-    else if (schemaKey === "data description") {
-      return (
-        <Form schema={processedSchema}
-        formData={formData}
-        uiSchema={DataDescriptionUISchema}
         validator={validator}
         onSubmit={saveFilePicker} >
         </Form>

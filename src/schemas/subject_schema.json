@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.2.2",
-         "const": "0.2.2",
+         "default": "0.3.0",
+         "const": "0.3.0",
          "type": "string"
       },
       "species": {
@@ -97,28 +97,20 @@
          "title": "Paternal genotype",
          "type": "string"
       },
-      "light_cycle": {
-         "title": "Light cycle",
-         "allOf": [
-            {
-               "$ref": "#/definitions/LightCycle"
-            }
-         ]
-      },
-      "home_cage_enrichment": {
-         "title": "Home cage enrichment",
-         "allOf": [
-            {
-               "$ref": "#/definitions/HomeCageEnrichment"
-            }
-         ]
-      },
       "wellness_reports": {
          "title": "Wellness Report",
          "type": "array",
          "items": {
             "$ref": "#/definitions/WellnessReport"
          }
+      },
+      "housing": {
+         "title": "Housing",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Housing"
+            }
+         ]
       },
       "notes": {
          "title": "Notes",
@@ -180,6 +172,27 @@
             "BALB/c"
          ]
       },
+      "WellnessReport": {
+         "title": "WellnessReport",
+         "description": "Wellness report on animal health",
+         "type": "object",
+         "properties": {
+            "date": {
+               "title": "Date",
+               "type": "string",
+               "format": "date"
+            },
+            "report": {
+               "title": "Report",
+               "type": "string"
+            }
+         },
+         "required": [
+            "date",
+            "report"
+         ],
+         "additionalProperties": false
+      },
       "LightCycle": {
          "title": "LightCycle",
          "description": "Description of vivarium light cycle times",
@@ -208,33 +221,50 @@
          "title": "HomeCageEnrichment",
          "description": "Materials provided in animal home cage",
          "enum": [
-            "none",
-            "running wheel",
-            "social housing",
-            "plastic tube",
-            "plastic shelter",
-            "other"
+            "None",
+            "Running wheel",
+            "Plastic tube",
+            "Plastic shelter",
+            "Other"
          ]
       },
-      "WellnessReport": {
-         "title": "WellnessReport",
-         "description": "Wellness report on animal health",
+      "Housing": {
+         "title": "Housing",
+         "description": "Description of subject housing",
          "type": "object",
          "properties": {
-            "date": {
-               "title": "Date",
-               "type": "string",
-               "format": "date"
-            },
-            "report": {
-               "title": "Report",
+            "cage_id": {
+               "title": "Cage ID",
                "type": "string"
+            },
+            "room_id": {
+               "title": "Room ID",
+               "type": "string"
+            },
+            "light_cycle": {
+               "title": "Light cycle",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/LightCycle"
+                  }
+               ]
+            },
+            "home_cage_enrichment": {
+               "title": "Home cage enrichment",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/HomeCageEnrichment"
+               }
+            },
+            "cohoused_subjects": {
+               "title": "Co-housed subjects",
+               "description": "List of IDs of other subjects housed in same cage",
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
             }
          },
-         "required": [
-            "date",
-            "report"
-         ],
          "additionalProperties": false
       }
    }

@@ -11,8 +11,8 @@
       },
       "schema_version": {
          "title": "Schema Version",
-         "default": "0.4.0",
-         "const": "0.4.0",
+         "default": "0.4.1",
+         "const": "0.4.1",
          "type": "string"
       },
       "license": {
@@ -41,13 +41,6 @@
       "institution": {
          "title": "Institution",
          "description": "An established society, corporation, foundation or other organization that collected this data",
-         "enumNames": [
-            "Allen Institute for Brain Science",
-            "Allen Institute for Neural Dynamics",
-            "Columbia University",
-            "Huazhong University of Science and Technology",
-            "New York University"
-         ],
          "allOf": [
             {
                "$ref": "#/definitions/Institution"
@@ -174,6 +167,13 @@
                "name": "New York University",
                "abbreviation": "NYU"
             }
+         ],
+         "enumNames": [
+            "Allen Institute for Brain Science",
+            "Allen Institute for Neural Dynamics",
+            "Columbia University",
+            "Huazhong University of Science and Technology",
+            "New York University"
          ]
       },
       "Funding": {
@@ -250,6 +250,15 @@
                "name": "Optical physiology",
                "abbreviation": "ophys"
             }
+         ],
+         "enumNames": [
+            "Extracellular electrophysiology",
+            "Selective plane illumination microscopy",
+            "Frame-projected independent-fiber photometry",
+            "Fluorescence micro-optical sectioning tomography",
+            "Hyperspectral fiber photometry",
+            "Magnetic resonance imaging",
+            "Optical physiology"
          ]
       },
       "ExperimentType": {
