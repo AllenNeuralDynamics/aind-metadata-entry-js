@@ -5,6 +5,7 @@ import schema_map from '../utilities/constants';
 import {preProcessing} from '../utilities/schemaHandlers';
 import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
 import validator from '@rjsf/validator-ajv8';
+import {widgets, uiSchema} from '../schemas/ui-schemas/TimeUISchema';
 
 
 export default function RenderForm (props) {
@@ -60,6 +61,8 @@ export default function RenderForm (props) {
         <Form schema={processedSchema}
         formData={formData}
         validator={validator}
+        uiSchema={uiSchema}
+        widgets={widgets}
         onSubmit={saveFilePicker} >
         </Form>
       )};
