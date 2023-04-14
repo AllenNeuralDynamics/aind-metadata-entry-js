@@ -30,7 +30,7 @@ export default function RenderForm (props) {
    const data = event.formData;
    const fileData = JSON.stringify(data, undefined, 4);
    const opts = {
-    suggestedName: schemaKey,
+    suggestedName: `${schemaKey}.json`,
     types: [
       {
         description: "JSON file",
