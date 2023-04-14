@@ -10,16 +10,16 @@ import ophys_session from '../schemas/ophys_session_schema.json';
 import imaging_acquisition from '../schemas/acquisition_schema.json';
 
 const schema_map = {
-    'data description': data_description,
+    'data_description': data_description,
     'procedures': procedures,
     'processing': processing,
     'subject': subject,
-    'ephys session': ephys_session,
-    'ephys rig': ephys_rig,
-    'imaging instrument': imaging_instrument,
-    'ophys rig': ophys_rig,
-    'ophys session': ophys_session,
-    'imaging acquisition': imaging_acquisition
+    'ephys_session': ephys_session,
+    'ephys_rig': ephys_rig,
+    'imaging_instrument': imaging_instrument,
+    'ophys_rig': ophys_rig,
+    'ophys_session': ophys_session,
+    'imaging_acquisition': imaging_acquisition
 }
 
 export default schema_map; 
