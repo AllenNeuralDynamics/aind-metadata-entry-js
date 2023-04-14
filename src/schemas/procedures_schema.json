@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.5.1",
-         "const": "0.5.1",
+         "default": "0.7.0",
+         "const": "0.7.0",
          "type": "string"
       },
       "subject_id": {
@@ -21,36 +21,19 @@
          "description": "Unique identifier for the subject. If this is not a Allen LAS ID, indicate this in the Notes.",
          "type": "string"
       },
-      "headframes": {
-         "title": "Headframes",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Headframe"
-         }
-      },
-      "craniotomies": {
-         "title": "Craniotomies",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Craniotomy"
-         }
-      },
-      "mri_scans": {
-         "title": "MRI scans",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/MriScan"
-         }
-      },
-      "injections": {
-         "title": "Injections",
+      "subject_procedures": {
+         "title": "Subject Procedures",
+         "default": [],
          "uniqueItems": true,
          "type": "array",
          "items": {
             "anyOf": [
+               {
+                  "$ref": "#/definitions/Headframe"
+               },
+               {
+                  "$ref": "#/definitions/Craniotomy"
+               },
                {
                   "$ref": "#/definitions/RetroOrbitalInjection"
                },
@@ -65,47 +48,32 @@
                },
                {
                   "$ref": "#/definitions/IntraCisternalMagnaInjection"
+               },
+               {
+                  "$ref": "#/definitions/FiberImplant"
+               },
+               {
+                  "$ref": "#/definitions/WaterRestriction"
+               },
+               {
+                  "$ref": "#/definitions/TrainingProtocol"
+               },
+               {
+                  "$ref": "#/definitions/Perfusion"
+               },
+               {
+                  "$ref": "#/definitions/SubjectProcedure"
                }
             ]
          }
       },
-      "fiber_implants": {
-         "title": "Fiber implants",
+      "specimen_procedures": {
+         "title": "Specimen Procedures",
+         "default": [],
          "uniqueItems": true,
          "type": "array",
          "items": {
-            "$ref": "#/definitions/FiberImplant"
-         }
-      },
-      "water_restrictions": {
-         "title": "Water restriction",
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/WaterRestriction"
-         }
-      },
-      "training_protocols": {
-         "title": "Training protocols",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/TrainingProtocol"
-         }
-      },
-      "tissue_preparations": {
-         "title": "Tissue preparations",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/TissuePrep"
-         }
-      },
-      "other_procedures": {
-         "title": "Other procedures",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Procedure"
+            "$ref": "#/definitions/SpecimenProcedure"
          }
       },
       "notes": {
@@ -118,6 +86,20 @@
    ],
    "additionalProperties": false,
    "definitions": {
+      "WeightUnit": {
+         "title": "WeightUnit",
+         "description": "Weight units",
+         "enum": [
+            "gram"
+         ]
+      },
+      "TimeUnit": {
+         "title": "TimeUnit",
+         "description": "Time units",
+         "enum": [
+            "minute"
+         ]
+      },
       "Anaesthetic": {
          "title": "Anaesthetic",
          "description": "Description of an anaestheic",
@@ -128,9 +110,17 @@
                "type": "string"
             },
             "duration": {
-               "title": "Duration (hours)",
-               "units": "hours",
+               "title": "Duration",
                "type": "number"
+            },
+            "duration_unit": {
+               "title": "Duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "level": {
                "title": "Level (percent)",
@@ -152,7 +142,8 @@
          "description": "Headframe material name",
          "enum": [
             "Titanium",
-            "Steel"
+            "Steel",
+            "White Zirconia"
          ]
       },
       "Headframe": {
@@ -160,11 +151,6 @@
          "description": "Description of headframe procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -189,11 +175,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -205,6 +206,12 @@
             },
             "notes": {
                "title": "Notes",
+               "type": "string"
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Headframe",
+               "const": "Headframe",
                "type": "string"
             },
             "headframe_type": {
@@ -242,6 +249,46 @@
          ],
          "additionalProperties": false
       },
+      "CraniotomyType": {
+         "title": "CraniotomyType",
+         "description": "Name of craniotomy Type",
+         "enum": [
+            "Visual Cortex",
+            "Whole hemisphere craniotomy",
+            "3 mm",
+            "5 mm",
+            "Other"
+         ]
+      },
+      "Side": {
+         "title": "Side",
+         "description": "Side of animal",
+         "enum": [
+            "Left",
+            "Right"
+         ]
+      },
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
+         "enum": [
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
+         ]
+      },
+      "CoordinateReferenceLocation": {
+         "title": "CoordinateReferenceLocation",
+         "description": "Name of reference point for Coordinates",
+         "enum": [
+            "Bregma",
+            "Lambda"
+         ]
+      },
       "ProtectiveMaterial": {
          "title": "ProtectiveMaterial",
          "description": "Name of material applied to craniotomy",
@@ -257,11 +304,6 @@
          "description": "Description of craniotomy procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -286,11 +328,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -304,6 +361,28 @@
                "title": "Notes",
                "type": "string"
             },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Craniotomy",
+               "const": "Craniotomy",
+               "type": "string"
+            },
+            "craniotomy_type": {
+               "title": "Craniotomy type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CraniotomyType"
+                  }
+               ]
+            },
+            "craniotomy_hemisphere": {
+               "title": "Craniotomy hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
             "craniotomy_coordinates_ml": {
                "title": "Craniotomy coordinate ML (mm)",
                "units": "mm",
@@ -314,10 +393,51 @@
                "units": "mm",
                "type": "number"
             },
+            "craniotomy_coordinates_unit": {
+               "title": "Craniotomy coordinates unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "craniotomy_coordinates_reference": {
+               "title": "Craniotomy coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "craniotomy_size": {
                "title": "Craniotomy size (mm)",
                "units": "mm",
                "type": "number"
+            },
+            "craniotomy_size_unit": {
+               "title": "Craniotomy size unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
             },
             "implant_part_number": {
                "title": "Implant part number",
@@ -338,6 +458,11 @@
             "workstation_id": {
                "title": "Workstation ID",
                "type": "string"
+            },
+            "recovery_time": {
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             }
          },
          "required": [
@@ -345,121 +470,8 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
+            "craniotomy_type",
             "craniotomy_size"
-         ],
-         "additionalProperties": false
-      },
-      "MriScanSequence": {
-         "title": "MriScanSequence",
-         "description": "MRI scan sequence",
-         "enum": [
-            "RARE"
-         ]
-      },
-      "ScannerLocation": {
-         "title": "ScannerLocation",
-         "description": "location of scanner",
-         "enum": [
-            "UW SLU",
-            "Fred Hutch"
-         ]
-      },
-      "MagneticStrength": {
-         "title": "MagneticStrength",
-         "description": "Strength of magnet",
-         "enum": [
-            7,
-            14
-         ]
-      },
-      "MriScan": {
-         "title": "MriScan",
-         "description": "Description of an MRI scan",
-         "type": "object",
-         "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
-            "start_date": {
-               "title": "Start date",
-               "type": "string",
-               "format": "date"
-            },
-            "end_date": {
-               "title": "End date",
-               "type": "string",
-               "format": "date"
-            },
-            "experimenter_full_name": {
-               "title": "Experimenter full name",
-               "description": "First and last name of the experimenter.",
-               "type": "string"
-            },
-            "protocol_id": {
-               "title": "Protocol ID",
-               "type": "string"
-            },
-            "iacuc_protocol": {
-               "title": "IACUC protocol",
-               "type": "string"
-            },
-            "animal_weight": {
-               "title": "Animal weight (g)",
-               "description": "Animal weight before procedure",
-               "units": "g",
-               "type": "number"
-            },
-            "anaesthesia": {
-               "title": "Anaesthesia",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Anaesthetic"
-                  }
-               ]
-            },
-            "notes": {
-               "title": "Notes",
-               "type": "string"
-            },
-            "scan_sequence": {
-               "title": "Scan sequence",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/MriScanSequence"
-                  }
-               ]
-            },
-            "scanner_location": {
-               "title": "Scanner location",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/ScannerLocation"
-                  }
-               ]
-            },
-            "magnetic_strength": {
-               "title": "Magnetic strength (T)",
-               "units": "T",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/MagneticStrength"
-                  }
-               ]
-            },
-            "resolution": {
-               "title": "Resolution",
-               "type": "number"
-            }
-         },
-         "required": [
-            "start_date",
-            "end_date",
-            "experimenter_full_name",
-            "protocol_id",
-            "scan_sequence",
-            "resolution"
          ],
          "additionalProperties": false
       },
@@ -503,6 +515,11 @@
                "units": "gc/mL",
                "type": "number"
             },
+            "titer_unit": {
+               "title": "Titer unit",
+               "default": "gc/mL",
+               "type": "string"
+            },
             "prep_lot_number": {
                "title": "Preparation lot number",
                "type": "string"
@@ -520,6 +537,10 @@
                      "$ref": "#/definitions/VirusPrepType"
                   }
                ]
+            },
+            "prep_protocol": {
+               "title": "Prep protocol",
+               "type": "string"
             }
          },
          "required": [
@@ -527,24 +548,11 @@
          ],
          "additionalProperties": false
       },
-      "Side": {
-         "title": "Side",
-         "description": "Side of animal",
-         "enum": [
-            "Left",
-            "Right"
-         ]
-      },
       "RetroOrbitalInjection": {
          "title": "RetroOrbitalInjection",
          "description": "Description of a retro-orbital injection procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -569,11 +577,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -596,14 +619,22 @@
                }
             },
             "recovery_time": {
-               "title": "Recovery time (min)",
-               "units": "min",
-               "type": "number"
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             },
             "injection_duration": {
                "title": "Injection duration",
-               "type": "string",
-               "format": "time"
+               "type": "number"
+            },
+            "injection_duration_unit": {
+               "title": "Injection duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -613,16 +644,21 @@
                "title": "Instrument ID",
                "type": "string"
             },
-            "injection_type": {
-               "title": "Injection type",
-               "default": "Retro-orbital",
-               "const": "Retro-orbital",
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Retro-orbital injection",
+               "const": "Retro-orbital injection",
                "type": "string"
             },
             "injection_volume": {
                "title": "Injection volume (nL)",
                "units": "nL",
                "type": "number"
+            },
+            "injection_volume_unit": {
+               "title": "Injection volume unit",
+               "default": "nL",
+               "type": "string"
             },
             "injection_eye": {
                "title": "Injection eye",
@@ -638,22 +674,31 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "recovery_time",
             "injection_volume",
             "injection_eye"
          ],
          "additionalProperties": false
+      },
+      "AngleUnit": {
+         "title": "AngleUnit",
+         "description": "orientation units",
+         "enum": [
+            "degree"
+         ]
+      },
+      "VolumeUnit": {
+         "title": "VolumeUnit",
+         "description": "Volume units",
+         "enum": [
+            "nanoliter",
+            "microliter"
+         ]
       },
       "NanojectInjection": {
          "title": "NanojectInjection",
          "description": "Description of a nanoject injection procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -678,11 +723,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -705,14 +765,22 @@
                }
             },
             "recovery_time": {
-               "title": "Recovery time (min)",
-               "units": "min",
-               "type": "number"
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             },
             "injection_duration": {
                "title": "Injection duration",
-               "type": "string",
-               "format": "time"
+               "type": "number"
+            },
+            "injection_duration_unit": {
+               "title": "Injection duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -721,14 +789,6 @@
             "instrument_id": {
                "title": "Instrument ID",
                "type": "string"
-            },
-            "injection_hemisphere": {
-               "title": "Injection hemisphere",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Side"
-                  }
-               ]
             },
             "injection_coordinate_ml": {
                "title": "Injection coordinate ML (mm)",
@@ -742,21 +802,83 @@
                "title": "Injection coodinate depth (mm)",
                "type": "number"
             },
+            "injection_coordinate_unit": {
+               "title": "Injection coordinate unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "injection_coordinate_reference": {
+               "title": "Injection coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "injection_angle": {
                "title": "Injection angle (deg)",
                "units": "deg",
                "type": "number"
             },
-            "injection_type": {
-               "title": "Injection type",
-               "default": "Nanoject",
-               "const": "Nanoject",
+            "injection_angle_unit": {
+               "title": "Injection angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
+            "targeted_structure": {
+               "title": "Injection targeted brain structure",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Nanoject injection",
+               "const": "Nanoject injection",
                "type": "string"
             },
             "injection_volume": {
                "title": "Injection volume (nL)",
                "units": "nL",
                "type": "number"
+            },
+            "injection_volume_unit": {
+               "title": "Injection volume unit",
+               "default": "nanoliter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/VolumeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -764,7 +886,6 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "recovery_time",
             "injection_coordinate_ml",
             "injection_coordinate_ap",
             "injection_coordinate_depth",
@@ -773,16 +894,18 @@
          ],
          "additionalProperties": false
       },
+      "CurrentUnit": {
+         "title": "CurrentUnit",
+         "description": "Current units",
+         "enum": [
+            "microamps"
+         ]
+      },
       "IontophoresisInjection": {
          "title": "IontophoresisInjection",
          "description": "Description of an iotophoresis injection procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -807,11 +930,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -834,14 +972,22 @@
                }
             },
             "recovery_time": {
-               "title": "Recovery time (min)",
-               "units": "min",
-               "type": "number"
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             },
             "injection_duration": {
                "title": "Injection duration",
-               "type": "string",
-               "format": "time"
+               "type": "number"
+            },
+            "injection_duration_unit": {
+               "title": "Injection duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -850,14 +996,6 @@
             "instrument_id": {
                "title": "Instrument ID",
                "type": "string"
-            },
-            "injection_hemisphere": {
-               "title": "Injection hemisphere",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Side"
-                  }
-               ]
             },
             "injection_coordinate_ml": {
                "title": "Injection coordinate ML (mm)",
@@ -871,21 +1009,83 @@
                "title": "Injection coodinate depth (mm)",
                "type": "number"
             },
+            "injection_coordinate_unit": {
+               "title": "Injection coordinate unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "injection_coordinate_reference": {
+               "title": "Injection coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "injection_angle": {
                "title": "Injection angle (deg)",
                "units": "deg",
                "type": "number"
             },
-            "injection_type": {
-               "title": "Injection type",
-               "default": "Iontophoresis",
-               "const": "Iontophoresis",
+            "injection_angle_unit": {
+               "title": "Injection angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
+            "targeted_structure": {
+               "title": "Injection targeted brain structure",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Iontophoresis injection",
+               "const": "Iontophoresis injection",
                "type": "string"
             },
             "injection_current": {
                "title": "Injection current (\u03bcA)",
                "units": "\u03bcA",
                "type": "number"
+            },
+            "injection_current_unit": {
+               "title": "Injection current unit",
+               "default": "microamps",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CurrentUnit"
+                  }
+               ]
             },
             "alternating_current": {
                "title": "Alternating current",
@@ -897,7 +1097,6 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "recovery_time",
             "injection_coordinate_ml",
             "injection_coordinate_ap",
             "injection_coordinate_depth",
@@ -912,11 +1111,6 @@
          "description": "Description of an interacerebellar ventricle injection",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -941,11 +1135,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -968,14 +1177,22 @@
                }
             },
             "recovery_time": {
-               "title": "Recovery time (min)",
-               "units": "min",
-               "type": "number"
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             },
             "injection_duration": {
                "title": "Injection duration",
-               "type": "string",
-               "format": "time"
+               "type": "number"
+            },
+            "injection_duration_unit": {
+               "title": "Injection duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -984,14 +1201,6 @@
             "instrument_id": {
                "title": "Instrument ID",
                "type": "string"
-            },
-            "injection_hemisphere": {
-               "title": "Injection hemisphere",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Side"
-                  }
-               ]
             },
             "injection_coordinate_ml": {
                "title": "Injection coordinate ML (mm)",
@@ -1005,21 +1214,83 @@
                "title": "Injection coodinate depth (mm)",
                "type": "number"
             },
+            "injection_coordinate_unit": {
+               "title": "Injection coordinate unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "injection_coordinate_reference": {
+               "title": "Injection coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "injection_angle": {
                "title": "Injection angle (deg)",
                "units": "deg",
                "type": "number"
             },
-            "injection_type": {
-               "title": "Injection type",
-               "default": "ICV",
-               "const": "ICV",
+            "injection_angle_unit": {
+               "title": "Injection angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
+            "targeted_structure": {
+               "title": "Injection targeted brain structure",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "ICV injection",
+               "const": "ICV injection",
                "type": "string"
             },
             "injection_volume": {
                "title": "Injection volume (nL)",
                "units": "nL",
                "type": "number"
+            },
+            "injection_volume_unit": {
+               "title": "Injection volume unit",
+               "default": "nanoliter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/VolumeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -1027,7 +1298,6 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "recovery_time",
             "injection_coordinate_ml",
             "injection_coordinate_ap",
             "injection_coordinate_depth",
@@ -1041,11 +1311,6 @@
          "description": "Description of an interacisternal magna injection",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -1070,11 +1335,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -1097,14 +1377,22 @@
                }
             },
             "recovery_time": {
-               "title": "Recovery time (min)",
-               "units": "min",
-               "type": "number"
+               "title": "Recovery time",
+               "type": "string",
+               "format": "time"
             },
             "injection_duration": {
                "title": "Injection duration",
-               "type": "string",
-               "format": "time"
+               "type": "number"
+            },
+            "injection_duration_unit": {
+               "title": "Injection duration unit",
+               "default": "minute",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TimeUnit"
+                  }
+               ]
             },
             "workstation_id": {
                "title": "Workstation ID",
@@ -1113,14 +1401,6 @@
             "instrument_id": {
                "title": "Instrument ID",
                "type": "string"
-            },
-            "injection_hemisphere": {
-               "title": "Injection hemisphere",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Side"
-                  }
-               ]
             },
             "injection_coordinate_ml": {
                "title": "Injection coordinate ML (mm)",
@@ -1134,21 +1414,83 @@
                "title": "Injection coodinate depth (mm)",
                "type": "number"
             },
+            "injection_coordinate_unit": {
+               "title": "Injection coordinate unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "injection_coordinate_reference": {
+               "title": "Injection coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "injection_angle": {
                "title": "Injection angle (deg)",
                "units": "deg",
                "type": "number"
             },
-            "injection_type": {
-               "title": "Injection type",
-               "default": "ICM",
-               "const": "ICM",
+            "injection_angle_unit": {
+               "title": "Injection angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
+            },
+            "targeted_structure": {
+               "title": "Injection targeted brain structure",
+               "type": "string"
+            },
+            "injection_hemisphere": {
+               "title": "Injection hemisphere",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Side"
+                  }
+               ]
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "ICM injection",
+               "const": "ICM injection",
                "type": "string"
             },
             "injection_volume": {
                "title": "Injection volume (nL)",
                "units": "nL",
                "type": "number"
+            },
+            "injection_volume_unit": {
+               "title": "Injection volume unit",
+               "default": "nanoliter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/VolumeUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -1156,7 +1498,6 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "recovery_time",
             "injection_coordinate_ml",
             "injection_coordinate_ap",
             "injection_coordinate_depth",
@@ -1171,7 +1512,8 @@
          "enum": [
             "Probe A",
             "Probe B",
-            "Probe C"
+            "Probe C",
+            "Probe D"
          ]
       },
       "FerruleMaterial": {
@@ -1208,6 +1550,11 @@
                "units": "\u03bcm",
                "type": "number"
             },
+            "core_diameter_unit": {
+               "title": "Core diameter unit",
+               "default": "\u03bcm",
+               "type": "string"
+            },
             "numerical_aperture": {
                "title": "Numerical aperture",
                "type": "number"
@@ -1239,10 +1586,51 @@
                "units": "mm",
                "type": "number"
             },
+            "stereotactic_coordinate_unit": {
+               "title": "Sterotactic coordinate unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
+            "stereotactic_coordinate_reference": {
+               "title": "Stereotactic coordinate reference",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/CoordinateReferenceLocation"
+                  }
+               ]
+            },
+            "bregma_to_lambda_distance": {
+               "title": "Bregma to lambda (mm)",
+               "description": "Distance between bregman and lambda",
+               "units": "mm",
+               "type": "number"
+            },
+            "bregma_to_lambda_unit": {
+               "title": "Bregma to lambda unit",
+               "default": "millimeter",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "angle": {
                "title": "Angle (deg)",
                "units": "deg",
                "type": "number"
+            },
+            "angle_unit": {
+               "title": "Angle unit",
+               "default": "degree",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/AngleUnit"
+                  }
+               ]
             },
             "notes": {
                "title": "Notes",
@@ -1268,11 +1656,6 @@
          "description": "Description of an implant procedure",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -1297,11 +1680,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -1313,6 +1711,11 @@
             },
             "notes": {
                "title": "Notes",
+               "type": "string"
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Fiber implant",
                "type": "string"
             },
             "probes": {
@@ -1338,6 +1741,12 @@
          "description": "Description of a water restriction procedure",
          "type": "object",
          "properties": {
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Water restriction",
+               "const": "Water restriction",
+               "type": "string"
+            },
             "protocol_id": {
                "title": "Water restriction protocol number",
                "type": "string"
@@ -1346,6 +1755,15 @@
                "title": "Baseline weight (g)",
                "description": "Weight at start of water restriction",
                "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "start_date": {
                "title": "Water restriction start date",
@@ -1370,6 +1788,16 @@
          "description": "Description of an animal training protocol",
          "type": "object",
          "properties": {
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Training",
+               "const": "Training",
+               "type": "string"
+            },
+            "training_name": {
+               "title": "Training protocol name",
+               "type": "string"
+            },
             "protocol_id": {
                "title": "Training protocol ID",
                "type": "string"
@@ -1390,33 +1818,17 @@
             }
          },
          "required": [
+            "training_name",
             "protocol_id",
             "training_protocol_start_date"
          ],
          "additionalProperties": false
       },
-      "TissuePrepName": {
-         "title": "TissuePrepName",
-         "description": "Tissue preparation type name",
-         "enum": [
-            "Perfusion",
-            "Fixation",
-            "Double delipidation",
-            "DCM delipidation",
-            "Immunostaining",
-            "Gelation"
-         ]
-      },
-      "TissuePrep": {
-         "title": "TissuePrep",
-         "description": "Description of a tissue preparation procedure",
+      "Perfusion": {
+         "title": "Perfusion",
+         "description": "Description of a perfusion procedure that creates a specimen",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -1441,11 +1853,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -1459,16 +1886,16 @@
                "title": "Notes",
                "type": "string"
             },
-            "name": {
-               "title": "Name",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/TissuePrepName"
-                  }
-               ]
+            "procedure_type": {
+               "title": "Procedure type",
+               "default": "Perfusion",
+               "const": "Perfusion",
+               "type": "string"
             },
-            "specimen_id": {
+            "output_specimen_ids": {
                "title": "Specimen ID",
+               "description": "IDs of specimens resulting from this procedure.",
+               "uniqueItems": true,
                "type": "array",
                "items": {
                   "type": "string"
@@ -1480,21 +1907,15 @@
             "end_date",
             "experimenter_full_name",
             "protocol_id",
-            "name",
-            "specimen_id"
+            "output_specimen_ids"
          ],
          "additionalProperties": false
       },
-      "Procedure": {
-         "title": "Procedure",
+      "SubjectProcedure": {
+         "title": "SubjectProcedure",
          "description": "Description of surgical or other procedure performed on a subject",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Procedure Type",
-               "description": "Procedure type",
-               "type": "string"
-            },
             "start_date": {
                "title": "Start date",
                "type": "string",
@@ -1519,11 +1940,26 @@
                "title": "IACUC protocol",
                "type": "string"
             },
-            "animal_weight": {
+            "animal_weight_prior": {
                "title": "Animal weight (g)",
                "description": "Animal weight before procedure",
                "units": "g",
                "type": "number"
+            },
+            "animal_weight_post": {
+               "title": "Animal weight (g)",
+               "description": "Animal weight after procedure",
+               "units": "g",
+               "type": "number"
+            },
+            "weight_unit": {
+               "title": "Weight unit",
+               "default": "gram",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/WeightUnit"
+                  }
+               ]
             },
             "anaesthesia": {
                "title": "Anaesthesia",
@@ -1539,6 +1975,109 @@
             }
          },
          "required": [
+            "start_date",
+            "end_date",
+            "experimenter_full_name",
+            "protocol_id"
+         ],
+         "additionalProperties": false
+      },
+      "SpecimenProcedureName": {
+         "title": "SpecimenProcedureName",
+         "description": "Specimen procedure type name",
+         "enum": [
+            "Active delipidation",
+            "DCM delipidation",
+            "Double delipidation",
+            "Embedding",
+            "Fixation",
+            "Gelation",
+            "Immunostaining",
+            "Soak",
+            "Other - see notes"
+         ]
+      },
+      "Reagent": {
+         "title": "Reagent",
+         "description": "Description of reagents used in procedure",
+         "type": "object",
+         "properties": {
+            "name": {
+               "title": "Name",
+               "type": "string"
+            },
+            "rrid": {
+               "title": "Research Resource ID",
+               "type": "string"
+            },
+            "lot_number": {
+               "title": "Lot number",
+               "type": "string"
+            },
+            "expiration_date": {
+               "title": "Lot expiration date",
+               "type": "string",
+               "format": "date"
+            }
+         },
+         "required": [
+            "name",
+            "lot_number"
+         ],
+         "additionalProperties": false
+      },
+      "SpecimenProcedure": {
+         "title": "SpecimenProcedure",
+         "description": "Description of surgical or other procedure performed on a specimen",
+         "type": "object",
+         "properties": {
+            "specimen_id": {
+               "title": "Specimen ID",
+               "type": "string"
+            },
+            "procedure_type": {
+               "title": "Procedure type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SpecimenProcedureName"
+                  }
+               ]
+            },
+            "start_date": {
+               "title": "Start date",
+               "type": "string",
+               "format": "date"
+            },
+            "end_date": {
+               "title": "End date",
+               "type": "string",
+               "format": "date"
+            },
+            "experimenter_full_name": {
+               "title": "Experimenter full name",
+               "description": "First and last name of the experimenter.",
+               "type": "string"
+            },
+            "protocol_id": {
+               "title": "Protocol ID",
+               "description": "DOI for protocols.io",
+               "type": "string"
+            },
+            "reagents": {
+               "title": "Reagents",
+               "type": "array",
+               "items": {
+                  "$ref": "#/definitions/Reagent"
+               }
+            },
+            "notes": {
+               "title": "Notes",
+               "type": "string"
+            }
+         },
+         "required": [
+            "specimen_id",
+            "procedure_type",
             "start_date",
             "end_date",
             "experimenter_full_name",

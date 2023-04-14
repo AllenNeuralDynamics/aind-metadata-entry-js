@@ -1,13 +1,13 @@
-import data_description from '../schemas/data-description-schema.json';
-import procedures from '../schemas/procedures-schema.json';
-import processing from '../schemas/processing-schema.json';
-import subject from '../schemas/subject-schema.json';
-import ephys_session from '../schemas/ephys/ephys-session-schema.json';
-import ephys_rig from '../schemas/ephys/ephys-rig-schema.json';
-import imaging_instrument from '../schemas/imaging/imaging-instrument-schema.json';
-import ophys_rig from '../schemas/ophys/ophys-rig-schema.json';
-import ophys_session from '../schemas/ophys/ophys-session-schema.json';
-import imaging_acquisition from '../schemas/imaging/imaging-acquisition-schema.json';
+import data_description from '../schemas/data_description_schema.json';
+import procedures from '../schemas/procedures_schema.json';
+import processing from '../schemas/processing_schema.json';
+import subject from '../schemas/subject_schema.json';
+import ephys_session from '../schemas/ephys_session_schema.json';
+import ephys_rig from '../schemas/ephys_rig_schema.json';
+import imaging_instrument from '../schemas/instrument_schema.json';
+import ophys_rig from '../schemas/ophys_rig_schema.json';
+import ophys_session from '../schemas/ophys_session_schema.json';
+import imaging_acquisition from '../schemas/acquisition_schema.json';
 
 const schema_map = {
     'data description': data_description,

@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Schema Version",
          "description": "schema version",
-         "default": "0.0.1",
-         "const": "0.0.1",
+         "default": "0.1.2",
+         "const": "0.1.2",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -51,28 +51,12 @@
          "title": "Rig ID",
          "type": "string"
       },
-      "patch_cords": {
-         "title": "Patch cords",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Patch"
-         }
-      },
       "lasers": {
          "title": "Lasers",
          "uniqueItems": true,
          "type": "array",
          "items": {
             "$ref": "#/definitions/Laser"
-         }
-      },
-      "coupling_array": {
-         "title": "Coupling array",
-         "uniqueItems": true,
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Coupling"
          }
       },
       "detectors": {
@@ -91,49 +75,13 @@
    "required": [
       "experimenter_full_name",
       "session_start_time",
-      "session_end_time",
       "subject_id",
       "session_type",
       "rig_id",
-      "patch_cords",
-      "lasers",
-      "coupling_array"
+      "lasers"
    ],
    "additionalProperties": false,
    "definitions": {
-      "PatchCordName": {
-         "title": "PatchCordName",
-         "description": "Patch cord name",
-         "enum": [
-            "Patch Cord A",
-            "Patch Cord B",
-            "Patch Cord C"
-         ]
-      },
-      "Patch": {
-         "title": "Patch",
-         "description": "Description of a patch",
-         "type": "object",
-         "properties": {
-            "name": {
-               "title": "Name",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/PatchCordName"
-                  }
-               ]
-            },
-            "output_power": {
-               "title": "Output power (uW)",
-               "type": "number"
-            }
-         },
-         "required": [
-            "name",
-            "output_power"
-         ],
-         "additionalProperties": false
-      },
       "LaserName": {
          "title": "LaserName",
          "description": "Laser name",
@@ -143,6 +91,27 @@
             "Laser C",
             "Laser D",
             "Laser E"
+         ]
+      },
+      "SizeUnit": {
+         "title": "SizeUnit",
+         "description": "units for sizes",
+         "enum": [
+            "pixel",
+            "inch",
+            "centimeter",
+            "millimeter",
+            "micrometer",
+            "nanometer",
+            "none"
+         ]
+      },
+      "PowerUnit": {
+         "title": "PowerUnit",
+         "description": "Power units",
+         "enum": [
+            "milliwatt",
+            "microwatt"
          ]
       },
       "Laser": {
@@ -162,9 +131,27 @@
                "title": "Wavelength (nm)",
                "type": "integer"
             },
+            "wavelength_unit": {
+               "title": "Wavelength unit",
+               "default": "nanometer",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/SizeUnit"
+                  }
+               ]
+            },
             "excitation_power": {
                "title": "Excitation power (mW)",
                "type": "number"
+            },
+            "excitation_power_unit": {
+               "title": "Excitation power unit",
+               "default": "milliwatt",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PowerUnit"
+                  }
+               ]
             }
          },
          "required": [
@@ -173,44 +160,13 @@
          ],
          "additionalProperties": false
       },
-      "FiberName": {
-         "title": "FiberName",
-         "description": "Fiber name",
+      "TriggerType": {
+         "title": "TriggerType",
+         "description": "Types of detector triggers",
          "enum": [
-            "Laser A",
-            "Laser B",
-            "Laser C",
-            "Laser D",
-            "Laser E"
+            "Internal",
+            "External"
          ]
-      },
-      "Coupling": {
-         "title": "Coupling",
-         "description": "Description of fiber coupling",
-         "type": "object",
-         "properties": {
-            "fiber_name": {
-               "title": "Fiber name",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/FiberName"
-                  }
-               ]
-            },
-            "patch_cord_name": {
-               "title": "Patch cord name",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/PatchCordName"
-                  }
-               ]
-            }
-         },
-         "required": [
-            "fiber_name",
-            "patch_cord_name"
-         ],
-         "additionalProperties": false
       },
       "Detector": {
          "title": "Detector",
@@ -224,11 +180,25 @@
             "exposure_time": {
                "title": "Exposure time (ms)",
                "type": "number"
+            },
+            "exposure_time_unit": {
+               "title": "Exposure time unit",
+               "default": "ms",
+               "type": "string"
+            },
+            "trigger_type": {
+               "title": "Trigger type",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/TriggerType"
+                  }
+               ]
             }
          },
          "required": [
             "name",
-            "exposure_time"
+            "exposure_time",
+            "trigger_type"
          ],
          "additionalProperties": false
       }

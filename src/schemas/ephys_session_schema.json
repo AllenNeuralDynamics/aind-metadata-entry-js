@@ -12,8 +12,8 @@
       "schema_version": {
          "title": "Version",
          "description": "schema version",
-         "default": "0.3.0",
-         "const": "0.3.0",
+         "default": "0.3.1",
+         "const": "0.3.1",
          "type": "string"
       },
       "experimenter_full_name": {
@@ -238,6 +238,14 @@
          ],
          "additionalProperties": false
       },
+      "PowerUnit": {
+         "title": "PowerUnit",
+         "description": "Power units",
+         "enum": [
+            "milliwatt",
+            "microwatt"
+         ]
+      },
       "Laser": {
          "title": "Laser",
          "description": "Laser used in a LaserModule",
@@ -251,6 +259,15 @@
                "title": "Power level used in this session",
                "units": "mW",
                "type": "number"
+            },
+            "power_unit": {
+               "title": "Power unit",
+               "default": "milliwatt",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/PowerUnit"
+                  }
+               ]
             }
          },
          "required": [
