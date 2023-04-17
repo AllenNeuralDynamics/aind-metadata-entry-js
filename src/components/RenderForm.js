@@ -27,11 +27,10 @@ export default function RenderForm (props) {
     /*
     File system access API to select save location
     */
-   const filename = JSON.stringify(schemaKey);
    const data = event.formData;
    const fileData = JSON.stringify(data, undefined, 4);
    const opts = {
-    suggestedName: `${filename}.json`,
+    suggestedName: `${schemaKey}.json`,
     types: [
       {
         description: "JSON file",
