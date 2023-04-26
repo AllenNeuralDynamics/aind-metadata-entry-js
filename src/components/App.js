@@ -14,18 +14,17 @@ export default function App(props) {
         Gives user the option to autofill the form with previously input data
      */
 
-    const [value, setValue] = useState('');
+    const setValue = useState('');
     const [data, setData] = useState(null);
     const [schema, setSchema] = useState('');
 
 
-    const callbackFunction = (childData) => { 
+    const callbackFunction = async (childData) => { 
         /**
          * Method to put the user-selected schema into state
          */
-        const schemaURL = (value in schema_map) ? schema_map[value] : undefined;
-        setValue(childData);
-        fetchSchema(schemaURL);
+        const schemaURL = (childData in schema_map) ? schema_map[childData] : undefined;
+        await fetchSchema(schemaURL, childData);
     }
 
     const handleRehydrate =  async () => { 
@@ -33,12 +32,13 @@ export default function App(props) {
         setData(data)
     }
 
-    const fetchSchema = async (url) => {
+    const fetchSchema = async (url, value) => {
         try {
           const response = await fetch(url);
           const schema = await response.json();
           const processedSchema = await schema ? preProcessing(schema) : undefined;
           setSchema(processedSchema);
+          setValue(value);
         } catch (error) {}
       };
 
