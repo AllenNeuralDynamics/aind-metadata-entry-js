@@ -14,7 +14,7 @@ export default function App(props) {
         Gives user the option to autofill the form with previously input data
      */
 
-    const setValue = useState('');
+    const [value, setValue] = useState('');
     const [data, setData] = useState(null);
     const [schema, setSchema] = useState('');
 
@@ -50,7 +50,7 @@ export default function App(props) {
                  < Dropdown parentCallback={callbackFunction} />
             </div>
             <div>
-                <RenderForm schema={schema} data={data}/> 
+                <RenderForm schema={schema} data={data} value={value}/> 
            </div>
         </div>
     );

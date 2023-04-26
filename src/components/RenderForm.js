@@ -2,7 +2,7 @@ import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, uiSchema} from '../schemas/ui-schemas/TimeUISchema';
+import {widgets, uiSchema} from '../custom-ui/TimeUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -12,6 +12,7 @@ export default function RenderForm (props) {
   Returns: 
     Form object 
   */
+  const schemaName = props.value;
   const schema = props.schema;
   const formData = props.data;
 
@@ -22,7 +23,7 @@ export default function RenderForm (props) {
    const data = event.formData;
    const fileData = JSON.stringify(data, undefined, 4);
    const opts = {
-    suggestedName: `${schema}.json`,
+    suggestedName: `${schemaName}.json`,
     types: [
       {
         description: "JSON file",
