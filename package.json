@@ -11,6 +11,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "ajv": "^8.11.0",
+    "aws-sdk": "^2.1362.0",
     "bootstrap": "^3.4.1",
     "bootstrap-loader": "^4.0.0",
     "bootstrap-sass": "^3.4.3",

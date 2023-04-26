@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import RenderForm from "./RenderForm";
 import Dropdown from "./Dropdown";
 import RehydrateForm from "./RehydrateForm";
+import schema_map from '../utilities/constants';
+import {preProcessing} from '../utilities/schemaHandlers';
 
 export default function App(props) {
     /*
@@ -14,18 +16,31 @@ export default function App(props) {
 
     const [value, setValue] = useState('');
     const [data, setData] = useState(null);
+    const [schema, setSchema] = useState('');
 
-    const callbackFunction = (childData) => {
+
+    const callbackFunction = (childData) => { 
         /**
          * Method to put the user-selected schema into state
          */
+        const schemaURL = (value in schema_map) ? schema_map[value] : undefined;
         setValue(childData);
+        fetchSchema(schemaURL);
     }
 
     const handleRehydrate =  async () => { 
         const data = await RehydrateForm()
         setData(data)
     }
+
+    const fetchSchema = async (url) => {
+        try {
+          const response = await fetch(url);
+          const schema = await response.json();
+          const processedSchema = await schema ? preProcessing(schema) : undefined;
+          setSchema(processedSchema);
+        } catch (error) {}
+      };
 
     return (
         <div>
@@ -35,7 +50,7 @@ export default function App(props) {
                  < Dropdown parentCallback={callbackFunction} />
             </div>
             <div>
-                <RenderForm schema={value} data={data}/> 
+                <RenderForm schema={schema} data={data}/> 
            </div>
         </div>
     );
