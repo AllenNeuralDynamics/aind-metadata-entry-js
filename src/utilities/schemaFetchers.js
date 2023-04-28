@@ -2,7 +2,7 @@ export async function fetchSchemasfromS3 (props) {
     /*
     Method to retrieve list of schema links from aws s3 bucket
     */
-    const response = await fetch('https://aind-data-schema-dev.s3.us-west-2.amazonaws.com/')
+    const response = await fetch(process.env.REACT_APP_S3__URL)
     const responseText = await response.text()
     const parser=new DOMParser();
     const xmlParsed = parser.parseFromString(responseText, 'text/xml');
@@ -53,4 +53,3 @@ export function findLatestSchemas(schemasList) {
     }
     return 0;
   }
-  

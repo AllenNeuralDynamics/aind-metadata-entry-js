@@ -8,6 +8,7 @@ import { fetchSchemasfromS3, findLatestSchemas } from "../utilities/schemaFetche
 export default function App(props) {
     /*
     Application to display a dropdown menu of schemas.
+        Fetches schema objects from s3
         Creates schema objects from filepaths
         Maps schemas to corresponding labels (string) in options (list)
         Renders dropdown menu with options
@@ -21,8 +22,8 @@ export default function App(props) {
 
     const callbackFunction = async (childData) => { 
         /**
-         * Method to retrieve schemas from S3 and
-         * put the user-selected schema into state
+         * Method to retrieve list of all schema paths from S3 and
+         * fetch the user-selected schema into state
          */
         const schemaList = await fetchSchemasfromS3()
         const latestSchemas = findLatestSchemas(schemaList)
@@ -42,9 +43,10 @@ export default function App(props) {
     const fetchAndSetSchema = async (url, value) => {
         /**
          * Method to put the user-selected schema into state
+         * defaults to latest schema version
          */
         try {
-            const response = await fetch('https://aind-data-schema-dev.s3.us-west-2.amazonaws.com/'+url);
+            const response = await fetch(process.env.REACT_APP_S3__URL+url);
             const schema = await response.json();
             const processedSchema = await schema ? preProcessing(schema) : undefined;
             setSchema(processedSchema);
