@@ -22,8 +22,8 @@ export default function Dropdown(props) {
         <option value='data_description'> Data Description Schema </option>
         <option value='ephys_rig'> Ephys Rig Schema </option>
         <option value='ephys_session'> Ephys Session Schema </option>
-        <option value='imaging_acquisition'> Imaging Acquisition Schema </option>
-        <option value='imaging_instrument'> Imaging Instrument Schema </option>
+        <option value='acquisition'> Imaging Acquisition Schema </option>
+        <option value='instrument'> Imaging Instrument Schema </option>
         <option value='ophys_rig'> Ophys Rig Schema </option>
         <option value='ophys_session'> Ophys Session Schema </option>
         <option value='procedures'> Procedures Schema </option>

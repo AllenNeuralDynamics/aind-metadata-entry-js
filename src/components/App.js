@@ -2,9 +2,8 @@ import React, {useState} from "react";
 import RenderForm from "./RenderForm";
 import Dropdown from "./Dropdown";
 import RehydrateForm from "./RehydrateForm";
-import schema_map from '../utilities/constants';
 import {preProcessing} from '../utilities/schemaHandlers';
-import fetchSchema from "./FetchSchema";
+import { fetchSchemasfromS3, findLatestSchemas } from "../utilities/schemaFetchers";
 
 export default function App(props) {
     /*
@@ -22,37 +21,42 @@ export default function App(props) {
 
     const callbackFunction = async (childData) => { 
         /**
-         * Method to put the user-selected schema into state
+         * Method to retrieve schemas from S3 and
+         * put the user-selected schema into state
          */
-        const schemaURL = (childData in schema_map) ? schema_map[childData] : undefined;
-        await fetchSchema(schemaURL, childData);
+        const schemaList = await fetchSchemasfromS3()
+        const latestSchemas = findLatestSchemas(schemaList)
+        const schemaURL = latestSchemas[childData].path
+        await fetchAndSetSchema(schemaURL, childData)
+
     }
 
     const handleRehydrate =  async () => { 
+        /**
+         * Method to put the user-selected schema into state
+         */
         const data = await RehydrateForm()
         setData(data)
     }
 
-    /* const fetchSchema = async (url, value) => {
+    const fetchAndSetSchema = async (url, value) => {
+        /**
+         * Method to put the user-selected schema into state
+         */
         try {
-          const response = await fetch(url);
-          const schema = await response.json();
-          const processedSchema = await schema ? preProcessing(schema) : undefined;
-          setSchema(processedSchema);
-          setValue(value);
+            const response = await fetch('https://aind-data-schema-dev.s3.us-west-2.amazonaws.com/'+url);
+            const schema = await response.json();
+            const processedSchema = await schema ? preProcessing(schema) : undefined;
+            setSchema(processedSchema);
+            setValue(value);
+            
         } catch (error) {}
-      }; */
-
-      const handleSelectSchema = async () => {
-        const schema = await fetchSchema()
-        setSchema(schema)
     }
 
     return (
         <div>
             <h1> AIND Metadata Entry </h1>
             <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
-            <button onClick={handleSelectSchema}>Select Schema</button>
             <div>
                  < Dropdown parentCallback={callbackFunction} />
             </div>
