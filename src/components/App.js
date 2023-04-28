@@ -4,6 +4,7 @@ import Dropdown from "./Dropdown";
 import RehydrateForm from "./RehydrateForm";
 import schema_map from '../utilities/constants';
 import {preProcessing} from '../utilities/schemaHandlers';
+import fetchSchema from "./FetchSchema";
 
 export default function App(props) {
     /*
@@ -32,7 +33,7 @@ export default function App(props) {
         setData(data)
     }
 
-    const fetchSchema = async (url, value) => {
+    /* const fetchSchema = async (url, value) => {
         try {
           const response = await fetch(url);
           const schema = await response.json();
@@ -40,12 +41,18 @@ export default function App(props) {
           setSchema(processedSchema);
           setValue(value);
         } catch (error) {}
-      };
+      }; */
+
+      const handleSelectSchema = async () => {
+        const schema = await fetchSchema()
+        setSchema(schema)
+    }
 
     return (
         <div>
             <h1> AIND Metadata Entry </h1>
             <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
+            <button onClick={handleSelectSchema}>Select Schema</button>
             <div>
                  < Dropdown parentCallback={callbackFunction} />
             </div>

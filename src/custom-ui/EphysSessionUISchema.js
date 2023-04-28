@@ -1,7 +1,7 @@
 import ObjectFieldTemplate from './ObjectFieldTemplate'
 
 const EphysSessionUISchema = {
-    "data_streams": {
+    "probe_streams": {
       "items": {
             "probes": {
               "items": {
