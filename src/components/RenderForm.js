@@ -1,12 +1,8 @@
 import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import schema_map from '../utilities/constants';
-import {preProcessing} from '../utilities/schemaHandlers';
-import EphysSessionUISchema from '../schemas/ui-schemas/EphysSessionUISchema';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, uiSchema} from '../schemas/ui-schemas/TimeUISchema';
-
+import {widgets, uiSchema} from '../custom-ui/TimeUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -16,12 +12,9 @@ export default function RenderForm (props) {
   Returns: 
     Form object 
   */
-
-  const schemaKey = props.schema;
-  const formData = props.data
-
-  const rawSchema = (schemaKey in schema_map) ? schema_map[schemaKey] : undefined;
-  const processedSchema = rawSchema ? preProcessing(rawSchema) : undefined;
+  const schemaName = props.value;
+  const schema = props.schema;
+  const formData = props.data;
 
   async function saveFilePicker (event) {
     /*
@@ -30,7 +23,7 @@ export default function RenderForm (props) {
    const data = event.formData;
    const fileData = JSON.stringify(data, undefined, 4);
    const opts = {
-    suggestedName: `${schemaKey}.json`,
+    suggestedName: `${schemaName}.json`,
     types: [
       {
         description: "JSON file",
@@ -43,28 +36,17 @@ export default function RenderForm (props) {
    await writer.write(new Blob([fileData], {type: "text/plain"}));
    writer.close();
   }
-  
-  // TODO: make a function for uiSchema selection based on selectedschema
-  if(processedSchema){
-    if (schemaKey === "ephys session") {
+
+  if(schema){
       return (
-        <Form schema={processedSchema}
-        formData={formData}
-        uiSchema={EphysSessionUISchema}
-        validator={validator}
-        onSubmit={saveFilePicker} >
-        </Form>
-    )}
-    else { 
-      return (
-        <Form schema={processedSchema}
+        schema && <Form schema={schema}
         formData={formData}
         validator={validator}
         uiSchema={uiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker} >
         </Form>
-      )};
+      );
  } else {
   return(<div> Please select a schema from the dropdown above. </div>)
  }
