@@ -46,7 +46,7 @@ export default function App(props) {
          * defaults to latest schema version
          */
         try {
-            const response = await fetch(process.env.REACT_APP_S3__URL+url);
+            const response = await fetch(process.env.REACT_APP_S3_URL+url);
             const schema = await response.json();
             const processedSchema = await schema ? preProcessing(schema) : undefined;
             setSchema(processedSchema);
