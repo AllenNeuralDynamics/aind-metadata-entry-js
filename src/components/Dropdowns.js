@@ -14,6 +14,7 @@ export default function Dropdowns (props) {
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.split('/')[1]))
   );
+  schemaTypes.shift()
 
   const versions = schemaList
     .filter((schema) => schema.includes(selectedSchemaType))
@@ -37,6 +38,7 @@ export default function Dropdowns (props) {
         value={selectedSchemaType}
         onChange={handleTypeChange}
       >
+        <option value="">Select a Schema</option>
         {schemaTypes.map((schemaType) => (
           <option key={schemaType} value={schemaType}>
             {schemaType}
@@ -52,7 +54,7 @@ export default function Dropdowns (props) {
             value={selectedSchemaVersion}
             onChange={handleVersionChange}
           >
-            <option value="">select version</option>
+            <option value="">Select Version</option>
             {versions.map((version) => (
               <option key={version} value={version}>
                 {version}
