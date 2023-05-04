@@ -1,46 +1,75 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import RenderForm from "./RenderForm";
-import Dropdown from "./Dropdown";
 import RehydrateForm from "./RehydrateForm";
 import {preProcessing} from '../utilities/schemaHandlers';
 import { fetchSchemasfromS3, findLatestSchemas } from "../utilities/schemaFetchers";
+import Dropdowns from "./Dropdowns";
 
 export default function App(props) {
     /*
     Application to display a dropdown menu of schemas.
         Fetches schema objects from s3
         Creates schema objects from filepaths
-        Maps schemas to corresponding labels (string) in options (list)
         Renders dropdown menu with options
         Gives user the option to autofill the form with previously input data
      */
-
-    const [value, setValue] = useState('');
     const [data, setData] = useState(null);
     const [schema, setSchema] = useState('');
+    const [selectedSchemaType, setSelectedSchemaType] = useState('');
+    const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('');
 
+    const [schemaList, setSchemaList] = useState([]);
 
-    const callbackFunction = async (childData) => { 
+    useEffect(() => {
+        async function fetchSchemaList () {
+            /*
+            Method to retrieve list of schema links from aws s3 bucket
+            UseEffect hook so that dropdowns can be rendered from list
+            */
+            const schema_links = await fetchSchemasfromS3()
+            setSchemaList(schema_links)
+        }
+        fetchSchemaList();
+    }, []);
+    
+    const typeCallbackFunction = async (childData) => { 
         /**
-         * Method to retrieve list of all schema paths from S3 and
-         * fetch the user-selected schema into state
+         * Method to retrieve user-selected schema and
+         * defaults form to latest version.
          */
-        const schemaList = await fetchSchemasfromS3()
+        setSelectedSchemaType(childData)
         const latestSchemas = findLatestSchemas(schemaList)
         const schemaURL = latestSchemas[childData].path
         await fetchAndSetSchema(schemaURL, childData)
+    }
 
+    const versionCallbackFunction = async (childData) => {
+        /**
+         * Method to retrieve user-selected schema version
+         * and replace default form to selected version.
+         */
+        setSelectedSchemaType(selectedSchemaType)
+        setSelectedSchemaVersion(childData)
+        const schemaURL = schemaList.find(url => 
+            url.includes(selectedSchemaType) && url.includes(childData)
+            )
+        await fetchAndSetSchema(schemaURL)
     }
 
     const handleRehydrate =  async () => { 
         /**
-         * Method to put the user-selected schema into state
+         * Method to put the user-selected data into state
          */
         const data = await RehydrateForm()
+        const version = data.schema_version
+        console.log(selectedSchemaType)
+/*         const schemaURL = schemaList.find(url =>
+            url.includes(selectedSchemaType) && url.includes(version))
+        await fetchAndSetSchema(schemaURL) */
         setData(data)
     }
 
-    const fetchAndSetSchema = async (url, value) => {
+    const fetchAndSetSchema = async (url) => {
         /**
          * Method to put the user-selected schema into state
          * defaults to latest schema version
@@ -50,8 +79,7 @@ export default function App(props) {
             const schema = await response.json();
             const processedSchema = await schema ? preProcessing(schema) : undefined;
             setSchema(processedSchema);
-            setValue(value);
-            
+            setSelectedSchemaType(selectedSchemaType)
         } catch (error) {}
     }
 
@@ -60,10 +88,13 @@ export default function App(props) {
             <h1> AIND Metadata Entry </h1>
             <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
             <div>
-                 < Dropdown parentCallback={callbackFunction} />
+                < Dropdowns 
+                    ParentTypeCallback={typeCallbackFunction}
+                    ParentVersionCallback={versionCallbackFunction}
+                    schemaList={schemaList}/>
             </div>
             <div>
-                <RenderForm schema={schema} data={data} value={value}/> 
+                <RenderForm schema={schema} data={data} selectedSchemaType={selectedSchemaType}/> 
            </div>
         </div>
     );

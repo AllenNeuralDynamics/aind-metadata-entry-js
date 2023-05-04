@@ -12,7 +12,7 @@ export default function RenderForm (props) {
   Returns: 
     Form object 
   */
-  const schemaName = props.value;
+  const schemaName = props.selectedSchemaType;
   const schema = props.schema;
   const formData = props.data;
 
