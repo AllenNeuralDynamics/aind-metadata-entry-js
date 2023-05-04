@@ -14,23 +14,21 @@ export default function Dropdowns (props) {
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.split('/')[1]))
   );
+
   const versions = schemaList
     .filter((schema) => schema.includes(selectedSchemaType))
     .map((schema) => schema.split('/')[2])
     .filter((version) => version !== undefined);
 
   const handleTypeChange = (event) => {
-    props.ParentTypeCallback(event.target.value)
+    props.ParentTypeCallback(event.target.value);
     setSelectedSchemaType(event.target.value);
-    setSelectedSchemaVersion('');
   };
 
   const handleVersionChange = (event) => {
-    props.ParentVersionCallback(event.target.value)
+    props.ParentVersionCallback(event.target.value);
     setSelectedSchemaVersion(event.target.value);
   };
-
-  
 
   return (
     <div>

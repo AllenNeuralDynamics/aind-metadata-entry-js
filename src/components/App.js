@@ -40,15 +40,15 @@ export default function App(props) {
         setSelectedSchemaType(childData)
         const latestSchemas = findLatestSchemas(schemaList)
         const schemaURL = latestSchemas[childData].path
-        await fetchAndSetSchema(schemaURL, childData)
+        setSelectedSchemaVersion(latestSchemas[childData].version)
+        await fetchAndSetSchema(schemaURL, childData) 
     }
 
     const versionCallbackFunction = async (childData) => {
         /**
          * Method to retrieve user-selected schema version
-         * and replace default form to selected version.
+         * and replace default form to selected version
          */
-        setSelectedSchemaType(selectedSchemaType)
         setSelectedSchemaVersion(childData)
         const schemaURL = schemaList.find(url => 
             url.includes(selectedSchemaType) && url.includes(childData)
@@ -59,13 +59,14 @@ export default function App(props) {
     const handleRehydrate =  async () => { 
         /**
          * Method to put the user-selected data into state
+         * updates schema based on schema version in rehydrate file
          */
         const data = await RehydrateForm()
         const version = data.schema_version
-        console.log(selectedSchemaType)
-/*         const schemaURL = schemaList.find(url =>
+        setSelectedSchemaVersion(version)
+        const schemaURL = schemaList.find(url =>
             url.includes(selectedSchemaType) && url.includes(version))
-        await fetchAndSetSchema(schemaURL) */
+        await fetchAndSetSchema(schemaURL)
         setData(data)
     }
 
@@ -79,7 +80,6 @@ export default function App(props) {
             const schema = await response.json();
             const processedSchema = await schema ? preProcessing(schema) : undefined;
             setSchema(processedSchema);
-            setSelectedSchemaType(selectedSchemaType)
         } catch (error) {}
     }
 
@@ -91,6 +91,7 @@ export default function App(props) {
                 < Dropdowns 
                     ParentTypeCallback={typeCallbackFunction}
                     ParentVersionCallback={versionCallbackFunction}
+                    schemaVersion={selectedSchemaVersion}
                     schemaList={schemaList}/>
             </div>
             <div>
