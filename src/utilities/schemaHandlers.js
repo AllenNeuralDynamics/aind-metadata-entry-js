@@ -6,16 +6,17 @@ const preProcessingHelper = (obj) => {
     */ 
     Object.keys(obj).forEach(key => {
 
-      const prop = obj[key]
+      if (obj[key] !== null) {
+        const prop = obj[key]
       if (prop.const !== undefined) {
         prop.readOnly = true;
-        prop.default = prop.const
+        prop.default = prop.const;
       }
 
       if (typeof(prop) === 'object') {
-        preProcessingHelper(prop)
+        preProcessingHelper(prop);
       }
-    })
+}})
   }
 
   export const preProcessing = (schema) => {
