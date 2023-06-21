@@ -2,8 +2,11 @@ export async function fetchSchemasfromS3 (props) {
     /*
     Method to retrieve list of schema links from aws s3 bucket
     */
-    const response = await fetch(process.env.REACT_APP_S3_URL)
+
     console.log('s3 url: ', process.env.REACT_APP_S3_URL)
+    console.log('app version: ', process.env.REACT_APP_VERSION)
+
+    const response = await fetch(process.env.REACT_APP_S3_URL)
     const responseText = await response.text()
     const parser=new DOMParser();
     const xmlParsed = parser.parseFromString(responseText, 'text/xml');
