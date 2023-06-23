@@ -132,4 +132,4 @@ dist
 
 # misc
 .DS_Store
-
+.idea/

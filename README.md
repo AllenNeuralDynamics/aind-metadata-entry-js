@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Ensure `gcloud` is configured to the right project. From the root directory, run `./bin/deploy-to-gcloud.sh`. The cloud configurations can be set in `app.yaml`. 
 
+# Local Development
+
+For local testing, run `export REACT_APP_S3_URL="https://s3-url-placeholder"` to set up required configurations before running `npm start`. 
+
 ## Available Scripts
 
 In the project directory, you can run:
