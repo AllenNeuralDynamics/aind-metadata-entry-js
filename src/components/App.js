@@ -86,6 +86,7 @@ export default function App(props) {
     return (
         <div>
             <h1> AIND Metadata Entry </h1>
+            <div>User-interface for metadata ingest and validation. Use on Chrome.</div>
             <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
             <div>
                 < Dropdowns 
