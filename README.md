@@ -1,6 +1,12 @@
 # AIND Metadata Entry
+User-interface to ease AIND metadata ingest and validation. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Overview
+This repository contains the components of a React app that renders forms directly from schemas defined by [aind-data-schema](https://github.com/AllenNeuralDynamics/aind-data-schema). The schemas are fetched from an s3-bucket, defined in environment. On user-selection, the app renders a form from selected schema (defaults to latest version). On submission, it validates the form data, and downloads it as a JSON-file. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# Suggested Usage
+Browser: Google Chrome.
+Machine: Windows or Linux.
 
 # Cloud Deployment
 
@@ -17,7 +23,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser. It is suggested that the app is opened on Google Chrome. 
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
