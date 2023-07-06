@@ -4,6 +4,10 @@ User-interface to ease AIND metadata ingest and validation.
 # Overview
 This repository contains the components of a React app that renders forms directly from schemas defined by [aind-data-schema](https://github.com/AllenNeuralDynamics/aind-data-schema). The schemas are fetched from an s3-bucket, defined in environment. On user-selection, the app renders a form from selected schema (defaults to latest version). On submission, it validates the form data, and downloads it as a JSON-file. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Suggested Usage
+Browser: Google Chrome.
+Machine: Windows or Linux.
+
 # Cloud Deployment
 
 Ensure `gcloud` is configured to the right project. From the root directory, run `./bin/deploy-to-gcloud.sh`. The cloud configurations can be set in `app.yaml`. 
