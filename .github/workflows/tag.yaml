@@ -1,0 +1,36 @@
+name: Tag and publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  bump-version-and-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ env.DEFAULT_BRANCH }}
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.1
+      with:
+        github_token: ${{ secrets.SERVICE_TOKEN }}
+        release_branches: main
+        default_bump: patch
+    - name: Get version from tag
+      run: |
+        echo "VERSION=${{ steps.tag_version.outputs.new_version }}" >> "$GITHUB_ENV"
+    - name: Update version file with new version
+      run: |
+        old_version=$(sed -n '3p' package.json | sed 's/.*"version": "\(.*\)".*/\1/')
+        new_version=${{ env.VERSION }}
+        sed -i "3s/$old_version/$new_version/" package.json
+    - name: Commit and Push version bump
+      uses: EndBug/add-and-commit@v9
+      with:
+        default_author: github_actions
+        message: "version bump [skip actions]"
+        add: package.json
