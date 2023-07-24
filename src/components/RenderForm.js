@@ -44,7 +44,8 @@ export default function RenderForm (props) {
         validator={validator}
         uiSchema={uiSchema}
         widgets={widgets}
-        onSubmit={saveFilePicker} >
+        onSubmit={saveFilePicker} 
+        noHtml5Validate >
         </Form>
       );
  } else {
