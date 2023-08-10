@@ -2,7 +2,7 @@ import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, uiSchema} from '../custom-ui/TimeUISchema';
+import {widgets, timeUiSchema} from '../custom-ui/TimeUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -37,12 +37,13 @@ export default function RenderForm (props) {
    writer.close();
   }
 
+
   if(schema){
       return (
         schema && <Form schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
+        uiSchema={timeUiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker} 
         noHtml5Validate >

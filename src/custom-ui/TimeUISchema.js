@@ -4,7 +4,7 @@ export const widgets = {
     time: CustomTimeWidget
 };
 
-export const uiSchema = {
+export const timeUiSchema = {
     "ui:widget": "time",
     "ui:options": {
         timeFormat: "hh:mm:ss",
