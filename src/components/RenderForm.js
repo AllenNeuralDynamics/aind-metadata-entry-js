@@ -1,8 +1,10 @@
-import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
 import {widgets, uiSchema} from '../custom-ui/TimeUISchema';
+import React, {useState, useEffect } from "react";
+
+console.log("time uischema", uiSchema)
 
 export default function RenderForm (props) {
   /*
@@ -15,6 +17,7 @@ export default function RenderForm (props) {
   const schemaName = props.selectedSchemaType;
   const schema = props.schema;
   const formData = props.data;
+  const [uiSchema, setUiSchema] = useState({});
 
   async function saveFilePicker (event) {
     /*
@@ -37,7 +40,43 @@ export default function RenderForm (props) {
    writer.close();
   }
 
+  useEffect(() => {
+    const generateUiSchema = (schema, lastKey = null, dynamicUiSchema = {}) => {
+      // const dynamicUiSchema = {};
+  
+      // Loop through schema properties
+      Object.keys(schema).forEach(key => {
+        if (schema[key] !== null) {
+          const prop = schema[key];
+  
+          if (typeof prop === 'object') {
+            const nestedUiSchema = generateUiSchema(prop, key);
+            if (Object.keys(nestedUiSchema).length > 0) {
+              dynamicUiSchema[key] = nestedUiSchema;
+            }
+          }
+          if (key === 'type' && prop === 'boolean' && lastKey !== null) {
+            const radioUi = {
+              'ui:widget': 'radio',
+              'ui:options': {
+                inline: true,
+              },
+            };
+            dynamicUiSchema[lastKey] = radioUi;
+          }
+        }
+      });
+      return dynamicUiSchema;
+    };
+  
+    const generatedUiSchema = generateUiSchema(schema);
+  
+    setUiSchema(generatedUiSchema);
+  }, [schema]);
+  
+
   if(schema){
+    console.log("ui schema", JSON.stringify(uiSchema))
       return (
         schema && <Form schema={schema}
         formData={formData}
