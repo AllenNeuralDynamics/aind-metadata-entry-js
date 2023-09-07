@@ -40,42 +40,35 @@ export default function RenderForm (props) {
    writer.close();
   }
 
-  useEffect(() => {
-    const generateUiSchema = (schema, lastKey = null, dynamicUiSchema = {}) => {
-      // const dynamicUiSchema = {};
+  function traverseAndGenerateUISchema(schema) {
+    const uiSchema = {};
   
-      // Loop through schema properties
-      Object.keys(schema).forEach(key => {
-        if (schema[key] !== null) {
-          const prop = schema[key];
+    function traverseSchema(currentSchema, currentUISchema, currentPath) {
+      for (const key in currentSchema) {
+        if (currentSchema[key] !== null) {
+          const prop = currentSchema[key];
   
           if (typeof prop === 'object') {
-            const nestedUiSchema = generateUiSchema(prop, key);
-            if (Object.keys(nestedUiSchema).length > 0) {
-              dynamicUiSchema[key] = nestedUiSchema;
-            }
-          }
-          if (key === 'type' && prop === 'boolean' && lastKey !== null) {
-            const radioUi = {
-              'ui:widget': 'radio',
-              'ui:options': {
-                inline: true,
-              },
-            };
-            dynamicUiSchema[lastKey] = radioUi;
+            const newPath = currentPath ? `${currentPath}.${key}` : key;
+            currentUISchema[key] = {};
+            traverseSchema(prop, currentUISchema[key], newPath);
           }
         }
-      });
-      return dynamicUiSchema;
-    };
   
-    const generatedUiSchema = generateUiSchema(schema);
+        if (key === 'type' && currentSchema[key] === 'boolean') {
+          currentUISchema['ui:widget'] = 'radio';
+        }
+      }
+    }
   
-    setUiSchema(generatedUiSchema);
-  }, [schema]);
+    traverseSchema(schema, uiSchema, '');
+  
+    return uiSchema;
+  }
   
 
   if(schema){
+    const uiSchema = traverseAndGenerateUISchema(schema)
     console.log("ui schema", JSON.stringify(uiSchema))
       return (
         schema && <Form schema={schema}
