@@ -2,9 +2,7 @@ import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
 import {widgets, timeUiSchema} from '../custom-ui/TimeUISchema';
-import React, {useState, useEffect } from "react";
-
-console.log("time uischema", timeUiSchema)
+import { ephysSessionUiSchema } from '../custom-ui/EphysSessionUiSchema';
 
 export default function RenderForm (props) {
   /*
@@ -17,7 +15,6 @@ export default function RenderForm (props) {
   const schemaName = props.selectedSchemaType;
   const schema = props.schema;
   const formData = props.data;
-  const [uiSchema, setUiSchema] = useState({});
 
   async function saveFilePicker (event) {
     /*
@@ -40,7 +37,17 @@ export default function RenderForm (props) {
    writer.close();
   }
 
-  function traverseAndGenerateUISchema(schema) {
+  const selectUiSchema = (title) => {
+    if(title === "EphysSession") {
+      return ephysSessionUiSchema
+    }
+    else {
+      return timeUiSchema
+    }
+
+  }
+  /* TODO: write a method that generates uischema programatically*/
+  /* function traverseAndGenerateUISchema(schema) {
     const uiSchema = {};
   
     function traverseSchema(currentSchema, currentUISchema, currentPath) {
@@ -49,27 +56,41 @@ export default function RenderForm (props) {
           const prop = currentSchema[key];
   
           if (typeof prop === 'object') {
-            const newPath = currentPath ? `${currentPath}.${key}` : key;
-            currentUISchema[key] = {};
-            traverseSchema(prop, currentUISchema[key], newPath);
+            if (key === 'properties') {
+              traverseSchema(prop, currentUISchema, currentPath);
+            } else if (Array.isArray(prop)) {
+              currentUISchema[key] = { items: {} };
+              traverseSchema(prop[0], currentUISchema[key].items, currentPath);
+            } else {
+              const newPath = currentPath ? `${currentPath}.${key}` : key;
+              currentUISchema[key] = {};
+              traverseSchema(prop, currentUISchema[key], newPath);
+            }
           }
         }
   
-        if (key === 'type' && currentSchema[key] === 'boolean') {
-          currentUISchema['ui:widget'] = 'radio';
+        if (key === 'type') {
+          if (currentSchema[key] === 'boolean') {
+            currentUISchema['ui:widget'] = 'radio';
+          } else if (key === 'anyOf') {
+            currentUISchema['ui:widget'] = 'radio';
+          }
         }
       }
     }
   
-    traverseSchema(schema, uiSchema, '');
+    // Start the traversal from "properties"
+    if (schema.properties) {
+      traverseSchema(schema.properties, uiSchema, '');
+    }
   
     return uiSchema;
-  }
+  } */
   
 
   if(schema){
-    const uiSchema = traverseAndGenerateUISchema(schema)
-    console.log("ui schema", JSON.stringify(uiSchema))
+    /* TODO: Figure out why the ephysuischema works in playground but not here */
+    const uiSchema = selectUiSchema(schema.title)
       return (
         schema && <Form schema={schema}
         formData={formData}
@@ -80,6 +101,7 @@ export default function RenderForm (props) {
         noHtml5Validate >
         </Form>
       );
+
  } else {
   return(<div> Please select a schema from the dropdown above. </div>)
  }
