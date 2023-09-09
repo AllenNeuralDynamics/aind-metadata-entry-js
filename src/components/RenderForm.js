@@ -74,7 +74,7 @@ export default function RenderForm (props) {
         schema && <Form schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={timeUiSchema}
+        uiSchema={uiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker} 
         noHtml5Validate >
