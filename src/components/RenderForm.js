@@ -1,8 +1,10 @@
-import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
 import {widgets, timeUiSchema} from '../custom-ui/TimeUISchema';
+import React, {useState, useEffect } from "react";
+
+console.log("time uischema", timeUiSchema)
 
 export default function RenderForm (props) {
   /*
@@ -15,6 +17,7 @@ export default function RenderForm (props) {
   const schemaName = props.selectedSchemaType;
   const schema = props.schema;
   const formData = props.data;
+  const [uiSchema, setUiSchema] = useState({});
 
   async function saveFilePicker (event) {
     /*
@@ -37,8 +40,36 @@ export default function RenderForm (props) {
    writer.close();
   }
 
+  function traverseAndGenerateUISchema(schema) {
+    const uiSchema = {};
+  
+    function traverseSchema(currentSchema, currentUISchema, currentPath) {
+      for (const key in currentSchema) {
+        if (currentSchema[key] !== null) {
+          const prop = currentSchema[key];
+  
+          if (typeof prop === 'object') {
+            const newPath = currentPath ? `${currentPath}.${key}` : key;
+            currentUISchema[key] = {};
+            traverseSchema(prop, currentUISchema[key], newPath);
+          }
+        }
+  
+        if (key === 'type' && currentSchema[key] === 'boolean') {
+          currentUISchema['ui:widget'] = 'radio';
+        }
+      }
+    }
+  
+    traverseSchema(schema, uiSchema, '');
+  
+    return uiSchema;
+  }
+  
 
   if(schema){
+    const uiSchema = traverseAndGenerateUISchema(schema)
+    console.log("ui schema", JSON.stringify(uiSchema))
       return (
         schema && <Form schema={schema}
         formData={formData}
