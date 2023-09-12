@@ -45,7 +45,6 @@ export default function RenderForm (props) {
     else {
       return timeUiSchema
     }
-
   }
   
   if(schema){
@@ -54,7 +53,7 @@ export default function RenderForm (props) {
         schema && <Form schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
+        uiSchema={timeUiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker} 
         noHtml5Validate >
