@@ -47,8 +47,7 @@ export default function RenderForm (props) {
     }
 
   }
-  /* TODO: write a method that generates uischema programatically*/
-
+  
   if(schema){
     const uiSchema = selectUiSchema(schema.title)
       return (
