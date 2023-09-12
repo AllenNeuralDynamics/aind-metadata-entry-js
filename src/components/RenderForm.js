@@ -38,6 +38,7 @@ export default function RenderForm (props) {
   }
 
   const selectUiSchema = (title) => {
+    // assumes that there are no time fields in EphysSession
     if(title === "EphysSession") {
       return ephysSessionUiSchema
     }
@@ -47,49 +48,8 @@ export default function RenderForm (props) {
 
   }
   /* TODO: write a method that generates uischema programatically*/
-  /* function traverseAndGenerateUISchema(schema) {
-    const uiSchema = {};
-  
-    function traverseSchema(currentSchema, currentUISchema, currentPath) {
-      for (const key in currentSchema) {
-        if (currentSchema[key] !== null) {
-          const prop = currentSchema[key];
-  
-          if (typeof prop === 'object') {
-            if (key === 'properties') {
-              traverseSchema(prop, currentUISchema, currentPath);
-            } else if (Array.isArray(prop)) {
-              currentUISchema[key] = { items: {} };
-              traverseSchema(prop[0], currentUISchema[key].items, currentPath);
-            } else {
-              const newPath = currentPath ? `${currentPath}.${key}` : key;
-              currentUISchema[key] = {};
-              traverseSchema(prop, currentUISchema[key], newPath);
-            }
-          }
-        }
-  
-        if (key === 'type') {
-          if (currentSchema[key] === 'boolean') {
-            currentUISchema['ui:widget'] = 'radio';
-          } else if (key === 'anyOf') {
-            currentUISchema['ui:widget'] = 'radio';
-          }
-        }
-      }
-    }
-  
-    // Start the traversal from "properties"
-    if (schema.properties) {
-      traverseSchema(schema.properties, uiSchema, '');
-    }
-  
-    return uiSchema;
-  } */
-  
 
   if(schema){
-    /* TODO: Figure out why the ephysuischema works in playground but not here */
     const uiSchema = selectUiSchema(schema.title)
       return (
         schema && <Form schema={schema}

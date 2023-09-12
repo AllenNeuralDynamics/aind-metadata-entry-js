@@ -11,4 +11,3 @@ export const timeUiSchema = {
         "ui:placeholder": "00:00:00"
     }
 };
-
