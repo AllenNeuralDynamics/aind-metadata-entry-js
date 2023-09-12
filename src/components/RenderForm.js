@@ -45,7 +45,6 @@ export default function RenderForm (props) {
     else {
       return timeUiSchema
     }
-
   }
   /* TODO: write a method that generates uischema programatically*/
 
@@ -55,7 +54,7 @@ export default function RenderForm (props) {
         schema && <Form schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
+        uiSchema={timeUiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker} 
         noHtml5Validate >
