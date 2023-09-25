@@ -1,8 +1,8 @@
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, timeUiSchema} from '../custom-ui/TimeUISchema';
-import { ephysSessionUiSchema } from '../custom-ui/EphysSessionUiSchema';
+import { widgets } from '../custom-ui/CustomWidgets';
+import { uiSchema } from '../custom-ui/CustomUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -37,60 +37,7 @@ export default function RenderForm (props) {
    writer.close();
   }
 
-  const selectUiSchema = (title) => {
-    if(title === "EphysSession") {
-      return ephysSessionUiSchema
-    }
-    else {
-      return timeUiSchema
-    }
-
-  }
-  /* TODO: write a method that generates uischema programatically*/
-  /* function traverseAndGenerateUISchema(schema) {
-    const uiSchema = {};
-  
-    function traverseSchema(currentSchema, currentUISchema, currentPath) {
-      for (const key in currentSchema) {
-        if (currentSchema[key] !== null) {
-          const prop = currentSchema[key];
-  
-          if (typeof prop === 'object') {
-            if (key === 'properties') {
-              traverseSchema(prop, currentUISchema, currentPath);
-            } else if (Array.isArray(prop)) {
-              currentUISchema[key] = { items: {} };
-              traverseSchema(prop[0], currentUISchema[key].items, currentPath);
-            } else {
-              const newPath = currentPath ? `${currentPath}.${key}` : key;
-              currentUISchema[key] = {};
-              traverseSchema(prop, currentUISchema[key], newPath);
-            }
-          }
-        }
-  
-        if (key === 'type') {
-          if (currentSchema[key] === 'boolean') {
-            currentUISchema['ui:widget'] = 'radio';
-          } else if (key === 'anyOf') {
-            currentUISchema['ui:widget'] = 'radio';
-          }
-        }
-      }
-    }
-  
-    // Start the traversal from "properties"
-    if (schema.properties) {
-      traverseSchema(schema.properties, uiSchema, '');
-    }
-  
-    return uiSchema;
-  } */
-  
-
   if(schema){
-    /* TODO: Figure out why the ephysuischema works in playground but not here */
-    const uiSchema = selectUiSchema(schema.title)
       return (
         schema && <Form schema={schema}
         formData={formData}
