@@ -1,8 +1,8 @@
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, timeUiSchema} from '../custom-ui/TimeUISchema';
-import { ephysSessionUiSchema } from '../custom-ui/EphysSessionUiSchema';
+import { widgets } from '../custom-ui/CustomWidgets';
+import { uiSchema } from '../custom-ui/CustomUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -37,18 +37,7 @@ export default function RenderForm (props) {
    writer.close();
   }
 
-  const selectUiSchema = (title) => {
-    // assumes that there are no time fields in EphysSession
-    if(title === "EphysSession") {
-      return ephysSessionUiSchema
-    }
-    else {
-      return timeUiSchema
-    }
-  }
-  
   if(schema){
-    const uiSchema = selectUiSchema(schema.title)
       return (
         schema && <Form schema={schema}
         formData={formData}
