@@ -16,7 +16,7 @@ const preProcessingHelper = (obj) => {
       if (typeof(prop) === 'object') {
         preProcessingHelper(prop);
       }
-}})
+    }})
   }
 
   export const preProcessing = (schema) => {

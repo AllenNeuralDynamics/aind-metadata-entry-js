@@ -1,8 +1,8 @@
-import React from 'react';
 import Form from '@rjsf/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from '@rjsf/validator-ajv8';
-import {widgets, uiSchema} from '../custom-ui/TimeUISchema';
+import { widgets } from '../custom-ui/CustomWidgets';
+import { uiSchema } from '../custom-ui/CustomUISchema';
 
 export default function RenderForm (props) {
   /*
@@ -48,6 +48,7 @@ export default function RenderForm (props) {
         noHtml5Validate >
         </Form>
       );
+
  } else {
   return(<div> Please select a schema from the dropdown above. </div>)
  }
