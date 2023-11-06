@@ -15,6 +15,13 @@ export async function fetchSchemasfromS3 (props) {
     return schema_links
 }
 
+export function removeDeprecatedSchemas(schema_links) {
+  const filteredStrings = schema_links.filter(
+    str => !str.includes("ephys_") && !str.includes("ophys_") && !str.includes("behavior_")
+  );
+  return filteredStrings;
+}
+
 export function findLatestSchemas(schemasList) {
     /*
     Method to find latest version of each schema
