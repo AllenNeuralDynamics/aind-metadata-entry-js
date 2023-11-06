@@ -12,7 +12,14 @@ export async function fetchSchemasfromS3 (props) {
     for (var i=0; i < elements.length; i++) {
         schema_links[i] = elements[i].innerHTML
     }
-    return schema_links
+    return removeDeprecatedSchemas(schema_links)
+}
+
+function removeDeprecatedSchemas(schema_links) {
+  const filteredStrings = schema_links.filter(
+    str => !str.includes("ephys_") && !str.includes("ophys_") && !str.includes("behavior_")
+  );
+  return filteredStrings;
 }
 
 export function findLatestSchemas(schemasList) {
