@@ -12,20 +12,17 @@ export async function fetchSchemasfromS3 (props) {
     for (var i=0; i < elements.length; i++) {
         schema_links[i] = elements[i].innerHTML
     }
-    return removeDeprecatedSchemas(schema_links)
+    return schema_links
 }
 
-function removeDeprecatedSchemas(schema_links) {
-  const filteredStrings = schema_links.filter(
-    str => !str.includes("ephys_") && !str.includes("ophys_") && !str.includes("behavior_")
-  );
-  return filteredStrings;
-}
-
-export function removeDeprecatedSchemas(schema_links) {
-  const filteredStrings = schema_links.filter(
-    str => !str.includes("ephys_") && !str.includes("ophys_") && !str.includes("behavior_")
-  );
+export function filterSchemas(schema_links) {
+  /*
+  Method to filter schemas in schema list options.
+   */
+  const filter = process.env.REACT_APP_FILTER_SCHEMAS
+  if (!filter) { return schema_links }
+  const filterArray = JSON.parse(filter)
+  const filteredStrings = schema_links.filter(str => !filterArray.some(substring => str.includes(substring)))
   return filteredStrings;
 }
 

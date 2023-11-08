@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import RenderForm from "./RenderForm";
 import RehydrateForm from "./RehydrateForm";
 import {preProcessing} from '../utilities/schemaHandlers';
-import { fetchSchemasfromS3, findLatestSchemas, removeDeprecatedSchemas } from "../utilities/schemaFetchers";
+import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from "../utilities/schemaFetchers";
 import Dropdowns from "./Dropdowns";
 
 export default function App(props) {
@@ -27,7 +27,7 @@ export default function App(props) {
             UseEffect hook so that dropdowns can be rendered from list
             */
             const schema_links = await fetchSchemasfromS3()
-            const filtered_schemas = removeDeprecatedSchemas(schema_links)
+            const filtered_schemas = filterSchemas(schema_links)
             setSchemaList(filtered_schemas)
         }
         fetchSchemaList();
