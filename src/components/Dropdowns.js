@@ -17,7 +17,10 @@ export default function Dropdowns (props) {
   schemaTypes.shift()
 
   const versions = schemaList
-    .filter((schema) => schema.includes(selectedSchemaType))
+  .filter((schema) => {
+    const [, schemaType] = schema.split('/');
+    return schemaType === selectedSchemaType;
+  })
     .map((schema) => schema.split('/')[2])
     .filter((version) => version !== undefined);
 
