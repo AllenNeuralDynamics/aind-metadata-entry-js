@@ -1,7 +1,6 @@
-import {checkDraft2020, preProcessing} from './schemaHandlers';
+import {preProcessing} from './schemaHandlers';
 
 const testSchema1 = ({
-    $schema: "https://json-schema.org/draft/2020-12/schema", 
     type: "object",
     properties: {
         describedBy: {
@@ -14,12 +13,77 @@ const testSchema1 = ({
 });
 
 const testSchema2 = ({
-    $schema: "https://json-schema.org/draft/2020-12/schema#"
+    title: "sample schema",
+    type: "object",
+    properties: {
+        name: {
+            title: "Full Name",
+            type: "string",
+        },
+        email: {
+            title: "Email Address",
+            type: "string"
+        },
+        parameters: {
+            title: "parameters",
+            type: "strobjecting",
+            default: {}
+        }
+    },
+    required: [
+        "name"
+    ]
 });
 
 const testSchema3 = ({
-    $schema: "http://json-schema.org/draft-07/schema#"
+    title: "sample schema",
+    type: "object",
+    properties: {
+        name: {
+            title: "Full Name",
+            type: "string"
+        },
+        email: {
+            title: "Email Address",
+            type: "string"
+        }, 
+        resume: {
+            title: "Resume",
+            type: "object",
+            properties: {
+                education: {
+                    title: "Education",
+                    const: "Farmington University",
+                    type: "string"
+                },
+                past_experiences: {
+                    title: "Past Experiences",
+                    type: "array",
+                    items: {
+                        $ref: "#/definitions/PastExperience"
+                    }
+                }
+            }
+        }
+    },
+    definitions: {
+        PastExperience: {
+            title: "PastExperience",
+            description: "Description of Past Experience",
+            type: "object",
+            key_points: {
+                title: "Key Points",
+                description: "Info about job experience (ex: company name, duration, etc)",
+                type: "object",
+                default: {}
+            }
+        }
+    },
+    required: [
+        "name"
+    ]
 });
+
 
 const testSchema4 = ({
     title: "sample schema",
@@ -39,20 +103,22 @@ const testSchema4 = ({
     ]
 });
 
-test("Checks checkDraft2020 returns true for test schemas with draft 2020", () => {
-    expect(checkDraft2020(testSchema1)).toBe(true);
-    expect(checkDraft2020(testSchema2)).toBe(true);
-});
-
-test("Checks checkDraft2020 returns false for draft 7 schema", () => {
-    expect(checkDraft2020(testSchema3)).toBe(false);
-})
-
-test("Checks preProcessing modifies draft 2020 schema", () => {
+test("Checks preProcessing modifies const schema", () => {
     const processedSchema1 = preProcessing(testSchema1);
-    expect(processedSchema1.$schema).toBe(undefined);
     expect(processedSchema1.properties.describedBy.default).toBe(testSchema1.properties.describedBy.const);
     expect(processedSchema1.properties.describedBy.readOnly).toBe(true);
+})
+
+test("Checks preProcessing modifies dictionary additional properties", () => {
+    const processedSchema2 = preProcessing(testSchema2);
+    expect(processedSchema2.properties.parameters.additionalProperties).toStrictEqual({"type": "string"})
+})
+
+test("Checks preProcessing recurses through nested schema as expected", () => {
+    const processedSchema3 = preProcessing(testSchema3);
+    expect(processedSchema3.properties.resume.properties.education.readOnly).toBe(true);
+    expect(processedSchema3.properties.resume.properties.education.default).toBe(testSchema3.properties.resume.properties.education.const);
+    expect(processedSchema3.definitions.PastExperience.key_points.additionalProperties).toStrictEqual({"type": "string"})
 })
 
 test("Checks preProcessing does not modify sample schema", () => {
