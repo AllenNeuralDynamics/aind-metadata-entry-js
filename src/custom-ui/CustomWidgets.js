@@ -3,6 +3,7 @@ import 'react-datetime/css/react-datetime.css';
 import moment from 'moment';
 import {default as RadioWidget} from "@rjsf/material-ui/lib/RadioWidget/RadioWidget";
 import {default as CheckboxWidget} from "@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget";
+import React from 'react';
 
 const CustomTimeWidget = (props) => {
     const onChange = (selectedDate) => {
@@ -35,4 +36,7 @@ const CustomCheckboxWidget = (props) => {
     };
 };
 
+
 export const widgets = {checkbox: CustomCheckboxWidget, time: CustomTimeWidget};
+
+

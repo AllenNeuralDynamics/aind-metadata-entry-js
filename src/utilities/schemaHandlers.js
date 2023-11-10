@@ -4,20 +4,28 @@ const preProcessingHelper = (obj) => {
       Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
       Hack around a bug in rjsf library.
     */ 
-    Object.keys(obj).forEach(key => {
+      Object.keys(obj).forEach(key => {
+        if (obj[key] !== null) {
+          const prop = obj[key];
 
-      if (obj[key] !== null) {
-        const prop = obj[key]
-      if (prop.const !== undefined) {
-        prop.readOnly = true;
-        prop.default = prop.const;
-      }
+          // grays out const fields and autofills the field with the const value
+          if (prop.const !== undefined) {
+            prop.readOnly = true;
+            prop.default = prop.const;
+          }
 
-      if (typeof(prop) === 'object') {
-        preProcessingHelper(prop);
-      }
-    }})
-  }
+          // if default is {}, expected value is a dictionary of strings 
+          if (typeof(prop.default) === 'object' && Object.keys(prop.default).length === 0) {
+            prop.additionalProperties={"type": "string"}
+          }
+    
+          // recursion
+          if (typeof(prop) === 'object') {
+            preProcessingHelper(prop);
+          }
+        }
+      });
+    };
 
   export const preProcessing = (schema) => {
     /*
