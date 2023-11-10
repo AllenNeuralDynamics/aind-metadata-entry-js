@@ -15,6 +15,17 @@ export async function fetchSchemasfromS3 (props) {
     return schema_links
 }
 
+export function filterSchemas(schema_links) {
+  /*
+  Method to filter schemas in schema list options.
+   */
+  const filter = process.env.REACT_APP_FILTER_SCHEMAS
+  if (!filter) { return schema_links }
+  const filterArray = JSON.parse(filter)
+  const filteredStrings = schema_links.filter(str => !filterArray.some(substring => str.includes(substring)))
+  return filteredStrings;
+}
+
 export function findLatestSchemas(schemasList) {
     /*
     Method to find latest version of each schema
