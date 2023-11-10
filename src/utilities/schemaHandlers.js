@@ -1,14 +1,15 @@
 const preProcessingHelper = (obj) => {
     /* 
-    Iterates through schema to make const fields non-fillable
-      Grays out const fields (prop.readOnly) and autofills the field with the const value (prop.default)
+    Recursively iterates through schema for rendering purposes
+      Makes const fields non-fillable
+      Renders dictionaries
       Hack around a bug in rjsf library.
     */ 
       Object.keys(obj).forEach(key => {
         if (obj[key] !== null) {
           const prop = obj[key];
 
-          // grays out const fields and autofills the field with the const value
+          // grays out const fields (readOnly) and autofills the field with the const value (default)
           if (prop.const !== undefined) {
             prop.readOnly = true;
             prop.default = prop.const;
