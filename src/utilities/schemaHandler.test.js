@@ -1,4 +1,4 @@
-import {preProcessing} from './schemaHandlers.js';
+import {preProcessing} from './schemaHandlers';
 
 const testSchema1 = ({
     type: "object",
