@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {compareVersions} from 'compare-versions';
 
 export default function Dropdowns (props) {
     /**
@@ -22,7 +23,9 @@ export default function Dropdowns (props) {
     return schemaType === selectedSchemaType;
   })
     .map((schema) => schema.split('/')[2])
-    .filter((version) => version !== undefined);
+    .filter((version) => version !== undefined)
+    .sort(compareVersions)
+    .reverse();
 
   const handleTypeChange = (event) => {
     props.ParentTypeCallback(event.target.value);
