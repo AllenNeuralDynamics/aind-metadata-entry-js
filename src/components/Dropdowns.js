@@ -41,6 +41,7 @@ export default function Dropdowns (props) {
     <div>
       <select
         id="schema-type-select"
+        title='Select a schema'
         value={selectedSchemaType}
         onChange={handleTypeChange}
       >
@@ -57,6 +58,7 @@ export default function Dropdowns (props) {
         <>
           <select
             id="schema-version-select"
+            title='Select a version'
             value={selectedSchemaVersion}
             onChange={handleVersionChange}
           >
