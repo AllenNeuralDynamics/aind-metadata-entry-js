@@ -15,6 +15,17 @@ export async function fetchSchemasfromS3 (props) {
     return schema_links
 }
 
+export function filterSchemas(schema_links) {
+  /*
+  Method to filter schemas in schema list options.
+   */
+  const filter = process.env.REACT_APP_FILTER_SCHEMAS
+  if (!filter) { return schema_links }
+  const filterArray = JSON.parse(filter)
+  const filteredStrings = schema_links.filter(str => !filterArray.some(substring => str.includes(substring)))
+  return filteredStrings;
+}
+
 export function findLatestSchemas(schemasList) {
     /*
     Method to find latest version of each schema
@@ -53,24 +64,4 @@ export function findLatestSchemas(schemasList) {
       }
     }
     return 0;
-  }
-
-  export function getSchemaVersionsByType(schemasList) {
-    const schemaVersionsByType = {};
-  
-    // Loop through all the schemas
-    for (const schema of schemasList) {
-      const schemaType = schema.split('/')[1];
-      const schemaVersion = schema.split('/')[2];
-  
-      // If the schema type hasn't been seen before, create a new array for it
-      if (!schemaVersionsByType[schemaType]) {
-        schemaVersionsByType[schemaType] = [];
-      }
-  
-      // Add the schema version to the array for the current type
-      schemaVersionsByType[schemaType].push(schemaVersion);
-    }
-  
-    return schemaVersionsByType;
   }
