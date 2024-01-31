@@ -1,4 +1,4 @@
-const preProcessingHelper = (obj) => {
+const preProcessHelper = (obj) => {
     /* 
     Recursively iterates through schema for rendering purposes
       Makes const fields non-fillable
@@ -22,19 +22,27 @@ const preProcessingHelper = (obj) => {
     
           // recursion
           if (typeof(prop) === 'object') {
-            preProcessingHelper(prop);
+            preProcessHelper(prop);
           }
         }
       });
     };
 
-  export const preProcessing = (schema) => {
-    /*
-    PreProcessing for schema validation
-      Uses helper function to make const fields non-fillable
-    */
-   let copiedSchema = JSON.parse(JSON.stringify(schema))
-    preProcessingHelper(copiedSchema)
-    return copiedSchema;
+export const preProcessSchema = (schema) => {
+  /*
+  PreProcessing for schema validation
+    Uses helper function to make const fields non-fillable
+    Returns processedSchema if successful, otherwise returns raw original schema
+  */
+  let copiedSchema = JSON.parse(JSON.stringify(schema))
+  try {
+    preProcessHelper(copiedSchema)
+  } catch (error) {
+    const msg = `Error processing ${schema?.title} ${schema.properties?.schema_version?.const}`
+    console.error(msg, schema)
+    console.error(error)
+    alert(`${msg}. Rendering raw schema instead.`)
+    return schema
   }
-  
+  return copiedSchema;
+}

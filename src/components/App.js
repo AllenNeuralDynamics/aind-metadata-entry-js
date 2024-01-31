@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import RenderForm from "./RenderForm";
 import RehydrateForm from "./RehydrateForm";
-import {preProcessing} from '../utilities/schemaHandlers';
+import {preProcessSchema} from '../utilities/schemaHandlers';
 import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from "../utilities/schemaFetchers";
 import Dropdowns from "./Dropdowns";
 
@@ -79,9 +79,12 @@ export default function App(props) {
         try {
             const response = await fetch(process.env.REACT_APP_S3_URL+'/'+url);
             const schema = await response.json();
-            const processedSchema = await schema ? preProcessing(schema) : undefined;
+            const processedSchema = await schema ? preProcessSchema(schema) : undefined;
             setSchema(processedSchema);
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+            alert(`Unable to render ${url}`);
+        }
     }
 
     return (
