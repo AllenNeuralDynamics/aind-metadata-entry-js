@@ -16,7 +16,7 @@ const preProcessHelper = (obj) => {
           }
 
           // if default is {}, expected value is a dictionary of strings 
-          if (typeof(prop.default) === 'object' && Object.keys(prop.default).length === 0) {
+          if (prop.default && typeof(prop.default) === 'object' && Object.keys(prop.default).length === 0) {
             prop.additionalProperties={"type": "string"}
           }
     
@@ -26,7 +26,7 @@ const preProcessHelper = (obj) => {
           }
         }
       });
-    };
+};
 
 export const preProcessSchema = (schema) => {
   /*
