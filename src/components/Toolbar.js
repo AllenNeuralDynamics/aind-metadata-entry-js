@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {compareVersions} from 'compare-versions';
+import styles from './Toolbar.module.css';
 
-export default function Dropdowns (props) {
+export default function Toolbar (props) {
     /**
-     * Application to render a dropdown menu for schema-selection.
+     * Component to render a dropdown menu for schema-selection.
      * Based on selected schema, renders a dropdown menu for version-selection. 
+     * Gives user the option to autofill the form with previously input data
      */
   const [selectedSchemaType, setSelectedSchemaType] = useState('');
   const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('');
@@ -41,36 +43,42 @@ export default function Dropdowns (props) {
     <div>
       <select
         id="schema-type-select"
+        className={["btn", "btn-default", styles.dropdown].join(" ")}
         title='Select a schema'
         value={selectedSchemaType}
         onChange={handleTypeChange}
       >
-        <option value="">Select a Schema</option>
+        <option value="">Select schema</option>
         {schemaTypes.map((schemaType) => (
           <option key={schemaType} value={schemaType}>
             {schemaType}
           </option>
         ))}
       </select>
-      <br />
-      <div></div>
-      {selectedSchemaType && (
-        <>
-          <select
-            id="schema-version-select"
-            title='Select a version'
-            value={selectedSchemaVersion}
-            onChange={handleVersionChange}
-          >
-            <option value="">Select Version</option>
-            {versions.map((version) => (
-              <option key={version} value={version}>
-                {version}
-              </option>
-            ))}
-          </select>
-        </>
-      )}
+      <select
+        id="schema-version-select"
+        className={["btn", "btn-default", styles.dropdown].join(" ")}
+        title='Select a version'
+        value={selectedSchemaVersion}
+        onChange={handleVersionChange}
+        disabled={!selectedSchemaType}
+      >
+        <option value="">Select version</option>
+        {versions.map((version) => (
+          <option key={version} value={version}>
+            {version}
+          </option>
+        ))}
+      </select>
+      <button
+        title="Autofill with existing data"
+        type="button"
+        className={["btn", "btn-default", styles.btnRight].join(" ")}
+        onClick={props.handleRehydrate}
+        disabled={!selectedSchemaType}
+      >
+        Autofill with existing data
+      </button>
     </div>
   );
 };

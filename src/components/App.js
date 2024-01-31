@@ -3,7 +3,7 @@ import RenderForm from "./RenderForm";
 import RehydrateForm from "./RehydrateForm";
 import {preProcessSchema} from '../utilities/schemaHandlers';
 import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from "../utilities/schemaFetchers";
-import Dropdowns from "./Dropdowns";
+import Toolbar from "./Toolbar";
 import styles from './App.module.css';
 
 export default function App(props) {
@@ -93,13 +93,13 @@ export default function App(props) {
         <div>
             <h1> AIND Metadata Entry </h1>
             <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
-            <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
-            <div className={styles.dropdownsSection}>
-                < Dropdowns 
+            <div className={styles.toolbarSection}>
+                < Toolbar 
                     ParentTypeCallback={typeCallbackFunction}
                     ParentVersionCallback={versionCallbackFunction}
                     schemaVersion={selectedSchemaVersion}
                     schemaList={schemaList}
+                    handleRehydrate={handleRehydrate}
                 />
             </div>
             <div className={styles.formSection}>

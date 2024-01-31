@@ -1,0 +1,11 @@
+.dropdown {
+    font-size: medium;
+    color: navy;
+    margin-right: 5px;
+    text-align: left
+}
+
+.btnRight {
+    float: right;
+    color: navy;
+}
