@@ -11,7 +11,7 @@ console.log('schemas to filter: ', process.env.REACT_APP_FILTER_SCHEMAS)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+    <App appVersion={appVersion} />
 );
 
 reportWebVitals();

@@ -1,5 +1,6 @@
 body {
   max-width: 80%;
+  margin: auto;
 }
 
 div.form-group.field.field-integer {
@@ -34,9 +35,4 @@ p.col-xs-offset-9 {
 
 div {
   margin: 5px;
-}
-  
-h1 {
-  color: navy;
-  margin: 10px;
 }

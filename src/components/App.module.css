@@ -1,0 +1,20 @@
+body {
+    padding: 40px;
+    text-align: center;
+
+    h1 {
+        text-align: center;
+        color: navy;
+    }
+
+    .dropdownsSection {
+        text-align: left;
+        margin-top: 30px;
+    }
+
+    .formSection {
+        text-align: left;
+        padding: 15px;
+        border: 1px dashed grey;
+    }
+}

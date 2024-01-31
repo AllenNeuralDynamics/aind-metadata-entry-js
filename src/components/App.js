@@ -4,6 +4,7 @@ import RehydrateForm from "./RehydrateForm";
 import {preProcessSchema} from '../utilities/schemaHandlers';
 import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from "../utilities/schemaFetchers";
 import Dropdowns from "./Dropdowns";
+import styles from './App.module.css';
 
 export default function App(props) {
     /*
@@ -13,6 +14,7 @@ export default function App(props) {
         Renders dropdown menu with options
         Gives user the option to autofill the form with previously input data
      */
+    const appVersionMsg = props.appVersion ? `App version ${props.appVersion}` : null;
     const [data, setData] = useState(null);
     const [schema, setSchema] = useState('');
     const [selectedSchemaType, setSelectedSchemaType] = useState('');
@@ -90,18 +92,19 @@ export default function App(props) {
     return (
         <div>
             <h1> AIND Metadata Entry </h1>
-            <div>User-interface for metadata ingest and validation. Use on Chrome.</div>
+            <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
             <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
-            <div>
+            <div className={styles.dropdownsSection}>
                 < Dropdowns 
                     ParentTypeCallback={typeCallbackFunction}
                     ParentVersionCallback={versionCallbackFunction}
                     schemaVersion={selectedSchemaVersion}
-                    schemaList={schemaList}/>
+                    schemaList={schemaList}
+                />
             </div>
-            <div>
+            <div className={styles.formSection}>
                 <RenderForm schema={schema} data={data} selectedSchemaType={selectedSchemaType}/> 
-           </div>
+            </div>
         </div>
     );
 };
