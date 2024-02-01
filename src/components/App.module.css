@@ -1,19 +1,19 @@
 body {
     padding: 40px;
-    text-align: center;
 
-    h1 {
+    .titleSection {
         text-align: center;
-        color: navy;
+
+        h1 {
+            color: navy;
+        }
     }
 
     .toolbarSection {
-        text-align: left;
         margin-top: 30px;
     }
 
     .formSection {
-        text-align: left;
         padding: 15px;
         border: 1px dashed grey;
     }

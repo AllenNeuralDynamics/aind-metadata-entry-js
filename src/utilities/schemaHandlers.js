@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const preProcessHelper = (obj) => {
   /* 
   Recursively iterates through schema for rendering purposes
@@ -53,7 +55,7 @@ export const preProcessSchema = (schema) => {
     const msg = `Error processing ${schema?.title} ${schema.properties?.schema_version?.const}`
     console.error(msg, schema)
     console.error(error)
-    alert(`${msg}. Rendering raw schema instead.`)
+    toast.warn(`${msg}. Rendered raw schema instead.`)
     return schema
   }
   return copiedSchema;

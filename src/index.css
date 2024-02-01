@@ -1,6 +1,7 @@
 body {
   max-width: 80%;
   margin: auto;
+  --toastify-toast-width: 400px;
 }
 
 div.form-group.field.field-integer {

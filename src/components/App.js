@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { toast } from 'react-toastify';
 import RenderForm from "./RenderForm";
 import RehydrateForm from "./RehydrateForm";
 import {preProcessSchema} from '../utilities/schemaHandlers';
@@ -85,14 +86,16 @@ export default function App(props) {
             setSchema(processedSchema);
         } catch (error) {
             console.error(error);
-            alert(`Unable to render ${url}`);
+            toast.error(`Unable to render ${url}`);
         }
     }
 
     return (
         <div>
-            <h1> AIND Metadata Entry </h1>
-            <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
+            <div className={styles.titleSection}>
+                <h1> AIND Metadata Entry </h1>
+                <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
+            </div>
             <div className={styles.toolbarSection}>
                 < Toolbar 
                     ParentTypeCallback={typeCallbackFunction}
