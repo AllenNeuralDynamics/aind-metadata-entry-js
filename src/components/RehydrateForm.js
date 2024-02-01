@@ -6,7 +6,7 @@ export default async function RehydrateForm (props) {
         Uses file system access API to access local files
         Returns pre-existing data (JSON object)
     */
-    alert("Select a JSON file that matches selected schema from local file system.")
+    alert("Select a JSON file from local file system that matches selected schema.")
     let fileHandle;
     let formData = null;
 
