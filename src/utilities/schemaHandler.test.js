@@ -26,7 +26,7 @@ const testSchema2 = ({
         },
         parameters: {
             title: "parameters",
-            type: "strobjecting",
+            type: "object",
             default: {}
         }
     },
@@ -45,7 +45,14 @@ const testSchema3 = ({
         },
         email: {
             title: "Email Address",
-            type: "string"
+            anyOf: [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ]
         }, 
         resume: {
             title: "Resume",
@@ -114,6 +121,12 @@ test("Checks preProcessSchema modifies dictionary additional properties", () => 
     expect(processedSchema2.properties.parameters.additionalProperties).toStrictEqual({"type": "string"})
 })
 
+test("Checks preProcessSchema add default title to `anyOf` options if needed", () => {
+    const processedSchema3 = preProcessSchema(testSchema3);
+    expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ "title": "string", "type": "string" }, { "title": "null", "type": "null" }])
+})
+
+
 test("Checks preProcessSchema recurses through nested schema as expected", () => {
     const processedSchema3 = preProcessSchema(testSchema3);
     expect(processedSchema3.properties.resume.properties.education.readOnly).toBe(true);
@@ -121,7 +134,7 @@ test("Checks preProcessSchema recurses through nested schema as expected", () =>
     expect(processedSchema3.definitions.PastExperience.key_points.additionalProperties).toStrictEqual({"type": "string"})
 })
 
-test("Checks preProcessSchema does not modify sample schema", () => {
+test("Checks preProcessSchema does not modify simple sample schema", () => {
     const processedSchema = preProcessSchema(testSchema4);
     expect(processedSchema).toEqual(testSchema4);
 })

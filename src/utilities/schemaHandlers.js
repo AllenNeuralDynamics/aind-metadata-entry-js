@@ -1,31 +1,43 @@
 const preProcessHelper = (obj) => {
-    /* 
-    Recursively iterates through schema for rendering purposes
-      Makes const fields non-fillable
-      Renders dictionaries
-      Hack around a bug in rjsf library.
-    */ 
-      Object.keys(obj).forEach(key => {
-        if (obj[key] !== null) {
-          const prop = obj[key];
+  /* 
+  Recursively iterates through schema for rendering purposes
+    Makes const fields non-fillable
+    Renders dictionaries
+    Displays type selection dropdown with better default text
+  */
+  Object.keys(obj).forEach(key => {
+    if (obj[key] !== null) {
+      const prop = obj[key];
 
-          // grays out const fields (readOnly) and autofills the field with the const value (default)
-          if (prop.const !== undefined) {
-            prop.readOnly = true;
-            prop.default = prop.const;
-          }
+      // grays out const fields (readOnly) and autofills the field with the const value (default)
+      if (prop.const !== undefined) {
+        prop.readOnly = true;
+        prop.default = prop.const;
+      }
 
-          // if default is {}, expected value is a dictionary of strings 
-          if (prop.default && typeof(prop.default) === 'object' && Object.keys(prop.default).length === 0) {
-            prop.additionalProperties={"type": "string"}
+      // if default is {}, expected value is a dictionary of strings 
+      if (prop.default && typeof (prop.default) === 'object' && Object.keys(prop.default).length === 0) {
+        prop.additionalProperties = { "type": "string" }
+      }
+
+      // add default titles to dropdown of allowed types/ subschemas
+      if (prop.anyOf) {
+        Object.values(prop.anyOf).forEach(option => {
+          // if the allowed type/ subschema is not a ref nor has a title,
+          // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
+          // we can convert to display the type name instead
+          if (!option.$ref && option.type && !option.title) {
+            option.title = option.type
           }
-    
-          // recursion
-          if (typeof(prop) === 'object') {
-            preProcessHelper(prop);
-          }
-        }
-      });
+        })
+      }
+
+      // recursion
+      if (typeof (prop) === 'object') {
+        preProcessHelper(prop);
+      }
+    }
+  });
 };
 
 export const preProcessSchema = (schema) => {
