@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from "react";
+import { toast } from 'react-toastify';
 import RenderForm from "./RenderForm";
 import RehydrateForm from "./RehydrateForm";
-import {preProcessing} from '../utilities/schemaHandlers';
+import {preProcessSchema} from '../utilities/schemaHandlers';
 import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from "../utilities/schemaFetchers";
-import Dropdowns from "./Dropdowns";
+import Toolbar from "./Toolbar";
+import styles from './App.module.css';
 
 export default function App(props) {
     /*
@@ -13,6 +15,7 @@ export default function App(props) {
         Renders dropdown menu with options
         Gives user the option to autofill the form with previously input data
      */
+    const appVersionMsg = props.appVersion ? `App version ${props.appVersion}` : null;
     const [data, setData] = useState(null);
     const [schema, setSchema] = useState('');
     const [selectedSchemaType, setSelectedSchemaType] = useState('');
@@ -79,26 +82,32 @@ export default function App(props) {
         try {
             const response = await fetch(process.env.REACT_APP_S3_URL+'/'+url);
             const schema = await response.json();
-            const processedSchema = await schema ? preProcessing(schema) : undefined;
+            const processedSchema = await schema ? preProcessSchema(schema) : undefined;
             setSchema(processedSchema);
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+            toast.error(`Unable to render ${url}`);
+        }
     }
 
     return (
         <div>
-            <h1> AIND Metadata Entry </h1>
-            <div>User-interface for metadata ingest and validation. Use on Chrome.</div>
-            <button onClick={handleRehydrate}>Autofill Form with Existing Data</button>
-            <div>
-                < Dropdowns 
+            <div className={styles.titleSection}>
+                <h1> AIND Metadata Entry </h1>
+                <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
+            </div>
+            <div className={styles.toolbarSection}>
+                < Toolbar 
                     ParentTypeCallback={typeCallbackFunction}
                     ParentVersionCallback={versionCallbackFunction}
                     schemaVersion={selectedSchemaVersion}
-                    schemaList={schemaList}/>
+                    schemaList={schemaList}
+                    handleRehydrate={handleRehydrate}
+                />
             </div>
-            <div>
+            <div className={styles.formSection}>
                 <RenderForm schema={schema} data={data} selectedSchemaType={selectedSchemaType}/> 
-           </div>
+            </div>
         </div>
     );
 };
