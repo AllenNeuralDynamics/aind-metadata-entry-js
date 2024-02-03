@@ -1,30 +1,35 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Dropdowns from "./Dropdowns";
+import Toolbar from "./Toolbar";
 import sampleSchemaList from '../testing/sample-schema-list.json';
 import sampleSortedVersionListInstrument from '../testing/sample-sorted-version-list-instrument.json';
 
 const nullCallback = () => { }
 
-describe("Dropdowns component", () => {
-  it("renders only schema type selection dropdown on default", () => {
-    render(<Dropdowns
+describe("Toolbar component", () => {
+  it("renders appropriate inputs on default", () => {
+    render(<Toolbar
       schemaList={sampleSchemaList}
     />);
     expect(screen.getByTitle('Select a schema')).toBeInTheDocument();
-    expect(screen.queryByTitle('Select a version')).toBeNull();
+    expect(screen.getByTitle('Select a version')).toBeInTheDocument();
+    expect(screen.getByTitle('Autofill with existing data')).toBeInTheDocument();
+    expect(screen.getByTitle('Select a schema')).toBeEnabled();
+    expect(screen.getByTitle('Select a version')).toBeDisabled();
+    expect(screen.getByTitle('Autofill with existing data')).toBeDisabled();
   })
 
-  it("renders schema version selection dropdown when a schema type is chosen", () => {
-    render(<Dropdowns
+  it("enables version selection dropdown and autofill/ upload button when a schema type is chosen", () => {
+    render(<Toolbar
       ParentTypeCallback={nullCallback}
       schemaList={sampleSchemaList}
     />);
     fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: 'instrument' } });
-    expect(screen.getByTitle('Select a version')).toBeInTheDocument();
+    expect(screen.getByTitle('Select a version')).toBeEnabled();
+    expect(screen.getByTitle('Autofill with existing data')).toBeEnabled();
   })
 
   it("has schema versions sorted by latest-first semantic version", () => {
-    render(<Dropdowns
+    render(<Toolbar
       ParentTypeCallback={nullCallback}
       schemaList={sampleSchemaList}
     />);

@@ -1,0 +1,20 @@
+body {
+    padding: 40px;
+
+    .titleSection {
+        text-align: center;
+
+        h1 {
+            color: navy;
+        }
+    }
+
+    .toolbarSection {
+        margin-top: 30px;
+    }
+
+    .formSection {
+        padding: 15px;
+        border: 1px dashed grey;
+    }
+}

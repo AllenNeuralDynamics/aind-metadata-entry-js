@@ -1,4 +1,4 @@
-import {preProcessing} from './schemaHandlers';
+import {preProcessSchema} from './schemaHandlers';
 
 const testSchema1 = ({
     type: "object",
@@ -26,7 +26,7 @@ const testSchema2 = ({
         },
         parameters: {
             title: "parameters",
-            type: "strobjecting",
+            type: "object",
             default: {}
         }
     },
@@ -45,7 +45,14 @@ const testSchema3 = ({
         },
         email: {
             title: "Email Address",
-            type: "string"
+            anyOf: [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ]
         }, 
         resume: {
             title: "Resume",
@@ -103,25 +110,31 @@ const testSchema4 = ({
     ]
 });
 
-test("Checks preProcessing modifies const schema", () => {
-    const processedSchema1 = preProcessing(testSchema1);
+test("Checks preProcessSchema modifies const schema", () => {
+    const processedSchema1 = preProcessSchema(testSchema1);
     expect(processedSchema1.properties.describedBy.default).toBe(testSchema1.properties.describedBy.const);
     expect(processedSchema1.properties.describedBy.readOnly).toBe(true);
 })
 
-test("Checks preProcessing modifies dictionary additional properties", () => {
-    const processedSchema2 = preProcessing(testSchema2);
+test("Checks preProcessSchema modifies dictionary additional properties", () => {
+    const processedSchema2 = preProcessSchema(testSchema2);
     expect(processedSchema2.properties.parameters.additionalProperties).toStrictEqual({"type": "string"})
 })
 
-test("Checks preProcessing recurses through nested schema as expected", () => {
-    const processedSchema3 = preProcessing(testSchema3);
+test("Checks preProcessSchema add default title to `anyOf` options if needed", () => {
+    const processedSchema3 = preProcessSchema(testSchema3);
+    expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ "title": "string", "type": "string" }, { "title": "null", "type": "null" }])
+})
+
+
+test("Checks preProcessSchema recurses through nested schema as expected", () => {
+    const processedSchema3 = preProcessSchema(testSchema3);
     expect(processedSchema3.properties.resume.properties.education.readOnly).toBe(true);
     expect(processedSchema3.properties.resume.properties.education.default).toBe(testSchema3.properties.resume.properties.education.const);
     expect(processedSchema3.definitions.PastExperience.key_points.additionalProperties).toStrictEqual({"type": "string"})
 })
 
-test("Checks preProcessing does not modify sample schema", () => {
-    const processedSchema = preProcessing(testSchema4);
+test("Checks preProcessSchema does not modify simple sample schema", () => {
+    const processedSchema = preProcessSchema(testSchema4);
     expect(processedSchema).toEqual(testSchema4);
 })
