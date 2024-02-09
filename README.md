@@ -28,10 +28,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser. 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `npm run test`, `npm run test:coverage`
+This project uses [Jest](https://jestjs.io) as its Node-based test runner. [react-testing-library](https://testing-library.com/docs/react-testing-library/intro) is used to test components in isolation.
+- Use `npm run test` to run all tests
+- Use `npm run test:coverage` to run all tests and get coverage report
+See [create-react-app running tests](https://create-react-app.dev/docs/running-tests) for more information.
 
 ### `npm run lint`, `npm run lint:fix`
 
