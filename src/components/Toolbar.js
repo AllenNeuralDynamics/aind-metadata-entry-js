@@ -10,7 +10,6 @@ export default function Toolbar (props) {
      * Gives user the option to autofill the form with previously input data
      */
   const [selectedSchemaType, setSelectedSchemaType] = useState('');
-  const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('');
   
   const schemaList = props.schemaList
 
@@ -36,7 +35,6 @@ export default function Toolbar (props) {
 
   const handleVersionChange = (event) => {
     props.ParentVersionCallback(event.target.value);
-    setSelectedSchemaVersion(event.target.value);
   };
 
   return (
@@ -59,7 +57,7 @@ export default function Toolbar (props) {
         id="schema-version-select"
         className={["btn", "btn-default", styles.dropdown].join(" ")}
         title='Select a version'
-        value={selectedSchemaVersion}
+        value={props.selectedSchemaVersion}
         onChange={handleVersionChange}
         disabled={!selectedSchemaType}
       >
