@@ -100,7 +100,7 @@ export default function App(props) {
                 < Toolbar 
                     ParentTypeCallback={typeCallbackFunction}
                     ParentVersionCallback={versionCallbackFunction}
-                    schemaVersion={selectedSchemaVersion}
+                    selectedSchemaVersion={selectedSchemaVersion}
                     schemaList={schemaList}
                     handleRehydrate={handleRehydrate}
                 />
