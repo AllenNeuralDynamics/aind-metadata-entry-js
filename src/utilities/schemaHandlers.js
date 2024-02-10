@@ -1,7 +1,7 @@
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 
 const preProcessHelper = (obj) => {
-  /* 
+  /*
   Recursively iterates through schema for rendering purposes
     Makes const fields non-fillable
     Renders dictionaries
@@ -9,17 +9,17 @@ const preProcessHelper = (obj) => {
   */
   Object.keys(obj).forEach(key => {
     if (obj[key] !== null) {
-      const prop = obj[key];
+      const prop = obj[key]
 
       // grays out const fields (readOnly) and autofills the field with the const value (default)
       if (prop.const !== undefined) {
-        prop.readOnly = true;
-        prop.default = prop.const;
+        prop.readOnly = true
+        prop.default = prop.const
       }
 
-      // if default is {}, expected value is a dictionary of strings 
+      // if default is {}, expected value is a dictionary of strings
       if (prop.default && typeof (prop.default) === 'object' && Object.keys(prop.default).length === 0) {
-        prop.additionalProperties = { "type": "string" }
+        prop.additionalProperties = { type: 'string' }
       }
 
       // add default titles to dropdown of allowed types/ subschemas
@@ -36,11 +36,11 @@ const preProcessHelper = (obj) => {
 
       // recursion
       if (typeof (prop) === 'object') {
-        preProcessHelper(prop);
+        preProcessHelper(prop)
       }
     }
-  });
-};
+  })
+}
 
 export const preProcessSchema = (schema) => {
   /*
@@ -48,7 +48,7 @@ export const preProcessSchema = (schema) => {
     Uses helper function to make const fields non-fillable
     Returns processedSchema if successful, otherwise returns raw original schema
   */
-  let copiedSchema = JSON.parse(JSON.stringify(schema))
+  const copiedSchema = JSON.parse(JSON.stringify(schema))
   try {
     preProcessHelper(copiedSchema)
   } catch (error) {
@@ -58,5 +58,5 @@ export const preProcessSchema = (schema) => {
     toast.warn(`${msg}. Rendered raw schema instead.`)
     return schema
   }
-  return copiedSchema;
+  return copiedSchema
 }
