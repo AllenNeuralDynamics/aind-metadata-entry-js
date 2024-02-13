@@ -7,22 +7,22 @@ export async function fetchSchemasfromS3 (props) {
   const responseText = await response.text()
   const parser = new DOMParser()
   const xmlParsed = parser.parseFromString(responseText, 'text/xml')
-  const schema_links = []
+  const schemaLinks = []
   const elements = xmlParsed.getElementsByTagName('Key')
   for (let i = 0; i < elements.length; i++) {
-    schema_links[i] = elements[i].innerHTML
+    schemaLinks[i] = elements[i].innerHTML
   }
-  return schema_links
+  return schemaLinks
 }
 
-export function filterSchemas (schema_links) {
+export function filterSchemas (schemaLinks) {
   /*
   Method to filter schemas in schema list options.
    */
   const filter = process.env.REACT_APP_FILTER_SCHEMAS
-  if (!filter) { return schema_links }
+  if (!filter) { return schemaLinks }
   const filterArray = JSON.parse(filter)
-  const filteredStrings = schema_links.filter(str => !filterArray.some(substring => str.includes(substring)))
+  const filteredStrings = schemaLinks.filter(str => !filterArray.some(substring => str.includes(substring)))
   return filteredStrings
 }
 

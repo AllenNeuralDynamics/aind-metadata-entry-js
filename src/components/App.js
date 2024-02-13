@@ -29,9 +29,9 @@ export default function App (props) {
             Method to retrieve list of schema links from aws s3 bucket
             UseEffect hook so that dropdowns can be rendered from list
             */
-      const schema_links = await fetchSchemasfromS3()
-      const filtered_schemas = filterSchemas(schema_links)
-      setSchemaList(filtered_schemas)
+      const schemaLinks = await fetchSchemasfromS3()
+      const filteredSchemas = filterSchemas(schemaLinks)
+      setSchemaList(filteredSchemas)
     }
     fetchSchemaList()
   }, [])

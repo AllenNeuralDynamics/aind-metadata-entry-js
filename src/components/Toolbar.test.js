@@ -1,3 +1,4 @@
+import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Toolbar from './Toolbar'
 import sampleSchemaList from '../testing/sample-schema-list.json'

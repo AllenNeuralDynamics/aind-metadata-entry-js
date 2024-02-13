@@ -1,3 +1,4 @@
+import React from 'react'
 import Form from '@rjsf/core'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import validator from '@rjsf/validator-ajv8'

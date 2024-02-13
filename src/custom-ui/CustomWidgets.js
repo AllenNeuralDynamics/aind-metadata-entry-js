@@ -1,8 +1,8 @@
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
-import { default as RadioWidget } from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
-import { default as CheckboxWidget } from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
+import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
+import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import React from 'react'
 
 const CustomTimeWidget = (props) => {
