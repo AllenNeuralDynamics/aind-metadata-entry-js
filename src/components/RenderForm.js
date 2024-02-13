@@ -1,21 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Form from '@rjsf/core'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import validator from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 
-export default function RenderForm (props) {
+function RenderForm (props) {
   /*
   Method to read and render a form based on the user-selected schema
-  Arguements:
+  Arguments:
+    props.schemaType (string) = the selected schema type
     props.schema (object) = the selected schema
+    props.formData (object) = the form data
   Returns:
     Form object
   */
-  const schemaName = props.selectedSchemaType
-  const schema = props.schema
-  const formData = props.data
+  const { schemaType, schema, formData } = props
 
   async function saveFilePicker (event) {
     /*
@@ -24,7 +25,7 @@ export default function RenderForm (props) {
     const data = event.formData
     const fileData = JSON.stringify(data, undefined, 4)
     const opts = {
-      suggestedName: `${schemaName}.json`,
+      suggestedName: `${schemaType}.json`,
       types: [
         {
           description: 'JSON file',
@@ -47,9 +48,17 @@ export default function RenderForm (props) {
         widgets={widgets}
         onSubmit={saveFilePicker}
         noHtml5Validate >
-        </Form>
+      </Form>
     )
   } else {
     return (<div> Please select a schema from the dropdown above. </div>)
   }
 }
+
+RenderForm.propTypes = {
+  schemaType: PropTypes.string.isRequired,
+  schema: PropTypes.object,
+  formData: PropTypes.object
+}
+
+export default RenderForm

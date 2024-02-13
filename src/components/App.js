@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
@@ -7,7 +8,7 @@ import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from '../utiliti
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 
-export default function App (props) {
+function App (props) {
   /*
     Application to display a dropdown menu of schemas.
         Fetches schema objects from s3
@@ -15,9 +16,10 @@ export default function App (props) {
         Renders dropdown menu with options
         Gives user the option to autofill the form with previously input data
      */
-  const appVersionMsg = props.appVersion ? `App version ${props.appVersion}` : null
+  const { appVersion } = props
+  const appVersionMsg = appVersion ? `App version ${appVersion}` : null
   const [data, setData] = useState(null)
-  const [schema, setSchema] = useState('')
+  const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
   const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('')
 
@@ -91,23 +93,29 @@ export default function App (props) {
   }
 
   return (
-        <div>
-            <div className={styles.titleSection}>
-                <h1> AIND Metadata Entry </h1>
-                <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
-            </div>
-            <div className={styles.toolbarSection}>
-                < Toolbar
-                    ParentTypeCallback={typeCallbackFunction}
-                    ParentVersionCallback={versionCallbackFunction}
-                    selectedSchemaVersion={selectedSchemaVersion}
-                    schemaList={schemaList}
-                    handleRehydrate={handleRehydrate}
-                />
-            </div>
-            <div className={styles.formSection}>
-                <RenderForm schema={schema} data={data} selectedSchemaType={selectedSchemaType}/>
-            </div>
-        </div>
+    <div>
+      <div className={styles.titleSection}>
+        <h1> AIND Metadata Entry </h1>
+        <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
+      </div>
+      <div className={styles.toolbarSection}>
+        < Toolbar
+          ParentTypeCallback={typeCallbackFunction}
+          ParentVersionCallback={versionCallbackFunction}
+          selectedSchemaVersion={selectedSchemaVersion}
+          schemaList={schemaList}
+          handleRehydrate={handleRehydrate}
+        />
+      </div>
+      <div className={styles.formSection}>
+        <RenderForm schemaType={selectedSchemaType} schema={schema} formData={data} />
+      </div>
+    </div>
   )
 }
+
+App.propTypes = {
+  appVersion: PropTypes.string.isRequired
+}
+
+export default App

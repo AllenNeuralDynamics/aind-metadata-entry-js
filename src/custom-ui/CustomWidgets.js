@@ -4,6 +4,7 @@ import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -18,6 +19,10 @@ const CustomTimeWidget = (props) => {
       onChange={onChange}
     />
   )
+}
+CustomTimeWidget.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.any
 }
 
 /**

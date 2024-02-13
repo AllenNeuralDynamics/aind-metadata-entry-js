@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { compareVersions } from 'compare-versions'
 import styles from './Toolbar.module.css'
 
-export default function Toolbar (props) {
+function Toolbar (props) {
   /**
      * Component to render a dropdown menu for schema-selection.
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
+  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaVersion, schemaList, handleRehydrate } = props
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
-
-  const schemaList = props.schemaList
 
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.split('/')[1]))
@@ -29,12 +29,12 @@ export default function Toolbar (props) {
     .reverse()
 
   const handleTypeChange = (event) => {
-    props.ParentTypeCallback(event.target.value)
+    ParentTypeCallback(event.target.value)
     setSelectedSchemaType(event.target.value)
   }
 
   const handleVersionChange = (event) => {
-    props.ParentVersionCallback(event.target.value)
+    ParentVersionCallback(event.target.value)
   }
 
   return (
@@ -57,7 +57,7 @@ export default function Toolbar (props) {
         id="schema-version-select"
         className={['btn', 'btn-default', styles.dropdown].join(' ')}
         title='Select a version'
-        value={props.selectedSchemaVersion}
+        value={selectedSchemaVersion}
         onChange={handleVersionChange}
         disabled={!selectedSchemaType}
       >
@@ -72,7 +72,7 @@ export default function Toolbar (props) {
         title="Autofill with existing data"
         type="button"
         className={['btn', 'btn-default', styles.btnRight].join(' ')}
-        onClick={props.handleRehydrate}
+        onClick={handleRehydrate}
         disabled={!selectedSchemaType}
       >
         Autofill with existing data
@@ -80,3 +80,13 @@ export default function Toolbar (props) {
     </div>
   )
 }
+
+Toolbar.propTypes = {
+  ParentTypeCallback: PropTypes.func.isRequired,
+  ParentVersionCallback: PropTypes.func.isRequired,
+  selectedSchemaVersion: PropTypes.string.isRequired,
+  schemaList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleRehydrate: PropTypes.func.isRequired
+}
+
+export default Toolbar

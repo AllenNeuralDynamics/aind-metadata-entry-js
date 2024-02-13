@@ -9,7 +9,11 @@ const nullCallback = () => { }
 describe('Toolbar component', () => {
   it('renders appropriate inputs on default', () => {
     render(<Toolbar
+      ParentTypeCallback={nullCallback}
+      ParentVersionCallback={nullCallback}
+      selectedSchemaVersion=''
       schemaList={sampleSchemaList}
+      handleRehydrate={nullCallback}
     />)
     expect(screen.getByTitle('Select a schema')).toBeInTheDocument()
     expect(screen.getByTitle('Select a version')).toBeInTheDocument()
@@ -22,7 +26,10 @@ describe('Toolbar component', () => {
   it('enables version selection dropdown and autofill/ upload button when a schema type is chosen', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
+      ParentVersionCallback={nullCallback}
+      selectedSchemaVersion=''
       schemaList={sampleSchemaList}
+      handleRehydrate={nullCallback}
     />)
     fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: 'instrument' } })
     expect(screen.getByTitle('Select a version')).toBeEnabled()
@@ -32,7 +39,10 @@ describe('Toolbar component', () => {
   it('has schema versions sorted by latest-first semantic version', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
+      ParentVersionCallback={nullCallback}
+      selectedSchemaVersion=''
       schemaList={sampleSchemaList}
+      handleRehydrate={nullCallback}
     />)
     fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: 'instrument' } })
 
