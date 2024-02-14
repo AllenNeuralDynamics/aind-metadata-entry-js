@@ -29,13 +29,13 @@ The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
 ### `npm run test`, `npm run test:coverage`
-This project uses [Jest](https://jestjs.io) as its Node-based test runner. [react-testing-library](https://testing-library.com/docs/react-testing-library/intro) is used to test components in isolation.
-- Use `npm run test` to run all tests
+This project uses [Jest](https://jestjs.io) as its Node-based test runner. [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) is used to test components in isolation.
+- Use `npm run test` to run all tests in watch mode
 - Use `npm run test:coverage` to run all tests and get coverage report
-See [create-react-app running tests](https://create-react-app.dev/docs/running-tests) for more information.
+
+See [Create React App - Running Tests](https://create-react-app.dev/docs/running-tests) for more information.
 
 ### `npm run lint`, `npm run lint:fix`
-
 This project uses [ESLint](https://eslint.org/docs/latest/use/core-concepts) for React, with [JS Standard Code Style](https://standardjs.com/rules).
 - Use `npm run lint` to run the linter
 - Use `npm run lint:fix` to auto-fix issues
