@@ -23,6 +23,7 @@ function App (props) {
   const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
   const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('')
+  const [selectedSchemaPath, setSelectedSchemaPath] = useState('')
 
   const [schemaList, setSchemaList] = useState([])
 
@@ -86,6 +87,7 @@ function App (props) {
       const response = await fetch(process.env.REACT_APP_S3_URL + '/' + url)
       const schema = await response.json()
       const processedSchema = await schema ? preProcessSchema(schema) : undefined
+      setSelectedSchemaPath(url)
       setSchema(processedSchema)
     } catch (error) {
       console.error(error)
@@ -112,9 +114,9 @@ function App (props) {
         <ErrorBoundary
           fallback={<div className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
           onError={(error) => { toast.error(`${error.name}: ${error.message}`) }}
-          resetKeys={[schema]}
+          resetKeys={[selectedSchemaPath]}
         >
-          <RenderForm schemaType={selectedSchemaType} schema={schema} formData={data} />
+          <RenderForm key={selectedSchemaPath} schemaType={selectedSchemaType} schema={schema} formData={data} />
         </ErrorBoundary>
       </div>
     </div>
