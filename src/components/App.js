@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
@@ -108,7 +109,13 @@ function App (props) {
         />
       </div>
       <div className={styles.formSection}>
-        <RenderForm schemaType={selectedSchemaType} schema={schema} formData={data} />
+        <ErrorBoundary
+          fallback={<div className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
+          onError={(error) => { toast.error(`${error.name}: ${error.message}`) }}
+          resetKeys={[schema]}
+        >
+          <RenderForm schemaType={selectedSchemaType} schema={schema} formData={data} />
+        </ErrorBoundary>
       </div>
     </div>
   )
