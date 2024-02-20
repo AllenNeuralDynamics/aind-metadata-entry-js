@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
@@ -22,6 +23,7 @@ function App (props) {
   const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
   const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('')
+  const [selectedSchemaPath, setSelectedSchemaPath] = useState('')
 
   const [schemaList, setSchemaList] = useState([])
 
@@ -85,6 +87,7 @@ function App (props) {
       const response = await fetch(process.env.REACT_APP_S3_URL + '/' + url)
       const schema = await response.json()
       const processedSchema = await schema ? preProcessSchema(schema) : undefined
+      setSelectedSchemaPath(url)
       setSchema(processedSchema)
     } catch (error) {
       console.error(error)
@@ -108,7 +111,13 @@ function App (props) {
         />
       </div>
       <div className={styles.formSection}>
-        <RenderForm schemaType={selectedSchemaType} schema={schema} formData={data} />
+        <ErrorBoundary
+          fallback={<div title='Form error' className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
+          onError={(error) => { toast.error(`${error.name}: ${error.message}`) }}
+          resetKeys={[selectedSchemaPath]}
+        >
+          <RenderForm key={selectedSchemaPath} schemaType={selectedSchemaType} schema={schema} formData={data} />
+        </ErrorBoundary>
       </div>
     </div>
   )
