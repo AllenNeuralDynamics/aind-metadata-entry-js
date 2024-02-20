@@ -112,7 +112,7 @@ function App (props) {
       </div>
       <div className={styles.formSection}>
         <ErrorBoundary
-          fallback={<div className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
+          fallback={<div title='Form error' className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
           onError={(error) => { toast.error(`${error.name}: ${error.message}`) }}
           resetKeys={[selectedSchemaPath]}
         >
