@@ -14,19 +14,13 @@ function Toolbar (props) {
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
 
   const schemaTypes = Array.from(
-    new Set(schemaList.map((schema) => schema.split('/')[1]))
+    new Set(schemaList.map((schema) => schema.type))
   )
-  schemaTypes.shift()
 
   const versions = schemaList
-    .filter((schema) => {
-      const [, schemaType] = schema.split('/')
-      return schemaType === selectedSchemaType
-    })
-    .map((schema) => schema.split('/')[2])
-    .filter((version) => version !== undefined)
-    .sort(compareVersions)
-    .reverse()
+    .filter((schema) => schema.type === selectedSchemaType)
+    .map((schema) => schema.version)
+    .sort((a, b) => compareVersions(b, a)) // reverse sort by semver
 
   const handleTypeChange = (event) => {
     ParentTypeCallback(event.target.value)
@@ -85,7 +79,7 @@ Toolbar.propTypes = {
   ParentTypeCallback: PropTypes.func.isRequired,
   ParentVersionCallback: PropTypes.func.isRequired,
   selectedSchemaVersion: PropTypes.string.isRequired,
-  schemaList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleRehydrate: PropTypes.func.isRequired
 }
 

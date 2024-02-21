@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
 import { preProcessSchema } from '../utilities/schemaHandlers'
-import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from '../utilities/schemaFetchers'
+import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 
@@ -34,7 +34,7 @@ function App (props) {
             UseEffect hook so that dropdowns can be rendered from list
             */
       const schemaLinks = await fetchSchemasfromS3()
-      const filteredSchemas = filterSchemas(schemaLinks)
+      const filteredSchemas = parseAndFilterSchemas(schemaLinks)
       setSchemaList(filteredSchemas)
     }
     fetchSchemaList()
@@ -58,10 +58,10 @@ function App (props) {
          * and replace default form to selected version
          */
     setSelectedSchemaVersion(childData)
-    const schemaURL = schemaList.find(url =>
-      url.includes(selectedSchemaType) && url.includes(childData)
+    const schema = schemaList.find(schema =>
+      schema.type === selectedSchemaType && schema.version === childData
     )
-    await fetchAndSetSchema(schemaURL)
+    await fetchAndSetSchema(schema?.path)
   }
 
   const handleRehydrate = async () => {
@@ -71,10 +71,10 @@ function App (props) {
          */
     const data = await RehydrateForm()
     const version = data.schema_version
-    setSelectedSchemaVersion(version)
-    const schemaURL = schemaList.find(url =>
-      url.includes(selectedSchemaType) && url.includes(version))
-    await fetchAndSetSchema(schemaURL)
+    const schema = schemaList.find(schema =>
+      schema.type === selectedSchemaType && schema.version === version
+    )
+    await fetchAndSetSchema(schema?.path)
     setData(data)
   }
 
