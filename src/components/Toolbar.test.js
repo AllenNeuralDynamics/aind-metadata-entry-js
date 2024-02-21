@@ -13,7 +13,7 @@ describe('Toolbar component', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
       ParentVersionCallback={nullCallback}
-      selectedSchemaVersion=''
+      selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)
@@ -29,7 +29,7 @@ describe('Toolbar component', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
       ParentVersionCallback={nullCallback}
-      selectedSchemaVersion=''
+      selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)
@@ -42,7 +42,7 @@ describe('Toolbar component', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
       ParentVersionCallback={nullCallback}
-      selectedSchemaVersion=''
+      selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)

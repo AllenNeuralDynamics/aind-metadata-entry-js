@@ -22,7 +22,6 @@ function App (props) {
   const [data, setData] = useState(null)
   const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
-  const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('')
   const [selectedSchemaPath, setSelectedSchemaPath] = useState('')
 
   const [schemaList, setSchemaList] = useState([])
@@ -48,8 +47,7 @@ function App (props) {
     setSelectedSchemaType(childData)
     const latestSchemas = findLatestSchemas(schemaList)
     const schemaURL = latestSchemas[childData].path
-    setSelectedSchemaVersion(latestSchemas[childData].version)
-    await fetchAndSetSchema(schemaURL, childData)
+    await fetchAndSetSchema(schemaURL)
   }
 
   const versionCallbackFunction = async (childData) => {
@@ -57,11 +55,7 @@ function App (props) {
          * Method to retrieve user-selected schema version
          * and replace default form to selected version
          */
-    setSelectedSchemaVersion(childData)
-    const schema = schemaList.find(schema =>
-      schema.type === selectedSchemaType && schema.version === childData
-    )
-    await fetchAndSetSchema(schema?.path)
+    await fetchAndSetSchema(childData)
   }
 
   const handleRehydrate = async () => {
@@ -105,7 +99,7 @@ function App (props) {
         < Toolbar
           ParentTypeCallback={typeCallbackFunction}
           ParentVersionCallback={versionCallbackFunction}
-          selectedSchemaVersion={selectedSchemaVersion}
+          selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
           handleRehydrate={handleRehydrate}
         />

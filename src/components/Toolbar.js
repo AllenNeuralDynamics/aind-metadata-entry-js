@@ -10,17 +10,16 @@ function Toolbar (props) {
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
-  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaVersion, schemaList, handleRehydrate } = props
+  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaPath, schemaList, handleRehydrate } = props
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
 
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.type))
   )
 
-  const versions = schemaList
+  const schemas = schemaList
     .filter((schema) => schema.type === selectedSchemaType)
-    .map((schema) => schema.version)
-    .sort((a, b) => compareVersions(b, a)) // reverse sort by semver
+    .sort((a, b) => compareVersions(b.version, a.version)) // reverse sort by semver
 
   const handleTypeChange = (event) => {
     ParentTypeCallback(event.target.value)
@@ -51,14 +50,14 @@ function Toolbar (props) {
         id="schema-version-select"
         className={['btn', 'btn-default', styles.dropdown].join(' ')}
         title='Select a version'
-        value={selectedSchemaVersion}
+        value={selectedSchemaPath}
         onChange={handleVersionChange}
         disabled={!selectedSchemaType}
       >
         <option value="">Select version</option>
-        {versions.map((version) => (
-          <option key={version} value={version}>
-            {version}
+        {schemas.map((schema) => (
+          <option key={schema.path} value={schema.path}>
+            {schema.version}
           </option>
         ))}
       </select>
@@ -78,7 +77,7 @@ function Toolbar (props) {
 Toolbar.propTypes = {
   ParentTypeCallback: PropTypes.func.isRequired,
   ParentVersionCallback: PropTypes.func.isRequired,
-  selectedSchemaVersion: PropTypes.string.isRequired,
+  selectedSchemaPath: PropTypes.string.isRequired,
   schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleRehydrate: PropTypes.func.isRequired
 }
