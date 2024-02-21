@@ -1,10 +1,12 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Toolbar from './Toolbar'
-import sampleSchemaList from '../testing/sample-schema-list.json'
+import { parseAndFilterSchemas } from '../utilities/schemaFetchers'
+import sampleSchemaLinks from '../testing/sample-schema-links.json'
 import sampleSortedVersionListInstrument from '../testing/sample-sorted-version-list-instrument.json'
 
 const nullCallback = () => { }
+const sampleSchemaList = parseAndFilterSchemas(sampleSchemaLinks)
 
 describe('Toolbar component', () => {
   it('renders appropriate inputs on default', () => {
