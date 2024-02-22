@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
 import { preProcessSchema } from '../utilities/schemaHandlers'
-import { fetchSchemasfromS3, findLatestSchemas, filterSchemas } from '../utilities/schemaFetchers'
+import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 
@@ -22,7 +22,6 @@ function App (props) {
   const [data, setData] = useState(null)
   const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
-  const [selectedSchemaVersion, setSelectedSchemaVersion] = useState('')
   const [selectedSchemaPath, setSelectedSchemaPath] = useState('')
 
   const [schemaList, setSchemaList] = useState([])
@@ -34,7 +33,7 @@ function App (props) {
             UseEffect hook so that dropdowns can be rendered from list
             */
       const schemaLinks = await fetchSchemasfromS3()
-      const filteredSchemas = filterSchemas(schemaLinks)
+      const filteredSchemas = parseAndFilterSchemas(schemaLinks)
       setSchemaList(filteredSchemas)
     }
     fetchSchemaList()
@@ -48,8 +47,7 @@ function App (props) {
     setSelectedSchemaType(childData)
     const latestSchemas = findLatestSchemas(schemaList)
     const schemaURL = latestSchemas[childData].path
-    setSelectedSchemaVersion(latestSchemas[childData].version)
-    await fetchAndSetSchema(schemaURL, childData)
+    await fetchAndSetSchema(schemaURL)
   }
 
   const versionCallbackFunction = async (childData) => {
@@ -57,11 +55,7 @@ function App (props) {
          * Method to retrieve user-selected schema version
          * and replace default form to selected version
          */
-    setSelectedSchemaVersion(childData)
-    const schemaURL = schemaList.find(url =>
-      url.includes(selectedSchemaType) && url.includes(childData)
-    )
-    await fetchAndSetSchema(schemaURL)
+    await fetchAndSetSchema(childData)
   }
 
   const handleRehydrate = async () => {
@@ -71,10 +65,10 @@ function App (props) {
          */
     const data = await RehydrateForm()
     const version = data.schema_version
-    setSelectedSchemaVersion(version)
-    const schemaURL = schemaList.find(url =>
-      url.includes(selectedSchemaType) && url.includes(version))
-    await fetchAndSetSchema(schemaURL)
+    const schema = schemaList.find(schema =>
+      schema.type === selectedSchemaType && schema.version === version
+    )
+    await fetchAndSetSchema(schema?.path)
     setData(data)
   }
 
@@ -105,7 +99,7 @@ function App (props) {
         < Toolbar
           ParentTypeCallback={typeCallbackFunction}
           ParentVersionCallback={versionCallbackFunction}
-          selectedSchemaVersion={selectedSchemaVersion}
+          selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
           handleRehydrate={handleRehydrate}
         />

@@ -1,3 +1,5 @@
+import { validate, compareVersions } from 'compare-versions'
+
 export async function fetchSchemasfromS3 (props) {
   /*
     Method to retrieve list of schema links from aws s3 bucket
@@ -15,15 +17,28 @@ export async function fetchSchemasfromS3 (props) {
   return schemaLinks
 }
 
-export function filterSchemas (schemaLinks) {
-  /*
-  Method to filter schemas in schema list options.
-   */
+/**
+ * @typedef {Object} Schema
+ * @property {string} type - The schema type.
+ * @property {string} version - The semver schema version.
+ * @property {string} path - The unique path of the schema.
+ *
+ * Parses and filters the given schemas paths based on a filter list stored in environment.
+ *
+ * @param {string[]} schemaLinks - The schemas paths to parse and filter.
+ * @returns {Schema[]} The parsed and filtered schemas.
+ */
+export function parseAndFilterSchemas (schemaLinks) {
+  const schemaList = []
   const filter = process.env.REACT_APP_FILTER_SCHEMAS
-  if (!filter) { return schemaLinks }
-  const filterArray = JSON.parse(filter)
-  const filteredStrings = schemaLinks.filter(str => !filterArray.some(substring => str.includes(substring)))
-  return filteredStrings
+  const filterArray = filter ? JSON.parse(filter) : []
+  for (const link of schemaLinks) {
+    const parts = link.split('/')
+    if (isValidSchema(link) && !filterArray.includes(parts[1])) {
+      schemaList.push({ type: parts[1], version: parts[2], path: link })
+    }
+  }
+  return schemaList
 }
 
 export function findLatestSchemas (schemasList) {
@@ -31,37 +46,25 @@ export function findLatestSchemas (schemasList) {
     Method to find latest version of each schema
     */
   const latestSchemas = {}
-  for (const schemaPath of schemasList) {
-    const parts = schemaPath.split('/')
-    if (parts[0] === 'schemas') {
-      const schemaType = parts[1]
-      const schemaVersion = parts[2]
-      if (!latestSchemas[schemaType] || compareVersions(schemaVersion, latestSchemas[schemaType].version) > 0) {
-        latestSchemas[schemaType] = {
-          schema_type: schemaType,
-          version: schemaVersion,
-          path: schemaPath
-        }
-      }
+  for (const schema of schemasList) {
+    if (!latestSchemas[schema.type] || compareVersions(schema.version, latestSchemas[schema.type].version) > 0) {
+      latestSchemas[schema.type] = schema
     }
   }
   return latestSchemas
 }
 
-function compareVersions (v1, v2) {
-  /*
-    Helper method for to find latest schemas
-    */
-  const parts1 = v1.split('.')
-  const parts2 = v2.split('.')
-  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-    const part1 = parseInt(parts1[i] || '0')
-    const part2 = parseInt(parts2[i] || '0')
-    if (part1 < part2) {
-      return -1
-    } else if (part1 > part2) {
-      return 1
-    }
-  }
-  return 0
+/**
+ * Validates the given schema path.
+ * Valid paths are in the form of 'schemas/{type}/{version}/{type}_schema.json'
+ * where version is a valid semver version
+ * @param {string} path - The schema path to validate.
+ * @returns {boolean} True if the schema path is valid, false otherwise.
+ */
+function isValidSchema (path) {
+  const parts = path.split('/')
+  return (
+    parts.length === 4 && parts[0] === 'schemas' &&
+    validate(parts[2]) && parts[3].endsWith('.json')
+  )
 }
