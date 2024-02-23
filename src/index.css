@@ -1,7 +1,17 @@
 body {
-  max-width: 80%;
+  max-width: 90%;
   margin: auto;
   --toastify-toast-width: 400px;
+}
+
+Form fieldset {
+  padding-left: 8px;
+  border-left: 2px solid rgba(0, 0, 255, .25);
+  border-radius: 5px;
+
+  &:hover {
+      border-color: rgba(0, 0, 255, .5);
+  }
 }
 
 div.form-group.field.field-integer {
