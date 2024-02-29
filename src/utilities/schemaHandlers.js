@@ -25,7 +25,7 @@ const preProcessHelper = (obj) => {
       }
 
       // if default is {}, expected value is a dictionary of strings
-      if (prop.default && typeof (prop.default) === 'object' && Object.keys(prop.default).length === 0) {
+      if (JSON.stringify(prop.default) === '{}') {
         prop.additionalProperties = { type: 'string' }
       }
 
