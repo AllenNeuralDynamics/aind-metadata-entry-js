@@ -1,11 +1,18 @@
 import { toast } from 'react-toastify'
 
+export const AJV_OPTIONS = {
+  ajvOptionsOverrides: {
+    discriminator: true
+  }
+}
+
 const preProcessHelper = (obj) => {
   /*
   Recursively iterates through schema for rendering purposes
     Makes const fields non-fillable
     Renders dictionaries
     Displays type selection dropdown with better default text
+    Enables validation for discriminator keyword
   */
   Object.keys(obj).forEach(key => {
     if (obj[key] !== null) {
@@ -32,6 +39,18 @@ const preProcessHelper = (obj) => {
             option.title = option.type
           }
         })
+      }
+
+      // enable validation for discriminator keyword
+      if (AJV_OPTIONS.ajvOptionsOverrides.discriminator && prop.discriminator) {
+        // discriminator.mapping is not supported and discriminator property must be `required`
+        // docs: https://ajv.js.org/json-schema.html#discriminator
+        delete prop.discriminator.mapping
+        if (!prop.required) {
+          prop.required = [prop.discriminator.propertyName]
+        } else if (!prop.required.includes(prop.discriminator.propertyName)) {
+          prop.required.push(prop.discriminator.propertyName)
+        }
       }
 
       // recursion
