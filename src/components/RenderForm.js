@@ -49,6 +49,8 @@ function RenderForm (props) {
         uiSchema={uiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker}
+        omitExtraData
+        liveOmit
         noHtml5Validate >
       </Form>
     )
