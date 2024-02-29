@@ -1,4 +1,5 @@
 import { preProcessSchema } from './schemaHandlers'
+import SAMPLE_SCHEMA_DISCRIMINATOR from '../testing/sample-schema-discriminator.json'
 
 const testSchema1 = ({
   type: 'object',
@@ -120,9 +121,19 @@ test('Checks preProcessSchema modifies dictionary additional properties', () => 
   expect(processedSchema2.properties.parameters.additionalProperties).toStrictEqual({ type: 'string' })
 })
 
-test('Checks preProcessSchema add default title to `anyOf` options if needed', () => {
+test('Checks preProcessSchema adds default title to `anyOf` options if needed', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
   expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ title: 'string', type: 'string' }, { title: 'null', type: 'null' }])
+})
+
+test('Checks preProcessSchema removes discriminator.mapping property', () => {
+  const processedSchema = preProcessSchema(SAMPLE_SCHEMA_DISCRIMINATOR)
+  expect(processedSchema.properties.sub_schema.discriminator.mapping).toBe(undefined)
+})
+
+test('Checks preProcessSchema adds discriminator property as required', () => {
+  const processedSchema = preProcessSchema(SAMPLE_SCHEMA_DISCRIMINATOR)
+  expect(processedSchema.properties.sub_schema.required).toStrictEqual([SAMPLE_SCHEMA_DISCRIMINATOR.properties.sub_schema.discriminator.propertyName])
 })
 
 test('Checks preProcessSchema recurses through nested schema as expected', () => {
