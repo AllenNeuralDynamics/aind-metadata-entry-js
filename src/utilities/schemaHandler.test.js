@@ -1,4 +1,5 @@
 import { preProcessSchema } from './schemaHandlers'
+import SAMPLE_SCHEMA_DISCRIMINATOR from '../testing/sample-schema-discriminator.json'
 
 const testSchema1 = ({
   type: 'object',
@@ -28,6 +29,14 @@ const testSchema2 = ({
       title: 'parameters',
       type: 'object',
       default: {}
+    },
+    default_array: {
+      title: 'Test Array',
+      type: 'array',
+      default: [],
+      items: {
+        type: 'string'
+      }
     }
   },
   required: [
@@ -118,11 +127,21 @@ test('Checks preProcessSchema modifies const schema', () => {
 test('Checks preProcessSchema modifies dictionary additional properties', () => {
   const processedSchema2 = preProcessSchema(testSchema2)
   expect(processedSchema2.properties.parameters.additionalProperties).toStrictEqual({ type: 'string' })
+  expect(processedSchema2.properties.default_array.additionalProperties).toBe(undefined)
 })
 
-test('Checks preProcessSchema add default title to `anyOf` options if needed', () => {
+test('Checks preProcessSchema adds default title to `anyOf` options if needed', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
   expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ title: 'string', type: 'string' }, { title: 'null', type: 'null' }])
+})
+
+test('Checks preProcessSchema modifies discriminator property', () => {
+  const processedSchema = preProcessSchema(SAMPLE_SCHEMA_DISCRIMINATOR)
+  const expectedDiscriminator = SAMPLE_SCHEMA_DISCRIMINATOR.properties.sub_schema.discriminator.propertyName
+  expect(processedSchema.properties.sub_schema.discriminator.mapping).toBe(undefined)
+  expect(processedSchema.properties.sub_schema.required).toStrictEqual([expectedDiscriminator])
+  expect(processedSchema.properties.sub_schema_required.required).toContain(expectedDiscriminator)
+  expect(processedSchema.properties.sub_schema.oneOf).toStrictEqual(SAMPLE_SCHEMA_DISCRIMINATOR.properties.sub_schema.oneOf)
 })
 
 test('Checks preProcessSchema recurses through nested schema as expected', () => {
