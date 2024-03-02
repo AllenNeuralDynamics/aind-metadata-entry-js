@@ -29,9 +29,6 @@ function App (props) {
   useEffect(() => {
     async function fetchSchemaList () {
       /*
-  useEffect(() => {
-    async function fetchSchemaList () {
-      /*
             Method to retrieve list of schema links from aws s3 bucket
             UseEffect hook so that dropdowns can be rendered from list
             */
@@ -55,16 +52,12 @@ function App (props) {
 
   const versionCallbackFunction = async (childData) => {
     /**
-  const versionCallbackFunction = async (childData) => {
-    /**
          * Method to retrieve user-selected schema version
          * and replace default form to selected version
          */
     await fetchAndSetSchema(childData)
   }
 
-  const handleRehydrate = async () => {
-    /**
   const handleRehydrate = async () => {
     /**
          * Method to put the user-selected data into state
@@ -79,8 +72,6 @@ function App (props) {
     setData(data)
   }
 
-  const fetchAndSetSchema = async (url) => {
-    /**
   const fetchAndSetSchema = async (url) => {
     /**
          * Method to put the user-selected schema into state
