@@ -16,5 +16,9 @@ body {
     .formSection {
         padding: 15px;
         border: 1px dashed grey;
+
+        .error {
+            color: red;
+        }
     }
 }

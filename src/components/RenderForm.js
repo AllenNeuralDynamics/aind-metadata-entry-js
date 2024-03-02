@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Form from '@rjsf/core'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import validator from '@rjsf/validator-ajv8'
+import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
+import { AJV_OPTIONS } from '../utilities/schemaHandlers'
 
 function RenderForm (props) {
   /*
@@ -17,6 +18,7 @@ function RenderForm (props) {
     Form object
   */
   const { schemaType, schema, formData } = props
+  const validator = customizeValidator(AJV_OPTIONS)
 
   async function saveFilePicker (event) {
     /*
@@ -47,6 +49,8 @@ function RenderForm (props) {
         uiSchema={uiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker}
+        omitExtraData
+        liveOmit
         noHtml5Validate >
       </Form>
     )
