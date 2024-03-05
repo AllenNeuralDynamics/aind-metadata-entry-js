@@ -14,7 +14,7 @@ export default async function RehydrateForm (props) {
     /*
         File system access API to fetch metadata
         */
-    [fileHandle] = await window.showOpenFilePicker()
+    [fileHandle] = await window.showOpenFilePicker({ types: [{ accept: { 'application/json': ['.json'] } }] })
     const file = await fileHandle.getFile()
     const contents = await file.text()
     return contents

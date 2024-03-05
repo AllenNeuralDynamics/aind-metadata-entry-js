@@ -63,7 +63,16 @@ function App (props) {
          * Method to put the user-selected data into state
          * updates schema based on schema version in rehydrate file
          */
-    const data = await RehydrateForm()
+    let data
+    try {
+      data = await RehydrateForm()
+    } catch (err) {
+      if (err.name !== 'AbortError' && err.message !== 'The user aborted a request.') {
+        toast.error('Unable to read file. Please try again.')
+        console.error(err)
+      }
+      return
+    }
     const version = data.schema_version
     const schema = schemaList.find(schema =>
       schema.type === selectedSchemaType && schema.version === version
