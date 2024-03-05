@@ -10,7 +10,7 @@ function Toolbar (props) {
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
-  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaPath, schemaList, handleRehydrate } = props
+  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaPath, schemaList, ParentAutofillCallback } = props
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
 
   const schemaTypes = Array.from(
@@ -28,6 +28,10 @@ function Toolbar (props) {
 
   const handleVersionChange = (event) => {
     ParentVersionCallback(event.target.value)
+  }
+
+  const handleAutofill = (event) => {
+    ParentAutofillCallback()
   }
 
   return (
@@ -62,13 +66,13 @@ function Toolbar (props) {
         ))}
       </select>
       <button
-        title="Autofill with existing data"
+        title="Autofill with existing data from local file"
         type="button"
         className={['btn', 'btn-default', styles.btnRight].join(' ')}
-        onClick={handleRehydrate}
+        onClick={handleAutofill}
         disabled={!selectedSchemaType}
       >
-        Autofill with existing data
+        Autofill from file
       </button>
     </div>
   )
@@ -79,7 +83,7 @@ Toolbar.propTypes = {
   ParentVersionCallback: PropTypes.func.isRequired,
   selectedSchemaPath: PropTypes.string.isRequired,
   schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleRehydrate: PropTypes.func.isRequired
+  ParentAutofillCallback: PropTypes.func.isRequired
 }
 
 export default Toolbar

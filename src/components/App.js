@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import RehydrateForm from './RehydrateForm'
 import { preProcessSchema } from '../utilities/schemaHandlers'
-import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas } from '../utilities/schemaFetchers'
+import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromFormData } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 
@@ -58,10 +58,10 @@ function App (props) {
     await fetchAndSetSchema(childData)
   }
 
-  const handleRehydrate = async () => {
+  const autofillCallbackFunction = async () => {
     /**
-         * Method to put the user-selected data into state
-         * updates schema based on schema version in rehydrate file
+         * Method to read from local JSON file, validate schema type and version,
+         * and update form data and state based on uploaded file.
          */
     let data
     try {
@@ -73,11 +73,12 @@ function App (props) {
       }
       return
     }
-    const version = data.schema_version
-    const schema = schemaList.find(schema =>
-      schema.type === selectedSchemaType && schema.version === version
-    )
-    await fetchAndSetSchema(schema?.path)
+    const schema = findSchemaFromFormData(data, schemaList, selectedSchemaType)
+    if (!schema) {
+      toast.error('Invalid schema type or version. Please check your file.')
+      return
+    }
+    await fetchAndSetSchema(schema.path)
     setData(data)
   }
 
@@ -110,7 +111,7 @@ function App (props) {
           ParentVersionCallback={versionCallbackFunction}
           selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
-          handleRehydrate={handleRehydrate}
+          ParentAutofillCallback={autofillCallbackFunction}
         />
       </div>
       <div className={styles.formSection}>

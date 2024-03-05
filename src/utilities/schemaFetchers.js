@@ -1,5 +1,12 @@
 import { validate, compareVersions } from 'compare-versions'
 
+/**
+ * @typedef {Object} Schema
+ * @property {string} type - The schema type.
+ * @property {string} version - The semver schema version.
+ * @property {string} path - The unique path of the schema.
+ */
+
 export async function fetchSchemasfromS3 (props) {
   /*
     Method to retrieve list of schema links from aws s3 bucket
@@ -18,13 +25,7 @@ export async function fetchSchemasfromS3 (props) {
 }
 
 /**
- * @typedef {Object} Schema
- * @property {string} type - The schema type.
- * @property {string} version - The semver schema version.
- * @property {string} path - The unique path of the schema.
- *
  * Parses and filters the given schemas paths based on a filter list stored in environment.
- *
  * @param {string[]} schemaLinks - The schemas paths to parse and filter.
  * @returns {Schema[]} The parsed and filtered schemas.
  */
@@ -67,4 +68,19 @@ function isValidSchema (path) {
     parts.length === 4 && parts[0] === 'schemas' &&
     validate(parts[2]) && parts[3].endsWith('.json')
   )
+}
+
+/**
+ * Parses the schema type and version from the given form data and finds the matching schema to use.
+ * @param {Object} formData - The form data to parse.
+ * @param {Schema[]} schemaList - The list of schemas to search.
+ * @param {string} selectedSchemaType - The selected schema type to match.
+ * @returns {Schema|undefined} The matching schema or undefined if no matching schema is found.
+ */
+export function findSchemaFromFormData (formData, schemaList, selectedSchemaType) {
+  // The 'describedBy' field should end in {schemaType}.py
+  const schemaType = formData.describedBy?.split('/').pop().split('.').shift()
+  if (!schemaType || schemaType !== selectedSchemaType) return
+  return schemaList.find(schema =>
+    schema.type === schemaType && schema.version === formData.schema_version)
 }
