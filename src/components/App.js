@@ -73,11 +73,12 @@ function App (props) {
       }
       return
     }
-    const schema = findSchemaFromFormData(data, schemaList, selectedSchemaType)
+    const schema = findSchemaFromFormData(data, schemaList)
     if (!schema) {
       toast.error('Invalid schema type or version. Please check your file.')
       return
     }
+    setSelectedSchemaType(schema.type)
     await fetchAndSetSchema(schema.path)
     setData(data)
   }
@@ -110,6 +111,7 @@ function App (props) {
         < Toolbar
           ParentTypeCallback={typeCallbackFunction}
           ParentVersionCallback={versionCallbackFunction}
+          selectedSchemaType={selectedSchemaType}
           selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
           ParentAutofillCallback={autofillCallbackFunction}
