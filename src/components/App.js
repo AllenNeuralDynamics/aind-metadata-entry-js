@@ -88,6 +88,7 @@ function App (props) {
          * defaults to latest schema version
          */
     try {
+      setData(null)
       const response = await fetch(process.env.REACT_APP_S3_URL + '/' + url)
       const schema = await response.json()
       const processedSchema = await schema ? preProcessSchema(schema) : undefined
