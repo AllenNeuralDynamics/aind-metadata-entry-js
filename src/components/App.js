@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
-import RehydrateForm from './RehydrateForm'
+import { readFromJSONFile } from '../utilities/fileUtils'
 import { preProcessSchema } from '../utilities/schemaHandlers'
 import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromFormData } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
@@ -65,7 +65,7 @@ function App (props) {
          */
     let data
     try {
-      data = await RehydrateForm()
+      data = await readFromJSONFile()
     } catch (err) {
       if (err.name !== 'AbortError' && err.message !== 'The user aborted a request.') {
         toast.error('Unable to read file. Please try again.')
