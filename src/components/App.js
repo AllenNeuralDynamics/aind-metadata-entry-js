@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import { readFromJSONFile } from '../utilities/fileUtils'
 import { preProcessSchema } from '../utilities/schemaHandlers'
-import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromFormData } from '../utilities/schemaFetchers'
+import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromData } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 import { nanoid } from 'nanoid'
@@ -64,10 +64,10 @@ function App (props) {
    * and updates form data and state based on uploaded file.
    * Toast promise is used to display pending, success, and error messages.
    */
-  const autofillCallbackFunction = async () => {
+  const handleRehydrate = async () => {
     const autofillFromJSONFile = async () => {
       const data = await readFromJSONFile()
-      const schema = findSchemaFromFormData(data, schemaList)
+      const schema = findSchemaFromData(data, schemaList)
       if (!schema) {
         throw new Error('Invalid schema type or version. Please check your file.')
       }
@@ -124,7 +124,7 @@ function App (props) {
           selectedSchemaType={selectedSchemaType}
           selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
-          ParentAutofillCallback={autofillCallbackFunction}
+          handleRehydrate={handleRehydrate}
         />
       </div>
       <div className={styles.formSection}>

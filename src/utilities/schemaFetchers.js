@@ -72,13 +72,13 @@ function isValidSchema (path) {
 
 /**
  * Parses the schema type and version from the given form data and finds the matching schema to use.
- * @param {Object} formData - The form data to parse.
+ * @param {Object} data - The form data to parse.
  * @param {Schema[]} schemaList - The list of schemas to search.
  * @returns {Schema|undefined} The matching schema or undefined if no matching schema is found.
  */
-export function findSchemaFromFormData (formData, schemaList) {
+export function findSchemaFromData (data, schemaList) {
   // The 'describedBy' field should end in {schemaType}.py
-  const schemaType = formData.describedBy?.split('/').pop().split('.').shift()
+  const schemaType = data.describedBy?.split('/').pop().split('.').shift()
   return schemaList.find(schema =>
-    schema.type === schemaType && schema.version === formData.schema_version)
+    schema.type === schemaType && schema.version === data.schema_version)
 }

@@ -47,3 +47,7 @@ p.col-xs-offset-9 {
 div {
   margin: 5px;
 }
+
+.Toastify__spinner {
+  margin: 0px;
+}

@@ -10,7 +10,7 @@ function Toolbar (props) {
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
-  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaType, selectedSchemaPath, schemaList, ParentAutofillCallback } = props
+  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaType, selectedSchemaPath, schemaList, handleRehydrate } = props
 
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.type))
@@ -31,7 +31,7 @@ function Toolbar (props) {
   }
 
   const handleAutofill = (event) => {
-    ParentAutofillCallback()
+    handleRehydrate()
     event.target.blur()
   }
 
@@ -81,10 +81,10 @@ function Toolbar (props) {
 Toolbar.propTypes = {
   ParentTypeCallback: PropTypes.func.isRequired,
   ParentVersionCallback: PropTypes.func.isRequired,
-  selectedSchemaType: PropTypes.string,
+  selectedSchemaType: PropTypes.string.isRequired,
   selectedSchemaPath: PropTypes.string.isRequired,
   schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  ParentAutofillCallback: PropTypes.func.isRequired
+  handleRehydrate: PropTypes.func.isRequired
 }
 
 export default Toolbar
