@@ -8,6 +8,7 @@ import { preProcessSchema } from '../utilities/schemaHandlers'
 import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromFormData } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
+import { nanoid } from 'nanoid'
 
 function App (props) {
   /*
@@ -58,29 +59,38 @@ function App (props) {
     await fetchAndSetSchema(childData)
   }
 
+  /**
+   * Reads from local JSON file, validates schema type and version,
+   * and updates form data and state based on uploaded file.
+   * Toast promise is used to display pending, success, and error messages.
+   */
   const autofillCallbackFunction = async () => {
-    /**
-         * Method to read from local JSON file, validate schema type and version,
-         * and update form data and state based on uploaded file.
-         */
-    let data
-    try {
-      data = await readFromJSONFile()
-    } catch (err) {
-      if (err.name !== 'AbortError' && err.message !== 'The user aborted a request.') {
-        toast.error('Unable to read file. Please try again.')
-        console.error(err)
+    const autofillFromJSONFile = async () => {
+      const data = await readFromJSONFile()
+      const schema = findSchemaFromFormData(data, schemaList)
+      if (!schema) {
+        throw new Error('Invalid schema type or version. Please check your file.')
       }
-      return
+      setSelectedSchemaType(schema.type)
+      await fetchAndSetSchema(schema.path)
+      setData(data)
     }
-    const schema = findSchemaFromFormData(data, schemaList)
-    if (!schema) {
-      toast.error('Invalid schema type or version. Please check your file.')
-      return
-    }
-    setSelectedSchemaType(schema.type)
-    await fetchAndSetSchema(schema.path)
-    setData(data)
+
+    const toastID = nanoid()
+    toast.promise(
+      autofillFromJSONFile(),
+      {
+        pending: 'Reading file...',
+        success: 'Successfully autofilled existing data from file.',
+        error: { render ({ data }) { return `${data.name}: ${data.message}` } }
+      },
+      { toastId: toastID }
+    ).catch((error) => {
+      // Dismiss error if file upload was cancelled by user
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        toast.dismiss(toastID)
+      }
+    })
   }
 
   const fetchAndSetSchema = async (url) => {

@@ -22,14 +22,17 @@ function Toolbar (props) {
 
   const handleTypeChange = (event) => {
     ParentTypeCallback(event.target.value)
+    event.target.blur()
   }
 
   const handleVersionChange = (event) => {
     ParentVersionCallback(event.target.value)
+    event.target.blur()
   }
 
   const handleAutofill = (event) => {
     ParentAutofillCallback()
+    event.target.blur()
   }
 
   return (
