@@ -13,42 +13,77 @@ describe('Toolbar component', () => {
     render(<Toolbar
       ParentTypeCallback={nullCallback}
       ParentVersionCallback={nullCallback}
+      selectedSchemaType=''
       selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)
     expect(screen.getByTitle('Select a schema')).toBeInTheDocument()
     expect(screen.getByTitle('Select a version')).toBeInTheDocument()
-    expect(screen.getByTitle('Autofill with existing data')).toBeInTheDocument()
+    expect(screen.getByTitle('Autofill with existing data from local file')).toBeInTheDocument()
     expect(screen.getByTitle('Select a schema')).toBeEnabled()
     expect(screen.getByTitle('Select a version')).toBeDisabled()
-    expect(screen.getByTitle('Autofill with existing data')).toBeDisabled()
+    expect(screen.getByTitle('Autofill with existing data from local file')).toBeEnabled()
   })
 
-  it('enables version selection dropdown and autofill/ upload button when a schema type is chosen', () => {
+  it('calls ParentTypeCallback and enables version selection dropdown when a schema type is chosen', () => {
+    const mockTypeCallback = jest.fn()
+    const sampleSchemaType = 'subject'
+    const newSchemaType = 'instrument'
     render(<Toolbar
-      ParentTypeCallback={nullCallback}
+      ParentTypeCallback={mockTypeCallback}
       ParentVersionCallback={nullCallback}
+      selectedSchemaType={sampleSchemaType}
       selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)
-    fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: 'instrument' } })
+    fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: newSchemaType } })
     expect(screen.getByTitle('Select a version')).toBeEnabled()
-    expect(screen.getByTitle('Autofill with existing data')).toBeEnabled()
+    expect(mockTypeCallback).toHaveBeenCalledWith(newSchemaType)
   })
 
   it('has schema versions sorted by latest-first semantic version', () => {
+    const sampleSchemaType = 'instrument'
     render(<Toolbar
       ParentTypeCallback={nullCallback}
       ParentVersionCallback={nullCallback}
+      selectedSchemaType={sampleSchemaType}
       selectedSchemaPath=''
       schemaList={sampleSchemaList}
       handleRehydrate={nullCallback}
     />)
-    fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: 'instrument' } })
-
     const schemaVersionsList = [...screen.getByTitle('Select a version').options].map((option) => option.text)
     expect(schemaVersionsList).toStrictEqual(sampleSortedVersionListInstrument)
+  })
+
+  it('calls ParentVersionCallback when a schema version is chosen', () => {
+    const mockVersionCallback = jest.fn()
+    const sampleSchemaType = 'instrument'
+    const sampleSchemaPath = 'schemas/instrument/0.10.0/instrument_schema.json'
+    render(<Toolbar
+      ParentTypeCallback={nullCallback}
+      ParentVersionCallback={mockVersionCallback}
+      selectedSchemaType={sampleSchemaType}
+      selectedSchemaPath=''
+      schemaList={sampleSchemaList}
+      handleRehydrate={nullCallback}
+    />)
+    fireEvent.change(screen.getByTitle('Select a version'), { target: { value: sampleSchemaPath } })
+    expect(mockVersionCallback).toHaveBeenCalledWith(sampleSchemaPath)
+  })
+
+  it('calls handleRehydrate when autofill button is clicked', () => {
+    const mockRehydrateCallback = jest.fn()
+    render(<Toolbar
+      ParentTypeCallback={nullCallback}
+      ParentVersionCallback={nullCallback}
+      selectedSchemaType=''
+      selectedSchemaPath=''
+      schemaList={sampleSchemaList}
+      handleRehydrate={mockRehydrateCallback}
+    />)
+    fireEvent.click(screen.getByTitle('Autofill with existing data from local file'))
+    expect(mockRehydrateCallback).toHaveBeenCalled()
   })
 })
