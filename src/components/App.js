@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
-import RehydrateForm from './RehydrateForm'
+import { readFromJSONFile } from '../utilities/fileUtils'
 import { preProcessSchema } from '../utilities/schemaHandlers'
-import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas } from '../utilities/schemaFetchers'
+import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromData } from '../utilities/schemaFetchers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
+import { nanoid } from 'nanoid'
 
 function App (props) {
   /*
@@ -58,18 +59,38 @@ function App (props) {
     await fetchAndSetSchema(childData)
   }
 
+  /**
+   * Reads from local JSON file, validates schema type and version,
+   * and updates form data and state based on uploaded file.
+   * Toast promise is used to display pending, success, and error messages.
+   */
   const handleRehydrate = async () => {
-    /**
-         * Method to put the user-selected data into state
-         * updates schema based on schema version in rehydrate file
-         */
-    const data = await RehydrateForm()
-    const version = data.schema_version
-    const schema = schemaList.find(schema =>
-      schema.type === selectedSchemaType && schema.version === version
-    )
-    await fetchAndSetSchema(schema?.path)
-    setData(data)
+    const autofillFromJSONFile = async () => {
+      const data = await readFromJSONFile()
+      const schema = findSchemaFromData(data, schemaList)
+      if (!schema) {
+        throw new Error('Invalid schema type or version. Please check your file.')
+      }
+      setSelectedSchemaType(schema.type)
+      await fetchAndSetSchema(schema.path)
+      setData(data)
+    }
+
+    const toastID = nanoid()
+    toast.promise(
+      autofillFromJSONFile(),
+      {
+        pending: 'Reading file...',
+        success: 'Successfully autofilled existing data from file.',
+        error: { render ({ data }) { return `${data.name}: ${data.message}` } }
+      },
+      { toastId: toastID }
+    ).catch((error) => {
+      // Dismiss error if file upload was cancelled by user
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        toast.dismiss(toastID)
+      }
+    })
   }
 
   const fetchAndSetSchema = async (url) => {
@@ -78,6 +99,7 @@ function App (props) {
          * defaults to latest schema version
          */
     try {
+      setData(null)
       const response = await fetch(process.env.REACT_APP_S3_URL + '/' + url)
       const schema = await response.json()
       const processedSchema = await schema ? preProcessSchema(schema) : undefined
@@ -99,6 +121,7 @@ function App (props) {
         < Toolbar
           ParentTypeCallback={typeCallbackFunction}
           ParentVersionCallback={versionCallbackFunction}
+          selectedSchemaType={selectedSchemaType}
           selectedSchemaPath={selectedSchemaPath}
           schemaList={schemaList}
           handleRehydrate={handleRehydrate}
