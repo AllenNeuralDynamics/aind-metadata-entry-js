@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { compareVersions } from 'compare-versions'
@@ -10,8 +10,8 @@ function Toolbar (props) {
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
-  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaPath, schemaList, handleRehydrate } = props
-  const [selectedSchemaType, setSelectedSchemaType] = useState('')
+  
+  const { ParentTypeCallback, ParentVersionCallback, selectedSchemaType, selectedSchemaPath, schemaList, handleRehydrate } = props
 
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.type))
@@ -23,11 +23,17 @@ function Toolbar (props) {
 
   const handleTypeChange = (event) => {
     ParentTypeCallback(event.target.value)
-    setSelectedSchemaType(event.target.value)
+    event.target.blur()
   }
 
   const handleVersionChange = (event) => {
     ParentVersionCallback(event.target.value)
+    event.target.blur()
+  }
+
+  const handleAutofill = (event) => {
+    handleRehydrate()
+    event.target.blur()
   }
 
   return (
@@ -62,13 +68,12 @@ function Toolbar (props) {
         ))}
       </select>
       <button
-        title="Autofill with existing data"
+        title="Autofill with existing data from local file"
         type="button"
         className={['btn', 'btn-default', styles.btnRight].join(' ')}
-        onClick={handleRehydrate}
-        disabled={!selectedSchemaType}
+        onClick={handleAutofill}
       >
-        Autofill with existing data
+        Autofill from file
       </button>
     </div>
   )
@@ -77,6 +82,7 @@ function Toolbar (props) {
 Toolbar.propTypes = {
   ParentTypeCallback: PropTypes.func.isRequired,
   ParentVersionCallback: PropTypes.func.isRequired,
+  selectedSchemaType: PropTypes.string.isRequired,
   selectedSchemaPath: PropTypes.string.isRequired,
   schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleRehydrate: PropTypes.func.isRequired

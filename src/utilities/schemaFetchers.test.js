@@ -1,4 +1,4 @@
-import { parseAndFilterSchemas } from './schemaFetchers'
+import { parseAndFilterSchemas, findSchemaFromData } from './schemaFetchers'
 
 const SAMPLE_VALID_SCHEMA_LINKS = [
   'schemas/test_type_1/1.0.0/test_type_1_schema.json',
@@ -18,6 +18,34 @@ const SAMPLE_INVALID_SCHEMA_LINKS = [
   'schemas/1.0.0/test_schema.json',
   'test_schema.json',
   'index.html'
+]
+
+const SAMPLE_VALID_FORM_DATAS = [
+  {
+    describedBy: 'https://raw.githubusercontent.com/Repo/src/schemas/test_type_1.py',
+    schema_version: '1.0.0'
+  },
+  {
+    describedBy: 'test_type_1.py',
+    schema_version: '1.0.0'
+  }
+]
+const SAMPLE_INVALID_FORM_DATAS = [
+  {
+    describedBy: 'https://raw.githubusercontent.com/Repo/src/schemas/invalid_schema_type.py',
+    schema_version: '1.0.0'
+  },
+  {
+    describedBy: 'https://raw.githubusercontent.com/Repo/src/schemas/test_type_1.py',
+    schema_version: '10.0.0'
+  },
+  {
+    describedBy: 'https://raw.githubusercontent.com/Repo/src/schemas/test_type_1.py'
+  },
+  {
+    schema_version: '1.0.0'
+  },
+  {}
 ]
 
 describe('parseAndFilterSchemas', () => {
@@ -48,5 +76,21 @@ describe('parseAndFilterSchemas', () => {
     process.env.REACT_APP_FILTER_SCHEMAS = JSON.stringify(['test_type_1'])
     const resultSchemas = parseAndFilterSchemas(SAMPLE_VALID_SCHEMA_LINKS)
     expect(resultSchemas).toHaveLength(1)
+  })
+})
+
+describe('findSchemaFromFormData', () => {
+  it('returns the matching schema', () => {
+    for (const formData of SAMPLE_VALID_FORM_DATAS) {
+      const resultSchema = findSchemaFromData(formData, EXPECTED_PARSED_SCHEMAS)
+      expect(resultSchema).toStrictEqual(EXPECTED_PARSED_SCHEMAS[0])
+    }
+  })
+
+  it('returns undefined if no matching schema is found', () => {
+    for (const formData of SAMPLE_INVALID_FORM_DATAS) {
+      const resultSchema = findSchemaFromData(formData, EXPECTED_PARSED_SCHEMAS)
+      expect(resultSchema).toBeUndefined()
+    }
   })
 })

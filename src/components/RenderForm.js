@@ -55,7 +55,7 @@ function RenderForm (props) {
       </Form>
     )
   } else {
-    return (<div> Please select a schema from the dropdown above. </div>)
+    return (<div>Please select a schema from the dropdown above or autofill data from an existing file.</div>)
   }
 }
 
