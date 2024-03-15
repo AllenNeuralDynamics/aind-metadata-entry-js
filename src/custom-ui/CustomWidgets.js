@@ -1,11 +1,11 @@
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
-import RadioWidget from '@rjsf/core/lib/components/widgets/RadioWidget'
-import CheckboxWidget from '@rjsf/core/lib/components/widgets/CheckboxWidget'
+import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
+import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
+import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
