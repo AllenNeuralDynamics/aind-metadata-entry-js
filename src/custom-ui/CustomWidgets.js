@@ -1,10 +1,11 @@
 import Datetime from 'react-datetime'
 import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
-import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
-import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
+import RadioWidget from '@rjsf/core/lib/components/widgets/RadioWidget'
+import CheckboxWidget from '@rjsf/core/lib/components/widgets/CheckboxWidget'
 import React from 'react'
 import PropTypes from 'prop-types'
+import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -41,4 +42,25 @@ const CustomCheckboxWidget = (props) => {
   }
 }
 
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget }
+/**
+ * Custom text widget that grays out const fields (readonly) and
+ * autofills the field with the const value
+ * @param {*} props RJSF widget props
+ * @returns A custom text widget
+ */
+const CustomTextWidget = (props) => {
+  if (props.schema.const !== undefined) {
+    const newProps = {
+      ...props,
+      value: props.schema.const,
+      readonly: true
+    }
+    return <TextWidget {...newProps} />
+  }
+  return <TextWidget {...props} />
+}
+CustomTextWidget.propTypes = {
+  schema: PropTypes.object
+}
+
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }

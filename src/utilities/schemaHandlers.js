@@ -9,7 +9,7 @@ export const AJV_OPTIONS = {
 const preProcessHelper = (obj) => {
   /*
   Recursively iterates through schema for rendering purposes
-    Makes const fields non-fillable
+    Specifies type for null consts
     Renders dictionaries
     Displays type selection dropdown with better default text
     Enables validation for discriminator keyword
@@ -18,10 +18,11 @@ const preProcessHelper = (obj) => {
     if (obj[key] !== null) {
       const prop = obj[key]
 
-      // grays out const fields (readOnly) and autofills the field with the const value (default)
-      if (prop.const !== undefined) {
-        prop.readOnly = true
-        prop.default = prop.const
+      // Specify type for null consts, otherwise we get undefined type warnings
+      // Note: We use a custom text widget to autofill the const value
+      // and set the field as readonly.
+      if (prop.const === null) {
+        prop.type = 'null'
       }
 
       // if default is {}, expected value is a dictionary of strings
