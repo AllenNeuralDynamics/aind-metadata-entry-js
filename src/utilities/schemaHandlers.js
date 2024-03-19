@@ -18,11 +18,12 @@ const preProcessHelper = (obj) => {
     if (obj[key] !== null) {
       const prop = obj[key]
 
-      // Specify type for null consts, otherwise we get undefined type warnings
-      // Note: We use a custom text widget to autofill the const value
-      // and set the field as readonly.
+      // Specify type for null consts as nullable string,
+      // otherwise we get undefined type warnings
+      // Note: We use a custom text widget to autofill the
+      // const value and set the field as readonly.
       if (prop.const === null) {
-        prop.type = 'null'
+        prop.type = ['string', 'null']
       }
 
       // if default is {}, expected value is a dictionary of strings
