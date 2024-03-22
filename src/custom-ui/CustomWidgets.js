@@ -4,8 +4,9 @@ import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
+import { toConstant } from '@rjsf/utils'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -51,19 +52,15 @@ const CustomCheckboxWidget = (props) => {
  * @returns A custom text widget
  */
 const CustomTextWidget = (props) => {
-  const { schema, value, onChange, readonly } = props
-  useEffect(() => {
-    if (schema.const !== undefined && value !== schema.const) {
-      onChange(schema.const)
+  // useLayoutEffect to run effect runs before browser repaints screen (reduce flickering)
+  useLayoutEffect(() => {
+    if (props.schema.const !== undefined) {
+      props.onChange(toConstant(props.schema))
     }
-  }, [schema.const, onChange, value])
-  if (schema.const === null) {
-    return null
-  }
-  return <TextWidget{...props}
-    readonly={schema.const ? true : readonly}
-    onChange={schema.const ? () => {} : onChange}
-    value={schema.const !== undefined ? schema.const : value}
+  }, [props])
+  return <TextWidget {...props}
+    readonly={props.schema.const !== undefined || props.readonly}
+    value={props.schema.const !== undefined ? toConstant(props.schema) : props.value}
   />
 }
 CustomTextWidget.propTypes = {
