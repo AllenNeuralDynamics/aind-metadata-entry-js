@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { guessType, deepEquals } from '@rjsf/utils'
 
 export const AJV_OPTIONS = {
   ajvOptionsOverrides: {
@@ -18,12 +19,12 @@ const preProcessHelper = (obj) => {
     if (obj[key] !== null) {
       const prop = obj[key]
 
-      // Specify type for null consts as nullable string,
-      // otherwise we get undefined type warnings
-      // Note: We use a custom text widget to autofill the
-      // const value and set the field as readonly.
-      if (prop.const === null) {
-        prop.type = ['string', 'null']
+      // Need to explicitly specify missing type for consts (bug in pydantic, may be fixed in next release)
+      // If default is undefined or not matching const value, set to const
+      // Note: We use a custom text widget to autofill the const value and set the field as readonly.
+      if (prop.const !== undefined) {
+        if (prop.type === undefined) { prop.type = guessType(prop.const) }
+        if (!deepEquals(prop.default, prop.const)) { prop.default = prop.const }
       }
 
       // if default is {}, expected value is a dictionary of strings
