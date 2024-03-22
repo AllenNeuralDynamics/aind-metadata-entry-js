@@ -9,6 +9,37 @@ const testSchema1 = ({
       const: 'https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.json',
       description: 'The URL reference to the schema.',
       title: 'Described by'
+    },
+    schema_version: {
+      const: '1.0.0',
+      default: '1.0.0',
+      description: 'The version of the schema.',
+      title: 'Schema Version'
+    },
+    number_const: {
+      title: 'Number with missing type',
+      const: 1,
+      default: 1
+    },
+    boolean_const: {
+      title: 'Boolean with missing type',
+      const: true,
+      default: true
+    },
+    object_const: {
+      title: 'Object with missing type',
+      const: { key: 'value' },
+      default: { key: 'value' }
+    },
+    array_const: {
+      title: 'Array with missing type',
+      const: [1, 2, 3],
+      default: [1, 2, 3]
+    },
+    null_const: {
+      title: 'Null with missing type',
+      const: null,
+      default: null
     }
   }
 })
@@ -118,10 +149,21 @@ const testSchema4 = ({
   ]
 })
 
-test('Checks preProcessSchema modifies const schema', () => {
+test('Checks preProcessSchema modifies const schema to add missing default or type', () => {
+  const expectedTypes = [
+    { key: 'describedBy', type: 'string' },
+    { key: 'schema_version', type: 'string' },
+    { key: 'number_const', type: 'number' },
+    { key: 'boolean_const', type: 'boolean' },
+    { key: 'object_const', type: 'object' },
+    { key: 'array_const', type: 'array' },
+    { key: 'null_const', type: 'null' }
+  ]
   const processedSchema1 = preProcessSchema(testSchema1)
   expect(processedSchema1.properties.describedBy.default).toBe(testSchema1.properties.describedBy.const)
-  expect(processedSchema1.properties.describedBy.readOnly).toBe(true)
+  for (const expectedType of expectedTypes) {
+    expect(processedSchema1.properties[expectedType.key].type).toBe(expectedType.type)
+  }
 })
 
 test('Checks preProcessSchema modifies dictionary additional properties', () => {
@@ -146,7 +188,6 @@ test('Checks preProcessSchema modifies discriminator property', () => {
 
 test('Checks preProcessSchema recurses through nested schema as expected', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
-  expect(processedSchema3.properties.resume.properties.education.readOnly).toBe(true)
   expect(processedSchema3.properties.resume.properties.education.default).toBe(testSchema3.properties.resume.properties.education.const)
   expect(processedSchema3.definitions.PastExperience.key_points.additionalProperties).toStrictEqual({ type: 'string' })
 })

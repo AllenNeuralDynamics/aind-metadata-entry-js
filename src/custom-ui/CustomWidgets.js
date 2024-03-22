@@ -59,7 +59,7 @@ const CustomTextWidget = (props) => {
     }
   }, [props])
   return <TextWidget {...props}
-    readonly={props.schema.const !== undefined || props.readonly}
+    readonly={props.schema.const !== undefined ?? props.readonly}
     value={props.schema.const !== undefined ? toConstant(props.schema) : props.value}
   />
 }

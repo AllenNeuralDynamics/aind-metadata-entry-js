@@ -51,11 +51,17 @@
   "jest": {
     "coverageThreshold": {
       "global": {
-        "statements": 58,
-        "branches": 55,
-        "functions": 68,
-        "lines": 58
+        "statements": 62,
+        "branches": 61,
+        "functions": 70,
+        "lines": 62
       }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@rjsf)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     }
   },
   "eslintConfig": {
