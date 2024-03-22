@@ -45,8 +45,7 @@ const CustomCheckboxWidget = (props) => {
 
 /**
  * Custom text widget to enable custom behavior for constants.
- * If string const: update formData value to const value, and return readonly text widget
- * If null const: update formData value to null and return null
+ * If const, update formData value to const value using onChange callback, render as readonly (grayed out)
  * Otherwise, return default text widget
  * @param {*} props RJSF widget props
  * @returns A custom text widget
