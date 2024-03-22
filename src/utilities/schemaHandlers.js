@@ -10,7 +10,7 @@ export const AJV_OPTIONS = {
 const preProcessHelper = (obj) => {
   /*
   Recursively iterates through schema for rendering purposes
-    Specifies type for null consts
+    Specifies type for consts if missing
     Renders dictionaries
     Displays type selection dropdown with better default text
     Enables validation for discriminator keyword
