@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { guessType, deepEquals } from '@rjsf/utils'
 
 export const AJV_OPTIONS = {
   ajvOptionsOverrides: {
@@ -9,7 +10,7 @@ export const AJV_OPTIONS = {
 const preProcessHelper = (obj) => {
   /*
   Recursively iterates through schema for rendering purposes
-    Makes const fields non-fillable
+    Specifies type for consts if missing
     Renders dictionaries
     Displays type selection dropdown with better default text
     Enables validation for discriminator keyword
@@ -18,10 +19,12 @@ const preProcessHelper = (obj) => {
     if (obj[key] !== null) {
       const prop = obj[key]
 
-      // grays out const fields (readOnly) and autofills the field with the const value (default)
+      // Need to explicitly specify missing type for consts (bug in pydantic, may be fixed in next release)
+      // If default is undefined or not matching const value, set to const
+      // Note: We use a custom text widget to autofill the const value and set the field as readonly.
       if (prop.const !== undefined) {
-        prop.readOnly = true
-        prop.default = prop.const
+        if (prop.type === undefined) { prop.type = guessType(prop.const) }
+        if (!deepEquals(prop.default, prop.const)) { prop.default = prop.const }
       }
 
       // if default is {}, expected value is a dictionary of strings

@@ -3,8 +3,10 @@ import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
-import React from 'react'
+import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
+import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
+import { toConstant } from '@rjsf/utils'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -41,4 +43,30 @@ const CustomCheckboxWidget = (props) => {
   }
 }
 
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget }
+/**
+ * Custom text widget to enable custom behavior for constants.
+ * If const, update formData value to const value using onChange callback, render as readonly (grayed out)
+ * Otherwise, return default text widget
+ * @param {*} props RJSF widget props
+ * @returns A custom text widget
+ */
+const CustomTextWidget = (props) => {
+  // useLayoutEffect to run effect runs before browser repaints screen (reduce flickering)
+  useLayoutEffect(() => {
+    if (props.schema.const !== undefined) {
+      props.onChange(toConstant(props.schema))
+    }
+  }, [props])
+  return <TextWidget {...props}
+    readonly={props.schema.const !== undefined ?? props.readonly}
+    value={props.schema.const !== undefined ? toConstant(props.schema) : props.value}
+  />
+}
+CustomTextWidget.propTypes = {
+  value: PropTypes.any,
+  onChange: PropTypes.func,
+  schema: PropTypes.object,
+  readonly: PropTypes.bool
+}
+
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }

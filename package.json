@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.1.2",
-    "@rjsf/core": "^5.13.0",
+    "@rjsf/core": "^5.17.1",
     "@rjsf/material-ui": "^5.13.0",
     "@rjsf/utils": "^5.13.0",
     "@rjsf/validator-ajv8": "^5.13.0",
@@ -51,11 +51,17 @@
   "jest": {
     "coverageThreshold": {
       "global": {
-        "statements": 58,
-        "branches": 55,
-        "functions": 68,
-        "lines": 58
+        "statements": 62,
+        "branches": 61,
+        "functions": 70,
+        "lines": 62
       }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@rjsf)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     }
   },
   "eslintConfig": {
