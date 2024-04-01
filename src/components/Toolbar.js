@@ -10,7 +10,6 @@ function Toolbar (props) {
      * Based on selected schema, renders a dropdown menu for version-selection.
      * Gives user the option to autofill the form with previously input data
      */
-  
   const { ParentTypeCallback, ParentVersionCallback, selectedSchemaType, selectedSchemaPath, schemaList, handleRehydrate } = props
 
   const schemaTypes = Array.from(
