@@ -45,27 +45,35 @@ const CustomCheckboxWidget = (props) => {
 /**
  * Custom text widget to enable custom behavior for constants.
  * If const, update formData value to const value using onChange callback, render as readonly (grayed out)
+ * If null const, return null (do not display text input)
  * Otherwise, return default text widget
  * @param {*} props RJSF widget props
  * @returns A custom text widget
  */
 const CustomTextWidget = (props) => {
+  const { schema, onChange, value } = props
   // useLayoutEffect to run effect runs before browser repaints screen (reduce flickering)
   useLayoutEffect(() => {
-    if (props.schema.const !== undefined && props.value !== props.schema.const) {
-      props.onChange(props.schema.const)
+    if (schema.const !== undefined && value !== schema.const) {
+      onChange(schema.const)
     }
-  }, [props])
-  return <TextWidget {...props}
-    readonly={props.schema.const !== undefined ?? props.readonly}
-    value={props.schema.const ?? props.value}
+  }, [onChange, schema.const, value])
+
+  if (schema.const === null) {
+    return null
+  } else if (schema.const) {
+    return <TextWidget {...props}
+    readonly={true}
+    value={schema.const}
   />
+  } else {
+    return <TextWidget {...props}/>
+  }
 }
 CustomTextWidget.propTypes = {
   value: PropTypes.any,
   onChange: PropTypes.func,
-  schema: PropTypes.object,
-  readonly: PropTypes.bool
+  schema: PropTypes.object
 }
 
 export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }
