@@ -6,7 +6,6 @@ import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
-import { toConstant } from '@rjsf/utils'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -53,13 +52,13 @@ const CustomCheckboxWidget = (props) => {
 const CustomTextWidget = (props) => {
   // useLayoutEffect to run effect runs before browser repaints screen (reduce flickering)
   useLayoutEffect(() => {
-    if (props.schema.const !== undefined) {
-      props.onChange(toConstant(props.schema))
+    if (props.schema.const !== undefined && props.value !== props.schema.const) {
+      props.onChange(props.schema.const)
     }
   }, [props])
   return <TextWidget {...props}
     readonly={props.schema.const !== undefined ?? props.readonly}
-    value={props.schema.const !== undefined ? toConstant(props.schema) : props.value}
+    value={props.schema.const ?? props.value}
   />
 }
 CustomTextWidget.propTypes = {
