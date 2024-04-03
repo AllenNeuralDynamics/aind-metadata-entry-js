@@ -6,7 +6,6 @@ import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
-import { toConstant } from '@rjsf/utils'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
@@ -46,27 +45,35 @@ const CustomCheckboxWidget = (props) => {
 /**
  * Custom text widget to enable custom behavior for constants.
  * If const, update formData value to const value using onChange callback, render as readonly (grayed out)
+ * If null const, return null (do not display text input)
  * Otherwise, return default text widget
  * @param {*} props RJSF widget props
  * @returns A custom text widget
  */
 const CustomTextWidget = (props) => {
+  const { schema, onChange, value } = props
   // useLayoutEffect to run effect runs before browser repaints screen (reduce flickering)
   useLayoutEffect(() => {
-    if (props.schema.const !== undefined) {
-      props.onChange(toConstant(props.schema))
+    if (schema.const !== undefined && value !== schema.const) {
+      onChange(schema.const)
     }
-  }, [props])
-  return <TextWidget {...props}
-    readonly={props.schema.const !== undefined ?? props.readonly}
-    value={props.schema.const !== undefined ? toConstant(props.schema) : props.value}
+  }, [onChange, schema.const, value])
+
+  if (schema.const === null) {
+    return null
+  } else if (schema.const) {
+    return <TextWidget {...props}
+    readonly={true}
+    value={schema.const}
   />
+  } else {
+    return <TextWidget {...props}/>
+  }
 }
 CustomTextWidget.propTypes = {
   value: PropTypes.any,
   onChange: PropTypes.func,
-  schema: PropTypes.object,
-  readonly: PropTypes.bool
+  schema: PropTypes.object
 }
 
 export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }

@@ -23,7 +23,11 @@ const preProcessHelper = (obj) => {
       // If default is undefined or not matching const value, set to const
       // Note: We use a custom text widget to autofill the const value and set the field as readonly.
       if (prop.const !== undefined) {
-        if (prop.type === undefined) { prop.type = guessType(prop.const) }
+        if (prop.type === undefined) {
+          const constType = guessType(prop.const)
+          // use nullable string type for null consts to enable allOf defaults
+          prop.type = constType === 'null' ? ['null', 'string'] : constType
+        }
         if (!deepEquals(prop.default, prop.const)) { prop.default = prop.const }
       }
 
