@@ -17,7 +17,8 @@ const helpToast = (
     </div>
     <br />
     <h4>Getting started</h4>
-    Use this tool to create metadata files based on {getLinkAsButton(Config.AIND_DATA_SCHEMA_REPO_URL, 'aind-data-schema')}.
+    Use this tool to create metadata files based on {getLinkAsButton(Config.AIND_DATA_SCHEMA_REPO_URL, 'aind-data-schema')}
+    &nbsp;&#40;{getLinkAsButton(Config.AIND_DATA_SCHEMA_READTHEDOCS_URL, 'readthedocs')}&#41;.
     <ul>
       <li>Select a schema from the dropdown. The latest version will be loaded as a fillable form.</li>
       <li>Or, use the &apos;Autofill from file&apos; button to load an existing metadata file (must be JSON).</li>
