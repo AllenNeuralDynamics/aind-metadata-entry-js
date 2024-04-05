@@ -6,6 +6,7 @@ import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
+import { toConstant } from '@rjsf/utils'
 
 const CustomTimeWidget = (props) => {
   const onChange = (selectedDate) => {
