@@ -7,6 +7,38 @@ export const AJV_OPTIONS = {
   }
 }
 
+const processAnyOf = (prop, allowedTypes) => {
+  /*
+  Handles AnyOfs in schema.
+  Removes unneccessary dropdowns for basic field types.
+  Otherwise, adds default titles to dropdown of allowed types/subschemas
+  */
+  const isAllowedType = prop.anyOf.some(option => allowedTypes.includes(option.type))
+  const isOptional = prop.anyOf.some(option => option.type === 'null')
+  const isDecimal = prop.anyOf.some(option => option.type === 'number' || option.type === 'string')
+
+  // Replace dropdown with input box for required decimals
+  if (isDecimal && !isOptional) {
+    prop.type = 'string'
+    delete prop.anyOf
+  // Replace dropdown with nullable input box for optional basic fields
+  } else if ((isDecimal || isAllowedType) && isOptional) {
+    prop.type = allowedTypes.filter(type => prop.anyOf.some(option => option.type === type))
+    prop.type = prop.type.concat('null')
+    delete prop.anyOf
+  } else {
+    // Add default titles to dropdown of allowed types/subschemas
+    Object.values(prop.anyOf).forEach(option => {
+      // if the allowed type/ subschema is not a ref nor has a title,
+      // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
+      // we can convert to display the type name instead
+      if (!option.$ref && option.type && !option.title) {
+        option.title = option.type
+      }
+    })
+  }
+}
+
 const preProcessHelper = (obj) => {
   /*
   Recursively iterates through schema for rendering purposes
@@ -36,16 +68,9 @@ const preProcessHelper = (obj) => {
         prop.additionalProperties = { type: 'string' }
       }
 
-      // add default titles to dropdown of allowed types/ subschemas
       if (prop.anyOf) {
-        Object.values(prop.anyOf).forEach(option => {
-          // if the allowed type/ subschema is not a ref nor has a title,
-          // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
-          // we can convert to display the type name instead
-          if (!option.$ref && option.type && !option.title) {
-            option.title = option.type
-          }
-        })
+        const allowedTypes = ['string', 'number', 'boolean', 'integer']
+        processAnyOf(prop, allowedTypes)
       }
 
       // enable validation for discriminator keyword

@@ -1,5 +1,7 @@
 import { preProcessSchema } from './schemaHandlers'
 import SAMPLE_SCHEMA_DISCRIMINATOR from '../testing/sample-schema-discriminator.json'
+import { processDependencies } from '@rjsf/utils/lib/schema/retrieveSchema'
+import { toBeInvalid } from '@testing-library/jest-dom/matchers'
 
 const testSchema1 = ({
   type: 'object',
@@ -103,13 +105,28 @@ const testSchema3 = ({
           const: 'Farmington University',
           type: 'string'
         },
+        gpa: {
+          title: 'GPA',
+          anyOf: [
+            {
+              type: 'string'
+            },
+            {
+              type: 'number'
+            },
+          ]
+        },
         past_experiences: {
           title: 'Past Experiences',
-          type: 'array',
-          items: {
-            $ref: '#/definitions/PastExperience'
-          }
-        }
+          anyOf: [
+            {
+               "$ref": '#/definitions/PastExperience'
+            },
+            {
+               "type": "null"
+            }
+         ],
+      },
       }
     }
   },
@@ -149,6 +166,7 @@ const testSchema4 = ({
   ]
 })
 
+
 test('Checks preProcessSchema modifies const schema to add missing default or type', () => {
   const expectedTypes = [
     { key: 'describedBy', type: 'string' },
@@ -172,9 +190,13 @@ test('Checks preProcessSchema modifies dictionary additional properties', () => 
   expect(processedSchema2.properties.default_array.additionalProperties).toBe(undefined)
 })
 
-test('Checks preProcessSchema adds default title to `anyOf` options if needed', () => {
+test('Checks preProcessSchema handles `anyOf` as needed', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
-  expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ title: 'string', type: 'string' }, { title: 'null', type: 'null' }])
+  expect(processedSchema3.properties.email.type).toStrictEqual(['string', 'null'])
+  expect(processedSchema3.properties.resume.properties.gpa.type).toStrictEqual('string')
+  expect(processedSchema3.properties.email.type.anyOf).toBeFalsy
+  expect(processedSchema3.properties.resume.properties.past_experiences.anyOf).toStrictEqual([ { '$ref': '#/definitions/PastExperience' }, { title: 'null', type: 'null' } ])
+  
 })
 
 test('Checks preProcessSchema modifies discriminator property', () => {
