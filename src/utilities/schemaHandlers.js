@@ -10,18 +10,23 @@ export const AJV_OPTIONS = {
 const processAnyOf = (prop, allowedTypes) => {
   /*
   Handles AnyOfs in schema.
-  Removes unneccessary dropdowns for basic field types.
+  Removes unneccessary dropdowns for json schema primitive types.
   Otherwise, adds default titles to dropdown of allowed types/subschemas
   */
   const isAllowedType = prop.anyOf.some(option => allowedTypes.includes(option.type))
   const isOptional = prop.anyOf.some(option => option.type === 'null')
   const isDecimal = prop.anyOf.some(option => option.type === 'number') && prop.anyOf.some(option => option.type === 'string')
-
   // Replace dropdown with input box
-  if (isDecimal || isAllowedType) {
-    prop.type = allowedTypes.filter(type => prop.anyOf.some(option => option.type === type))
+  if (prop.anyOf.length <= 3 && isDecimal) {
+    prop.type = 'number'
     // if optional, still allow nullable input
-    if (isOptional) { prop.type = prop.type.concat('null') }
+    if (isOptional) {
+      prop.type = ['number', 'null']
+    }
+    delete prop.anyOf
+  } else if (prop.anyOf.length === 2 && isAllowedType && isOptional) {
+    prop.type = allowedTypes.filter(type => prop.anyOf.some(option => option.type === type))
+    prop.type = prop.type.concat('null')
     delete prop.anyOf
   } else {
     // Add default titles to dropdown of allowed types/subschemas
