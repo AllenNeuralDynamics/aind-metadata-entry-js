@@ -157,12 +157,12 @@ test('Checks preProcessSchema modifies const schema to add missing default or ty
     { key: 'boolean_const', type: 'boolean' },
     { key: 'object_const', type: 'object' },
     { key: 'array_const', type: 'array' },
-    { key: 'null_const', type: 'null' }
+    { key: 'null_const', type: ['null', 'string'] }
   ]
   const processedSchema1 = preProcessSchema(testSchema1)
   expect(processedSchema1.properties.describedBy.default).toBe(testSchema1.properties.describedBy.const)
   for (const expectedType of expectedTypes) {
-    expect(processedSchema1.properties[expectedType.key].type).toBe(expectedType.type)
+    expect(processedSchema1.properties[expectedType.key].type).toStrictEqual(expectedType.type)
   }
 })
 
