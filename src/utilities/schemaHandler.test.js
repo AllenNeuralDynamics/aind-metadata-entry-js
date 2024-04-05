@@ -193,9 +193,9 @@ test('Checks preProcessSchema modifies dictionary additional properties', () => 
 test('Checks preProcessSchema handles `anyOf` as needed', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
   expect(processedSchema3.properties.email.type).toStrictEqual(['string', 'null'])
-  expect(processedSchema3.properties.resume.properties.gpa.type).toStrictEqual('string')
+  expect(processedSchema3.properties.resume.properties.gpa.type).toStrictEqual(['string', 'number'])
   expect(processedSchema3.properties.email.type.anyOf).toBeFalsy
-  expect(processedSchema3.properties.resume.properties.past_experiences.anyOf).toStrictEqual([ { '$ref': '#/definitions/PastExperience' }, { title: 'null', type: 'null' } ])
+  expect(processedSchema3.properties.resume.properties.past_experiences.anyOf).toStrictEqual([ { '$ref': '#/definitions/PastExperience' }, { title: 'null',type: 'null' } ])
   
 })
 

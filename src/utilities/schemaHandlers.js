@@ -17,14 +17,11 @@ const processAnyOf = (prop, allowedTypes) => {
   const isOptional = prop.anyOf.some(option => option.type === 'null')
   const isDecimal = prop.anyOf.some(option => option.type === 'number') && prop.anyOf.some(option => option.type === 'string')
 
-  // Replace dropdown with input box for required decimals
-  if (isDecimal && !isOptional) {
-    prop.type = 'string'
-    delete prop.anyOf
-  // Replace dropdown with nullable input box for optional basic fields
-  } else if ((isDecimal || isAllowedType) && isOptional) {
+  // Replace dropdown with input box
+  if (isDecimal || isAllowedType) {
     prop.type = allowedTypes.filter(type => prop.anyOf.some(option => option.type === type))
-    prop.type = prop.type.concat('null')
+    // if optional, still allow nullable input
+    if (isOptional) { prop.type = prop.type.concat('null') }
     delete prop.anyOf
   } else {
     // Add default titles to dropdown of allowed types/subschemas
