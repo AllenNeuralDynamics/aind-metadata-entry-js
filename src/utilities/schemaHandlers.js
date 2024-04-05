@@ -15,7 +15,7 @@ const processAnyOf = (prop, allowedTypes) => {
   */
   const isAllowedType = prop.anyOf.some(option => allowedTypes.includes(option.type))
   const isOptional = prop.anyOf.some(option => option.type === 'null')
-  const isDecimal = prop.anyOf.some(option => option.type === 'number' || option.type === 'string')
+  const isDecimal = prop.anyOf.some(option => option.type === 'number') && prop.anyOf.some(option => option.type === 'string')
 
   // Replace dropdown with input box for required decimals
   if (isDecimal && !isOptional) {
