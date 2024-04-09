@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
-import { AJV_OPTIONS } from '../utilities/schemaHandlers'
+import { AJV_OPTIONS, preprocessUiSchema } from '../utilities/schemaHandlers'
 
 function RenderForm (props) {
   /*
@@ -19,6 +19,9 @@ function RenderForm (props) {
   */
   const { schemaType, schema, formData } = props
   const validator = customizeValidator(AJV_OPTIONS)
+
+  const dynamicUiSchema = preprocessUiSchema(schema)
+  const mergedUiSchema = { ...uiSchema, ...dynamicUiSchema }
 
   async function saveFilePicker (event) {
     /*
@@ -46,7 +49,7 @@ function RenderForm (props) {
       schema && <Form schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
+        uiSchema={mergedUiSchema}
         widgets={widgets}
         onSubmit={saveFilePicker}
         omitExtraData

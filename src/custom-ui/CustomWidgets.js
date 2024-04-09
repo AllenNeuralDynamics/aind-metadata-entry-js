@@ -76,4 +76,24 @@ CustomTextWidget.propTypes = {
   schema: PropTypes.object
 }
 
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }
+const CustomDecimalWidget = ({ value, onChange }) => {
+  const handleChange = (e) => {
+    onChange(e.target.value)
+  }
+
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={handleChange}
+      placeholder="Enter number or string..."
+    />
+  )
+}
+
+CustomDecimalWidget.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.any
+}
+
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, CustomDecimalWidget }
