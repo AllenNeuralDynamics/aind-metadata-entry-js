@@ -96,4 +96,4 @@ CustomDecimalWidget.propTypes = {
   value: PropTypes.any
 }
 
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, CustomDecimalWidget }
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, customDecimal: CustomDecimalWidget }

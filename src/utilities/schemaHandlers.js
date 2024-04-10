@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { guessType, deepEquals } from '@rjsf/utils'
-import { widgets } from '../custom-ui/CustomWidgets'
+// import { widgets } from '../custom-ui/CustomWidgets'
 
 export const AJV_OPTIONS = {
   ajvOptionsOverrides: {
@@ -19,7 +19,6 @@ const preProcessHelper = (obj) => {
   Object.keys(obj).forEach(key => {
     if (obj[key] !== null) {
       const prop = obj[key]
-
       // Need to explicitly specify missing type for consts (bug in pydantic, may be fixed in next release)
       // If default is undefined or not matching const value, set to const
       // Note: We use a custom text widget to autofill the const value and set the field as readonly.
@@ -89,18 +88,20 @@ export const preProcessSchema = (schema) => {
 
 export const preprocessUiSchema = (schema) => {
   const dynamicUiSchema = {}
-
   // Loop through properties in the schema
   Object.keys(schema).forEach(key => {
     if (schema[key] !== null) {
-      console.log()
       const prop = schema[key]
-      if (prop.const !== undefined) {
-        const isDecimal = prop.anyOf.some(option => option.type === 'number') && prop.anyOf.some(option => option.type === 'string')
-        // Check if anyOf includes string and number types
-        if (prop.anyOf && isDecimal) {
-          dynamicUiSchema[key] = { 'ui:widget': widgets.CustomDecimalWidget }
-        }
+      console.log(prop)
+      const isDecimal = prop.anyOf.some(option => option.type === 'number') && prop.anyOf.some(option => option.type === 'string')
+      // Check if anyOf includes string and number types
+      console.log(prop, ' IS DECIMAL')
+      if (prop.anyOf && isDecimal) {
+        dynamicUiSchema[key] = { 'ui:widget': 'decimal' }
+      }
+      // recursion
+      if (typeof (prop) === 'object') {
+        preprocessUiSchema(prop)
       }
     }
   })
