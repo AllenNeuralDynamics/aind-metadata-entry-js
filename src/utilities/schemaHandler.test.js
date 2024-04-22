@@ -103,12 +103,44 @@ const testSchema3 = ({
           const: 'Farmington University',
           type: 'string'
         },
+        weighted_gpa: {
+          title: 'Weighted GPA',
+          anyOf: [
+            {
+              type: 'string'
+            },
+            {
+              type: 'number'
+            }
+          ]
+        },
+        unweighted_gpa: {
+          title: 'Unweighted GPA',
+          anyOf: [
+            {
+              type: 'string'
+            },
+            {
+              type: 'number'
+            },
+            {
+              type: 'null'
+            }
+          ]
+        },
         past_experiences: {
           title: 'Past Experiences',
-          type: 'array',
-          items: {
-            $ref: '#/definitions/PastExperience'
-          }
+          anyOf: [
+            {
+              $ref: '#/definitions/PastExperience'
+            },
+            {
+              type: 'null'
+            },
+            {
+              type: 'string'
+            }
+          ]
         }
       }
     }
@@ -172,9 +204,13 @@ test('Checks preProcessSchema modifies dictionary additional properties', () => 
   expect(processedSchema2.properties.default_array.additionalProperties).toBe(undefined)
 })
 
-test('Checks preProcessSchema adds default title to `anyOf` options if needed', () => {
+test('Checks preProcessSchema handles `anyOf` as needed', () => {
   const processedSchema3 = preProcessSchema(testSchema3)
-  expect(processedSchema3.properties.email.anyOf).toStrictEqual([{ title: 'string', type: 'string' }, { title: 'null', type: 'null' }])
+  expect(processedSchema3.properties.email.type).toStrictEqual(['string', 'null'])
+  expect(processedSchema3.properties.resume.properties.weighted_gpa.type).toStrictEqual('number')
+  expect(processedSchema3.properties.email.type.anyOf).toBeFalsy()
+  expect(processedSchema3.properties.resume.properties.past_experiences.anyOf).toStrictEqual([{ $ref: '#/definitions/PastExperience' }, { title: 'null', type: 'null' }, { title: 'string', type: 'string' }])
+  expect(processedSchema3.properties.resume.properties.unweighted_gpa.type).toStrictEqual(['number', 'null'])
 })
 
 test('Checks preProcessSchema modifies discriminator property', () => {
