@@ -50,7 +50,6 @@ function RenderForm (props) {
         widgets={widgets}
         onSubmit={saveFilePicker}
         omitExtraData
-        liveOmit
         noHtml5Validate >
       </Form>
     )
