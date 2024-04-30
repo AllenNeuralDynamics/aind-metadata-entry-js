@@ -7,6 +7,7 @@ import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import { AJV_OPTIONS } from '../utilities/schemaHandlers'
 import { deepEquals } from '@rjsf/utils'
+import { saveToJSONFile } from '../utilities/fileUtils'
 
 function RenderForm (props) {
   /*
@@ -23,8 +24,7 @@ function RenderForm (props) {
   const validator = customizeValidator(AJV_OPTIONS)
 
   /**
-   * Custom onBlur event handler to omit extra data from formData.
-   * Based on omitExtraData logic in RJSF Form component.
+   * onBlur event handler to omit extra data from formData.
    */
   const omitExtraDataOnBlur = () => {
     // NOTE: There is a bug in RJSF `omitExtraData` logic causing validation errors.
@@ -50,25 +50,12 @@ function RenderForm (props) {
     }
   }
 
-  async function saveFilePicker (event) {
-    /*
-    File system access API to select save location
-    */
-    const data = event.formData
-    const fileData = JSON.stringify(data, undefined, 4)
-    const opts = {
-      suggestedName: `${schemaType}.json`,
-      types: [
-        {
-          description: 'JSON file',
-          accept: { 'text/plain': ['.json'] }
-        }
-      ]
-    }
-    const handle = await window.showSaveFilePicker(opts)
-    const writer = await handle.createWritable()
-    await writer.write(new Blob([fileData], { type: 'text/plain' }))
-    writer.close()
+  /**
+   * onSubmit event handler to save validated form data to a JSON file.
+   * @param {Event} event The form event
+   */
+  async function saveFileOnSubmit (event) {
+    saveToJSONFile(event.formData, schemaType)
   }
 
   if (schema) {
@@ -80,7 +67,7 @@ function RenderForm (props) {
         validator={validator}
         uiSchema={uiSchema}
         widgets={widgets}
-        onSubmit={saveFilePicker}
+        onSubmit={saveFileOnSubmit}
         onBlur={omitExtraDataOnBlur}
         omitExtraData
         noHtml5Validate >
