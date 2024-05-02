@@ -51,7 +51,9 @@ function RenderForm (props) {
         onSubmit={saveFilePicker}
         omitExtraData
         liveOmit
-        noHtml5Validate >
+        noHtml5Validate
+        focusOnFirstError
+      >
       </Form>
     )
   } else {
