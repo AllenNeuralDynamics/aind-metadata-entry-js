@@ -1,0 +1,65 @@
+{
+  "$defs": {
+    "Option1": {
+      "additionalProperties": false,
+      "description": "Description of Option1",
+      "properties": {
+        "discriminator_property": {
+          "const": "Discriminator 1",
+          "default": "Discriminator 1",
+          "title": "Discriminator 1"
+        },
+        "extra_data_str": {
+          "title": "Extra Data String",
+          "type": "string"
+        }
+      },
+      "title": "Option1",
+      "type": "object"
+    },
+    "Option2": {
+      "additionalProperties": false,
+      "description": "Description of Option2",
+      "properties": {
+        "discriminator_property": {
+          "const": "Discriminator 2",
+          "default": "Discriminator 2",
+          "title": "Discriminator 2"
+        },
+        "extra_data_num": {
+          "title": "Extra Data Number",
+          "type": "number"
+        }
+      },
+      "title": "Option2",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Sample schema with subschema with discriminator keyword.",
+  "properties": {
+    "sub_schema": {
+      "discriminator": {
+        "mapping": {
+          "Option1": "#/$defs/Option1",
+          "Option2": "#/$defs/Option2"
+        },
+        "propertyName": "discriminator_property"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Option1"
+        },
+        {
+          "$ref": "#/$defs/Option2"
+        }
+      ],
+      "title": "Sub Schema with Discriminator Keyword"
+    }
+  },
+  "required": [
+    "sub_schema"
+  ],
+  "title": "Sample Schema with Discriminator",
+  "type": "object"
+}
