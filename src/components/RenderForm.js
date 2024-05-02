@@ -33,15 +33,6 @@ function RenderForm (props) {
     event.target.blur()
   }
 
-  /**
-   * Event handler to reset the form
-   * @param {Event} event The click event
-   */
-  const onResetForm = (event) => {
-    formRef.current.reset()
-    event.target.blur()
-  }
-
   async function saveFilePicker (event) {
     /*
     File system access API to select save location
@@ -81,7 +72,6 @@ function RenderForm (props) {
         <div className="btn-group" role="group">
           <button title="Save form data to JSON file" type="submit" className="btn btn-primary">Submit</button>
           <button title="Validate form" type="button" className="btn btn-default" onClick={onValidateForm}>Validate</button>
-          <button title="Reset form" type="button" className="btn btn-default" onClick={onResetForm}>Reset</button>
         </div>
       </Form>
     )
