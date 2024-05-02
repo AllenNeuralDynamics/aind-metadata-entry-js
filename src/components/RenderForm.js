@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import PropTypes from 'prop-types'
 import Form from '@rjsf/core'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -6,6 +6,7 @@ import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import { AJV_OPTIONS } from '../utilities/schemaHandlers'
+import { toast } from 'react-toastify'
 
 function RenderForm (props) {
   /*
@@ -18,7 +19,28 @@ function RenderForm (props) {
     Form object
   */
   const { schemaType, schema, formData } = props
+  const formRef = createRef()
   const validator = customizeValidator(AJV_OPTIONS)
+
+  /**
+   * Event handler to validate the form
+   * @param {Event} event The click event
+   */
+  const onValidateForm = (event) => {
+    if (formRef.current.validateForm()) {
+      toast.success('Form is valid. Ready to submit!')
+    }
+    event.target.blur()
+  }
+
+  /**
+   * Event handler to reset the form
+   * @param {Event} event The click event
+   */
+  const onResetForm = (event) => {
+    formRef.current.reset()
+    event.target.blur()
+  }
 
   async function saveFilePicker (event) {
     /*
@@ -43,7 +65,9 @@ function RenderForm (props) {
 
   if (schema) {
     return (
-      schema && <Form schema={schema}
+      schema && <Form
+        ref={formRef}
+        schema={schema}
         formData={formData}
         validator={validator}
         uiSchema={uiSchema}
@@ -54,6 +78,11 @@ function RenderForm (props) {
         noHtml5Validate
         focusOnFirstError
       >
+        <div className="btn-group" role="group">
+          <button title="Save form data to JSON file" type="submit" className="btn btn-primary">Submit</button>
+          <button title="Validate form" type="button" className="btn btn-default" onClick={onValidateForm}>Validate</button>
+          <button title="Reset form" type="button" className="btn btn-default" onClick={onResetForm}>Reset</button>
+        </div>
       </Form>
     )
   } else {
