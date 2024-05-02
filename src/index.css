@@ -4,13 +4,30 @@ body {
   --toastify-toast-width: 400px;
 }
 
-Form fieldset {
-  padding-left: 8px;
-  border-left: 2px solid rgba(0, 0, 255, .25);
-  border-radius: 5px;
+Form.rjsf {
+  /* dynamically resize form and error sections */
+  .panel-danger.errors {
+    max-height: 15vh;
+    overflow-y: auto;
+    font-size: small;
+  }
+  .form-group.field.field-object fieldset#root{
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .panel-danger.errors + .form-group.field.field-object fieldset#root{
+    max-height: 65vh;
+  }
+  
+  /* indent and border-left for nested schemas */
+  .form-group.field.field-object fieldset:not(#root){
+    padding-left: 8px;
+    border-left: 2px solid rgba(0, 0, 255, .25);
+    border-radius: 5px;
 
-  &:hover {
-      border-color: rgba(0, 0, 255, .5);
+    &:hover {
+        border-color: rgba(0, 0, 255, .5);
+    }
   }
 }
 
