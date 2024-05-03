@@ -1,12 +1,5 @@
 .dropdown {
     font-size: medium;
     color: navy;
-    margin-right: 5px;
     text-align: left
-}
-
-.btnRight {
-    float: right;
-    margin-left: 5px;
-    color: navy;
 }
