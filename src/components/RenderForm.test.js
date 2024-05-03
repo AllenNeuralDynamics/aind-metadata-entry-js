@@ -4,6 +4,7 @@ import RenderForm from './RenderForm'
 import { preProcessSchema } from '../utilities/schemaHandlers'
 import { saveToJSONFile } from '../utilities/fileUtils'
 import SAMPLE_SCHEMA_EXTRA_DATA from '../testing/sample-schema-discriminator-extra-data.json'
+import { toast } from 'react-toastify'
 
 const EXPECTED_PROMPT_TEXT = 'Please select a schema from the dropdown above or autofill data from an existing file.'
 const SAMPLE_SCHEMA_TYPE = 'test'
@@ -16,6 +17,12 @@ const SAMPLE_FORM_DATA = {
 }
 
 jest.mock('../utilities/fileUtils', () => ({ saveToJSONFile: jest.fn() }))
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn()
+  }
+}))
 
 describe('RenderForm component', () => {
   it('renders prompt on default if no schema is provided', () => {
@@ -37,6 +44,28 @@ describe('RenderForm component', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
     const formData = saveToJSONFile.mock.calls[0][0]
     expect(formData).toEqual(SAMPLE_FORM_DATA)
+  })
+
+  it('validates formData when Validate button is clicked', () => {
+    // if invalid data, focus on the first error
+    jest.spyOn(console, 'error').mockImplementation(() => jest.fn())
+    const sampleInvalidFormData = {
+      sub_schema: {
+        discriminator_property: 'Discriminator 1',
+        invalid_prop: 'I am not allowed'
+      }
+    }
+    render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={sampleInvalidFormData} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
+    expect(screen.getByText('Errors')).toBeVisible()
+    expect(screen.getByText('\'Option1\' must NOT have additional properties')).toBeVisible()
+  })
+
+  it('shows a success message when form data is validated with no errors', () => {
+    // if valid data, show success message
+    render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={SAMPLE_FORM_DATA} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
+    expect(toast.success).toHaveBeenCalledWith('Form is valid. Ready to submit!')
   })
 
   it('omits extra data on blur events', () => {

@@ -8,6 +8,7 @@ import { uiSchema } from '../custom-ui/CustomUISchema'
 import { AJV_OPTIONS } from '../utilities/schemaHandlers'
 import { deepEquals } from '@rjsf/utils'
 import { saveToJSONFile } from '../utilities/fileUtils'
+import { toast } from 'react-toastify'
 
 function RenderForm (props) {
   /*
@@ -22,6 +23,17 @@ function RenderForm (props) {
   const { schemaType, schema, formData } = props
   const formRef = createRef()
   const validator = customizeValidator(AJV_OPTIONS)
+
+  /**
+   * Event handler to validate the form
+   * @param {Event} event The click event
+   */
+  const onValidateForm = (event) => {
+    if (formRef.current.validateForm()) {
+      toast.success('Form is valid. Ready to submit!')
+    }
+    event.target.blur()
+  }
 
   /**
    * onBlur event handler to omit extra data from formData.
@@ -70,7 +82,13 @@ function RenderForm (props) {
         onSubmit={saveFileOnSubmit}
         onBlur={omitExtraDataOnBlur}
         omitExtraData
-        noHtml5Validate >
+        noHtml5Validate
+        focusOnFirstError
+      >
+        <div className="btn-group" role="group">
+          <button title="Save form data to JSON file" type="submit" className="btn btn-primary">Submit</button>
+          <button title="Validate form" type="button" className="btn btn-default" onClick={onValidateForm}>Validate</button>
+        </div>
       </Form>
     )
   } else {

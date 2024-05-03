@@ -67,51 +67,53 @@ function Toolbar (props) {
 
   return (
     <div>
-      <select
-        id="schema-type-select"
-        className={['btn', 'btn-default', styles.dropdown].join(' ')}
-        title='Select a schema'
-        value={selectedSchemaType}
-        onChange={handleTypeChange}
-      >
-        <option value="">Select schema</option>
-        {schemaTypes.map((schemaType) => (
-          <option key={schemaType} value={schemaType}>
-            {schemaType}
-          </option>
-        ))}
-      </select>
-      <select
-        id="schema-version-select"
-        className={['btn', 'btn-default', styles.dropdown].join(' ')}
-        title='Select a version'
-        value={selectedSchemaPath}
-        onChange={handleVersionChange}
-        disabled={!selectedSchemaType}
-      >
-        <option value="">Select version</option>
-        {schemas.map((schema) => (
-          <option key={schema.path} value={schema.path}>
-            {schema.version}
-          </option>
-        ))}
-      </select>
-      <button
-        title="Get help"
-        type="button"
-        className={['btn', 'btn-default', styles.btnRight].join(' ')}
-        onClick={showHelpPopup}
-      >
-        Help
-      </button>
-      <button
-        title="Autofill with existing data from local file"
-        type="button"
-        className={['btn', 'btn-default', styles.btnRight].join(' ')}
-        onClick={handleAutofill}
-      >
-        Autofill from file
-      </button>
+      <div className="btn-toolbar" role="toolbar">
+        <select
+          id="schema-type-select"
+          className={['btn', 'btn-default', styles.dropdown].join(' ')}
+          title='Select a schema'
+          value={selectedSchemaType}
+          onChange={handleTypeChange}
+        >
+          <option value="">Select schema</option>
+          {schemaTypes.map((schemaType) => (
+            <option key={schemaType} value={schemaType}>
+              {schemaType}
+            </option>
+          ))}
+        </select>
+        <select
+          id="schema-version-select"
+          className={['btn', 'btn-default', styles.dropdown].join(' ')}
+          title='Select a version'
+          value={selectedSchemaPath}
+          onChange={handleVersionChange}
+          disabled={!selectedSchemaType}
+        >
+          <option value="">Select version</option>
+          {schemas.map((schema) => (
+            <option key={schema.path} value={schema.path}>
+              {schema.version}
+            </option>
+          ))}
+        </select>
+        <button
+          title="Get help"
+          type="button"
+          className={['btn', 'btn-default', 'pull-right'].join(' ')}
+          onClick={showHelpPopup}
+        >
+          Help
+        </button>
+        <button
+          title="Autofill with existing data from local file"
+          type="button"
+          className={['btn', 'btn-default', 'pull-right'].join(' ')}
+          onClick={handleAutofill}
+        >
+          Autofill from file
+        </button>
+      </div>
     </div>
   )
 }
