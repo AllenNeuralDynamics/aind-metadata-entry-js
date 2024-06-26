@@ -3,6 +3,7 @@ import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
+import SelectWidget from '@rjsf/material-ui/lib/SelectWidget/SelectWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
@@ -76,4 +77,19 @@ CustomTextWidget.propTypes = {
   schema: PropTypes.object
 }
 
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }
+/**
+ * Uses RadioButtons for booleans so
+ * users understand undefined default
+ */
+const CustomSelectWidget = (props) => {
+  const options = []
+  for (let i = 0; i < props.options.enumOptions.length; i++) {
+    options.push(props.options.enumOptions[i].label)
+  }
+  if (options.sort().join() !== ['number', 'string'].join()) {
+    const newProps = { ...props, hideLabel: true }
+    return SelectWidget(newProps)
+  }
+}
+
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, select: CustomSelectWidget }
