@@ -78,8 +78,8 @@ CustomTextWidget.propTypes = {
 }
 
 /**
- * Uses RadioButtons for booleans so
- * users understand undefined default
+ * Uses CustomSelectWidget when options
+ * are string and number
  */
 const CustomSelectWidget = (props) => {
   const options = []
