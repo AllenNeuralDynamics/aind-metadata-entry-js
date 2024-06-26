@@ -78,7 +78,7 @@ CustomTextWidget.propTypes = {
 }
 
 /**
- * Uses CustomSelectWidget when options
+ * Return no SelectWidget when options
  * are string and number
  */
 const CustomSelectWidget = (props) => {
