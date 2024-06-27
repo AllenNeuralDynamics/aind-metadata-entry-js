@@ -82,4 +82,31 @@ describe('CustomSelectWidget', () => {
     expect(screen.getByRole('combobox')).toBeInTheDocument()
   })
 
+  it('Changes options of a SelectWidget', () => {
+    const testSchema = {
+      title: 'Test Number/String/Null',
+      type: 'object',
+      anyOf: [
+        {
+          type: 'number',
+          title: 'number'
+        },
+        {
+          type: 'string',
+          title: 'string'
+        },
+        {
+          type: 'null',
+          title: 'null'
+        }
+      ]
+    }
+    render(<Form schema={testSchema}
+      validator={validator}
+      widgets={ { select: widgets.select } }
+    />)
+    expect(screen.getByRole('combobox')).not.toHaveValue("string")
+
+  })
+
 })
