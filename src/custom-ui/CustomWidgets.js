@@ -3,7 +3,7 @@ import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
-import SelectWidget from '@rjsf/material-ui/lib/SelectWidget/SelectWidget'
+import SelectWidget from '@rjsf/core/lib/components/widgets/SelectWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
@@ -68,6 +68,7 @@ const CustomTextWidget = (props) => {
     value={schema.const}
   />
   } else {
+    console.log(props)
     return <TextWidget {...props}/>
   }
 }
@@ -82,14 +83,20 @@ CustomTextWidget.propTypes = {
  * are string and number
  */
 const CustomSelectWidget = (props) => {
-  const options = []
-  for (let i = 0; i < props.options.enumOptions.length; i++) {
-    options.push(props.options.enumOptions[i].label)
+  const { value, options } = props
+  const possibleOpts = []
+  console.log('select', value)
+  for (let i = 0; i < options.enumOptions.length; i++) {
+    possibleOpts.push(options.enumOptions[i].label)
   }
-  if (options.sort().join() !== ['number', 'string'].join()) {
-    const newProps = { ...props, hideLabel: true }
-    return SelectWidget(newProps)
+  if (possibleOpts.sort().join() !== ['number', 'string'].join()) {
+    return < SelectWidget {...props} />
   }
+}
+
+CustomSelectWidget.propTypes = {
+  value: PropTypes.any,
+  options: PropTypes.any
 }
 
 export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, select: CustomSelectWidget }
