@@ -84,6 +84,7 @@ CustomTextWidget.propTypes = {
  */
 const CustomSelectWidget = (props) => {
   const { options } = props
+  console.log(props)
   const possibleOpts = []
   for (let i = 0; i < options.enumOptions.length; i++) {
     possibleOpts.push(options.enumOptions[i].label)
