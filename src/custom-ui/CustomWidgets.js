@@ -83,9 +83,8 @@ CustomTextWidget.propTypes = {
  * are string and number
  */
 const CustomSelectWidget = (props) => {
-  const { value, options } = props
+  const { options } = props
   const possibleOpts = []
-  console.log('select', value)
   for (let i = 0; i < options.enumOptions.length; i++) {
     possibleOpts.push(options.enumOptions[i].label)
   }
@@ -95,7 +94,6 @@ const CustomSelectWidget = (props) => {
 }
 
 CustomSelectWidget.propTypes = {
-  value: PropTypes.any,
   options: PropTypes.any
 }
 
