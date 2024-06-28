@@ -68,7 +68,6 @@ const CustomTextWidget = (props) => {
     value={schema.const}
   />
   } else {
-    console.log(props)
     return <TextWidget {...props}/>
   }
 }
