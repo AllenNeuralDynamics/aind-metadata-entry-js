@@ -36,3 +36,78 @@ describe('CustomTextWidget', () => {
     fireEvent.click(screen.getByRole('button', { name: /submit/i }))
   })
 })
+
+describe('CustomSelectWidget', () => {
+  it('Does not render a SelectWidget', () => {
+    const testSchema = {
+      title: 'Test Number/String',
+      type: 'object',
+      anyOf: [
+        {
+          type: 'number',
+          title: 'number'
+        },
+        {
+          type: 'string',
+          title: 'string'
+        }
+      ]
+    }
+    render(<Form schema={testSchema}
+      validator={validator}
+      widgets={ { select: widgets.select } }
+    />)
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+  })
+
+  it('Does render a SelectWidget', () => {
+    const testSchema = {
+      title: 'Test String/Null',
+      type: 'object',
+      anyOf: [
+        {
+          type: 'null',
+          title: 'null'
+        },
+        {
+          type: 'string',
+          title: 'string'
+        }
+      ]
+    }
+    render(<Form schema={testSchema}
+      validator={validator}
+      widgets={ { select: widgets.select } }
+    />)
+    expect(screen.getByRole('combobox')).toBeInTheDocument()
+  })
+
+  it('Changes options of a SelectWidget', () => {
+    const testSchema = {
+      title: 'Test Number/String/Null',
+      type: 'object',
+      anyOf: [
+        {
+          type: 'number',
+          title: 'number'
+        },
+        {
+          type: 'string',
+          title: 'string'
+        },
+        {
+          type: 'null',
+          title: 'null'
+        }
+      ]
+    }
+    render(<Form schema={testSchema}
+      validator={validator}
+      widgets={ { select: widgets.select } }
+    />)
+    expect(screen.getByRole('combobox')).toBeInTheDocument()
+    expect(screen.getByRole('combobox')).not.toHaveValue("string")
+
+  })
+
+})
