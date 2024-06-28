@@ -84,15 +84,16 @@ CustomTextWidget.propTypes = {
  */
 const CustomSelectWidget = (props) => {
   const { options } = props
-  const possibleOpts = []
+  const possOpts = []
   for (let i = 0; i < options.enumOptions.length; i++) {
-    possibleOpts.push(options.enumOptions[i].label)
+    possOpts.push(options.enumOptions[i].label)
   }
-  if (possibleOpts.sort().join() !== ['number', 'string'].join() &&
-  possibleOpts.sort().join() !== ['null', 'number', 'string'].join()) {
+  const ordOpts = [...possOpts]
+  possOpts.sort()
+  if (possOpts.join() !== ['number', 'string'].join() && possOpts.join() !== ['null', 'number', 'string'].join()) {
     return < SelectWidget {...props} />
-  } else if (possibleOpts.sort().join() === ['null', 'number', 'string'].join()) {
-    const newEnum = [{ label: 'number', value: 0 }, { label: 'null', value: 2 }]
+  } else if (possOpts.join() === ['null', 'number', 'string'].join()) {
+    const newEnum = [options.enumOptions[ordOpts.indexOf('number')], options.enumOptions[ordOpts.indexOf('null')]]
     const newProps = { ...props, options: { enumOptions: newEnum } }
     return < SelectWidget {...newProps} />
   }

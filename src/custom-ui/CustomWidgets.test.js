@@ -105,6 +105,7 @@ describe('CustomSelectWidget', () => {
       validator={validator}
       widgets={ { select: widgets.select } }
     />)
+    expect(screen.getByRole('combobox')).toBeInTheDocument()
     expect(screen.getByRole('combobox')).not.toHaveValue("string")
 
   })
