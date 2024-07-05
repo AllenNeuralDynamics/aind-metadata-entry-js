@@ -53,9 +53,10 @@ const preProcessHelper = (obj) => {
               option.title = option.type
             }
           })
-        } else {
-          console.log(prop.anyOf)
+        } else if (possOpts.join() === ['number', 'string'].join()) {
           prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }]
+        } else {
+          prop.anyOf = [{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }]
         }
       }
 
