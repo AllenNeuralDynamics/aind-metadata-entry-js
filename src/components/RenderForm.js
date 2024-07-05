@@ -67,6 +67,17 @@ function RenderForm (props) {
    * @param {Event} event The form event
    */
   async function saveFileOnSubmit (event) {
+    const {
+      schemaUtils: _schemaUtils,
+      schema: _schema,
+      formData: _formData
+    } = formRef.current.state
+    const retrievedSchema = _schemaUtils.retrieveSchema(_schema, _formData)
+    const pathSchema = _schemaUtils.toPathSchema(retrievedSchema, '', _formData)
+    const fieldNames = formRef.current.getTemplate(pathSchema, _formData)
+    console.log(fieldNames)
+    console.log(schemaType)
+    console.log(event)
     saveToJSONFile(event.formData, schemaType)
   }
 

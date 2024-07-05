@@ -3,7 +3,6 @@ import 'react-datetime/css/react-datetime.css'
 import moment from 'moment'
 import RadioWidget from '@rjsf/material-ui/lib/RadioWidget/RadioWidget'
 import CheckboxWidget from '@rjsf/material-ui/lib/CheckboxWidget/CheckboxWidget'
-import SelectWidget from '@rjsf/core/lib/components/widgets/SelectWidget'
 import TextWidget from '@rjsf/core/lib/components/widgets/TextWidget'
 import React, { useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
@@ -77,29 +76,4 @@ CustomTextWidget.propTypes = {
   schema: PropTypes.object
 }
 
-/**
- * Return no SelectWidget when options
- * are string and number
- */
-const CustomSelectWidget = (props) => {
-  const { options } = props
-  const possOpts = []
-  for (let i = 0; i < options.enumOptions.length; i++) {
-    possOpts.push(options.enumOptions[i].label)
-  }
-  const ordOpts = [...possOpts]
-  possOpts.sort()
-  if (possOpts.join() !== ['number', 'string'].join() && possOpts.join() !== ['null', 'number', 'string'].join()) {
-    return < SelectWidget {...props} />
-  } else if (possOpts.join() === ['null', 'number', 'string'].join()) {
-    const newEnum = [options.enumOptions[ordOpts.indexOf('number')], options.enumOptions[ordOpts.indexOf('null')]]
-    const newProps = { ...props, options: { enumOptions: newEnum } }
-    return < SelectWidget {...newProps} />
-  }
-}
-
-CustomSelectWidget.propTypes = {
-  options: PropTypes.any
-}
-
-export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget, select: CustomSelectWidget }
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }

@@ -38,14 +38,25 @@ const preProcessHelper = (obj) => {
 
       // add default titles to dropdown of allowed types/ subschemas
       if (prop.anyOf) {
-        Object.values(prop.anyOf).forEach(option => {
-          // if the allowed type/ subschema is not a ref nor has a title,
-          // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
-          // we can convert to display the type name instead
-          if (!option.$ref && option.type && !option.title) {
-            option.title = option.type
-          }
-        })
+        const options = Object.values(prop.anyOf)
+        const possOpts = []
+        for (let i = 0; i < options.length; i++) {
+          possOpts.push(options[i].type)
+        }
+        possOpts.sort()
+        if (possOpts.join() !== ['number', 'string'].join() && possOpts.join() !== ['null', 'number', 'string'].join()) {
+          Object.values(prop.anyOf).forEach(option => {
+            // if the allowed type/ subschema is not a ref nor has a title,
+            // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
+            // we can convert to display the type name instead
+            if (!option.$ref && option.type && !option.title) {
+              option.title = option.type
+            }
+          })
+        } else {
+          console.log(prop.anyOf)
+          prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }]
+        }
       }
 
       // enable validation for discriminator keyword
