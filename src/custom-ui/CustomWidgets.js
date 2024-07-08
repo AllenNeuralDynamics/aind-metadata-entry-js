@@ -59,6 +59,7 @@ const CustomTextWidget = (props) => {
     }
   }, [onChange, schema.const, value])
 
+  console.log(props)
   if (schema.const === null) {
     return null
   } else if (schema.const) {
@@ -66,6 +67,18 @@ const CustomTextWidget = (props) => {
     readonly={true}
     value={schema.const}
   />
+  } else if (schema.title === 'decimal') {
+    const onChange = (val) => {
+      const re = '/^\\d*\\.?\\d*$/'
+      // if value is not blank, then test the regex
+      console.log(val, RegExp(re).test(val))
+      if (val === undefined || RegExp(re).test(val)) {
+        props.onChange(val)
+      }
+    }
+    // props.onChange(formattedTime)
+    return <TextWidget {...props}
+    onChange={onChange}/>
   } else {
     return <TextWidget {...props}/>
   }
