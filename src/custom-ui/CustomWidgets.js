@@ -69,10 +69,7 @@ const CustomTextWidget = (props) => {
   />
   } else if (schema.title === 'decimal') {
     const onChange = (val) => {
-      const re = '/^\\d*\\.?\\d*$/'
-      // if value is not blank, then test the regex
-      console.log(val, RegExp(re).test(val))
-      if (val === undefined || RegExp(re).test(val)) {
+      if (val === undefined || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
         props.onChange(val)
       }
     }
