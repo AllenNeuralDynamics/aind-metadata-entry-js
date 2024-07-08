@@ -59,7 +59,6 @@ const CustomTextWidget = (props) => {
     }
   }, [onChange, schema.const, value])
 
-  console.log(props)
   if (schema.const === null) {
     return null
   } else if (schema.const) {
