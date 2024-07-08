@@ -38,7 +38,6 @@ const preProcessHelper = (obj) => {
 
       // add default titles to dropdown of allowed types/ subschemas
       if (prop.anyOf) {
-        console.log('in prop any', Object.values(prop.anyOf))
         const options = Object.values(prop.anyOf)
         const possOpts = []
         for (let i = 0; i < options.length; i++) {

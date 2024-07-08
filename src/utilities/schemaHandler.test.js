@@ -153,12 +153,8 @@ const testSchema5 = ({
   title: 'sample schema',
   type: 'object',
   properties: {
-    name: {
-      title: 'Full Name',
-      type: 'string'
-    },
-    email: {
-      title: 'Email Address',
+    test : {
+      title: 'test',
       anyOf: [
         {
           type: 'string'
@@ -168,56 +164,28 @@ const testSchema5 = ({
         }
       ]
     },
-    resume: {
-      title: 'Resume',
-      type: 'object',
-      properties: {
-        education: {
-          title: 'Education',
-          const: 'Farmington University',
-          type: 'string'
-        },
-        past_experiences: {
-          title: 'Past Experiences',
-          type: 'array',
-          items: {
-            $ref: '#/definitions/PastExperience'
-          }
-        }
-      }
-    }
-  },
-  definitions: {
-    PastExperience: {
-      title: 'PastExperience',
-      description: 'Description of Past Experience',
-      type: 'object',
-      key_points: {
-        title: 'Key Points',
-        description: 'Info about job experience (ex: company name, duration, etc)',
-        type: 'object',
-        default: {}
-      }
-    }
-  },
-  required: [
-    'name'
-  ]
+  }
 })
 
 const testSchema6 = ({
-  title: 'Test Number/String',
+  title: 'sample schema',
   type: 'object',
-  anyOf: [
-    {
-      type: 'number',
-      title: 'number'
+  properties: {
+    test : {
+      title: 'test',
+      anyOf: [
+        {
+          type: 'string'
+        },
+        {
+          type: 'number'
+        },
+        {
+          type: 'null'
+        }
+      ]
     },
-    {
-      type: 'string',
-      title: 'string'
-    }
-  ]
+  }
 })
 
 test('Checks preProcessSchema modifies const schema to add missing default or type', () => {
@@ -269,39 +237,11 @@ test('Checks preProcessSchema does not modify simple sample schema', () => {
 })
 
 test('Checks if anyOf string/number are changed to decimal', () => {
-  const expectedSchema = ({
-    title: 'Test Null/String/Number',
-    type: 'object',
-    anyOf: [
-      {
-        title: 'decimal',
-        type: 'string',
-        pattern: '^\\d+(\\.\\d{1,2})?$'
-      }
-    ]
-  })
   const processedSchema = preProcessSchema(testSchema5)
-  console.log(processedSchema)
-  // expect(processedSchema).toEqual(expectedSchema)
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }])
 })
 
 test('Checks if anyOf null.string/number are changed to decimal', () => {
-  const expectedSchema = ({
-    title: 'Test Null/String/Number',
-    type: 'object',
-    anyOf: [
-      {
-        type: 'null',
-        title: 'null'
-      },
-      {
-        title: 'decimal',
-        type: 'string',
-        pattern: '^\\d+(\\.\\d{1,2})?$'
-      }
-    ]
-  })
   const processedSchema = preProcessSchema(testSchema6)
-  // console.log(processedSchema)
-  // expect(processedSchema).toEqual(expectedSchema)
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }])
 })
