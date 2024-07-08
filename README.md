@@ -14,7 +14,8 @@ Ensure `gcloud` is configured to the right project. From the root directory, run
 
 # Local Development
 
-For local testing, run `export REACT_APP_S3_URL="https://s3-url-placeholder"` to set up required configurations before running `npm start`. 
+For local testing and development, you will need to configure the environment variables.
+Run `export REACT_APP_S3_URL="https://s3-url-placeholder"` and `export REACT_APP_FILTER_SCHEMAS=['schema1', 'schema2']` to set up required configurations before running `npm start`.
 
 ## Available Scripts
 
