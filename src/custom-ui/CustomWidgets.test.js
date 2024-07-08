@@ -35,4 +35,45 @@ describe('CustomTextWidget', () => {
     expect(screen.getByDisplayValue('const example string value')).toHaveAttribute('readonly')
     fireEvent.click(screen.getByRole('button', { name: /submit/i }))
   })
+
+  it('only allows numerical and decimal input for decimal title', () => {
+    const testSchema = {
+      title: 'decimal',
+      type: 'string'
+    }
+    render(<Form schema={testSchema}
+      validator={validator}
+      widgets={ { text: widgets.text } }
+    />)
+    expect(screen.getByLabelText('decimal')).toBeInTheDocument()
+    const textbox = screen.getByLabelText('decimal')
+
+    // check integer input
+    fireEvent.change(textbox, {target: {value: '23'}})
+    expect(textbox.value).toBe('23')
+
+    // check decimal inputs
+    fireEvent.change(textbox, {target: {value: '23.'}})
+    expect(textbox.value).toBe('23.')
+
+    fireEvent.change(textbox, {target: {value: '23.7'}})
+    expect(textbox.value).toBe('23.7')
+
+    fireEvent.change(textbox, {target: {value: ''}})
+    fireEvent.change(textbox, {target: {value: '.7'}})
+    expect(textbox.value).toBe('')
+
+    // check letter values
+    fireEvent.change(textbox, {target: {value: ''}})
+    fireEvent.change(textbox, {target: {value: 'abc'}})
+    expect(textbox.value).toBe('')
+
+    fireEvent.change(textbox, {target: {value: '45abc'}})
+    expect(textbox.value).toBe('')
+
+    fireEvent.change(textbox, {target: {value: '45'}})
+    fireEvent.change(textbox, {target: {value: '45abc'}})
+    expect(textbox.value).toBe('45')
+  })
+
 })
