@@ -68,7 +68,6 @@ const CustomTextWidget = (props) => {
   />
   } else if (schema.title === 'decimal') {
     const onChange = (val) => {
-      // /^\d{1,}(\.\d{0,})?$/
       if (val === undefined || val.match(/^-?\d{0,}(\.\d{0,})?$/)) {
         props.onChange(val)
       }
