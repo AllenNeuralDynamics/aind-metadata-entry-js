@@ -149,6 +149,45 @@ const testSchema4 = ({
   ]
 })
 
+const testSchema5 = ({
+  title: 'sample schema',
+  type: 'object',
+  properties: {
+    test: {
+      title: 'test',
+      anyOf: [
+        {
+          type: 'string'
+        },
+        {
+          type: 'number'
+        }
+      ]
+    }
+  }
+})
+
+const testSchema6 = ({
+  title: 'sample schema',
+  type: 'object',
+  properties: {
+    test: {
+      title: 'test',
+      anyOf: [
+        {
+          type: 'string'
+        },
+        {
+          type: 'number'
+        },
+        {
+          type: 'null'
+        }
+      ]
+    }
+  }
+})
+
 test('Checks preProcessSchema modifies const schema to add missing default or type', () => {
   const expectedTypes = [
     { key: 'describedBy', type: 'string' },
@@ -195,4 +234,14 @@ test('Checks preProcessSchema recurses through nested schema as expected', () =>
 test('Checks preProcessSchema does not modify simple sample schema', () => {
   const processedSchema = preProcessSchema(testSchema4)
   expect(processedSchema).toEqual(testSchema4)
+})
+
+test('Checks if anyOf string/number are changed to decimal', () => {
+  const processedSchema = preProcessSchema(testSchema5)
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }])
+})
+
+test('Checks if anyOf null/string/number are changed to decimal', () => {
+  const processedSchema = preProcessSchema(testSchema6)
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }])
 })
