@@ -35,16 +35,14 @@ const preProcessHelper = (obj) => {
       if (JSON.stringify(prop.default) === '{}') {
         prop.additionalProperties = { type: 'string' }
       }
-
       // add default titles to dropdown of allowed types/ subschemas
       if (prop.anyOf) {
-        const options = Object.values(prop.anyOf)
-        const possOpts = []
-        for (let i = 0; i < options.length; i++) {
-          possOpts.push(options[i].type)
-        }
-        possOpts.sort()
-        if (possOpts.join() !== ['number', 'string'].join() && possOpts.join() !== ['null', 'number', 'string'].join()) {
+        const options = Object.values(prop.anyOf).map(option => option.type).sort().join()
+        if (options === 'number,string') {
+          prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
+        } else if (options === 'null,number,string') {
+          prop.anyOf = [{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
+        } else {
           Object.values(prop.anyOf).forEach(option => {
             // if the allowed type/ subschema is not a ref nor has a title,
             // it defaults to <parentProp.title> option 1, <prop.title> option 2, ...
@@ -53,10 +51,6 @@ const preProcessHelper = (obj) => {
               option.title = option.type
             }
           })
-        } else if (possOpts.join() === ['number', 'string'].join()) {
-          prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
-        } else {
-          prop.anyOf = [{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
         }
       }
 
