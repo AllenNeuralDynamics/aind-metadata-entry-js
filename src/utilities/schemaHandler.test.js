@@ -238,10 +238,10 @@ test('Checks preProcessSchema does not modify simple sample schema', () => {
 
 test('Checks if anyOf string/number are changed to decimal', () => {
   const processedSchema = preProcessSchema(testSchema5)
-  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }])
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }])
 })
 
 test('Checks if anyOf null/string/number are changed to decimal', () => {
   const processedSchema = preProcessSchema(testSchema6)
-  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^\\d+(\\.\\d{1,2})?$' }])
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }])
 })
