@@ -153,7 +153,7 @@ const testSchema5 = ({
   title: 'sample schema',
   type: 'object',
   properties: {
-    test : {
+    test: {
       title: 'test',
       anyOf: [
         {
@@ -163,7 +163,7 @@ const testSchema5 = ({
           type: 'number'
         }
       ]
-    },
+    }
   }
 })
 
@@ -171,7 +171,7 @@ const testSchema6 = ({
   title: 'sample schema',
   type: 'object',
   properties: {
-    test : {
+    test: {
       title: 'test',
       anyOf: [
         {
@@ -184,7 +184,7 @@ const testSchema6 = ({
           type: 'null'
         }
       ]
-    },
+    }
   }
 })
 

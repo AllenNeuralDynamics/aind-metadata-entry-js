@@ -49,37 +49,36 @@ describe('CustomTextWidget', () => {
     const textbox = screen.getByLabelText('decimal')
 
     // check integer input
-    fireEvent.change(textbox, {target: {value: '23'}})
+    fireEvent.change(textbox, { target: { value: '23' } })
     expect(textbox.value).toBe('23')
 
     // check decimal inputs
-    fireEvent.change(textbox, {target: {value: '23.'}})
+    fireEvent.change(textbox, { target: { value: '23.' } })
     expect(textbox.value).toBe('23.')
 
-    fireEvent.change(textbox, {target: {value: '23.7'}})
+    fireEvent.change(textbox, { target: { value: '23.7' } })
     expect(textbox.value).toBe('23.7')
 
-    fireEvent.change(textbox, {target: {value: '23.70000000'}})
+    fireEvent.change(textbox, { target: { value: '23.70000000' } })
     expect(textbox.value).toBe('23.70000000')
 
-    fireEvent.change(textbox, {target: {value: '-23.7'}})
+    fireEvent.change(textbox, { target: { value: '-23.7' } })
     expect(textbox.value).toBe('-23.7')
 
-    fireEvent.change(textbox, {target: {value: ''}})
-    fireEvent.change(textbox, {target: {value: '.7'}})
+    fireEvent.change(textbox, { target: { value: '' } })
+    fireEvent.change(textbox, { target: { value: '.7' } })
     expect(textbox.value).toBe('.7')
 
     // check letter values
-    fireEvent.change(textbox, {target: {value: ''}})
-    fireEvent.change(textbox, {target: {value: 'abc'}})
+    fireEvent.change(textbox, { target: { value: '' } })
+    fireEvent.change(textbox, { target: { value: 'abc' } })
     expect(textbox.value).toBe('')
 
-    fireEvent.change(textbox, {target: {value: '45abc'}})
+    fireEvent.change(textbox, { target: { value: '45abc' } })
     expect(textbox.value).toBe('')
 
-    fireEvent.change(textbox, {target: {value: '45'}})
-    fireEvent.change(textbox, {target: {value: '45abc'}})
+    fireEvent.change(textbox, { target: { value: '45' } })
+    fireEvent.change(textbox, { target: { value: '45abc' } })
     expect(textbox.value).toBe('45')
   })
-
 })
