@@ -59,9 +59,11 @@ describe('CustomTextWidget', () => {
     fireEvent.change(textbox, {target: {value: '23.7'}})
     expect(textbox.value).toBe('23.7')
 
-    fireEvent.change(textbox, {target: {value: ''}})
-    fireEvent.change(textbox, {target: {value: '.7'}})
-    expect(textbox.value).toBe('')
+    fireEvent.change(textbox, {target: {value: '23.70000000'}})
+    expect(textbox.value).toBe('23.70000000')
+
+    fireEvent.change(textbox, {target: {value: '-23.7'}})
+    expect(textbox.value).toBe('-23.7')
 
     // check letter values
     fireEvent.change(textbox, {target: {value: ''}})
