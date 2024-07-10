@@ -72,7 +72,6 @@ const CustomTextWidget = (props) => {
         props.onChange(val)
       }
     }
-    // props.onChange(formattedTime)
     return <TextWidget {...props}
     onChange={onChange}/>
   } else {
