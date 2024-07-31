@@ -70,6 +70,13 @@ function RenderForm (props) {
     saveToJSONFile(event.formData, schemaType)
   }
 
+  function transformErrors (errors) {
+    return errors.map(error => {
+      if (error.property) { error.stack = `${error.property}: ${error.stack}` }
+      return error
+    })
+  }
+
   if (schema) {
     return (
       schema && <Form
@@ -81,6 +88,7 @@ function RenderForm (props) {
         widgets={widgets}
         onSubmit={saveFileOnSubmit}
         onBlur={omitExtraDataOnBlur}
+        transformErrors={transformErrors}
         omitExtraData
         noHtml5Validate
         focusOnFirstError
