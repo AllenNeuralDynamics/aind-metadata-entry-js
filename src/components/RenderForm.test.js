@@ -58,7 +58,7 @@ describe('RenderForm component', () => {
     render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={sampleInvalidFormData} />)
     fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
     expect(screen.getByText('Errors')).toBeVisible()
-    expect(screen.getByText('\'Option1\' must NOT have additional properties')).toBeVisible()
+    expect(screen.getByText('.sub_schema: \'Option1\' must NOT have additional properties')).toBeVisible()
   })
 
   it('shows a success message when form data is validated with no errors', () => {
