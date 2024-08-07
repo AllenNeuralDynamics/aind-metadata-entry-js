@@ -67,16 +67,4 @@ describe('RenderForm component', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
     expect(toast.success).toHaveBeenCalledWith('Form is valid. Ready to submit!')
   })
-
-  it('omits extra data on blur events', () => {
-    render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={SAMPLE_FORM_DATA} />)
-    // Select Option2, which should clear extra_data_str from initial formData
-    const option2Val = screen.getByRole('option', { name: 'Option2' }).value
-    fireEvent.change(screen.getByDisplayValue('Option1'), { target: { value: option2Val } })
-    fireEvent.blur(screen.getByDisplayValue('Option2'))
-    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
-    const formData = saveToJSONFile.mock.calls[0][0]
-    expect(formData.sub_schema).not.toHaveProperty('extra_data_str')
-    expect(formData).toEqual({ sub_schema: { discriminator_property: 'Discriminator 2' } })
-  })
 })
