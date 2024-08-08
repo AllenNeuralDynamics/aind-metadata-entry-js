@@ -41,7 +41,7 @@ const preProcessHelper = (obj) => {
         if (options === 'number,string') {
           prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
         } else if (options === 'null,number,string') {
-          prop.anyOf = [{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }]
+          prop.anyOf = [{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }, { type: 'null', title: 'null' }]
         } else {
           Object.values(prop.anyOf).forEach(option => {
             // if the allowed type/ subschema is not a ref nor has a title,
