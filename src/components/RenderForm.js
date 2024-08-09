@@ -70,6 +70,11 @@ function RenderForm (props) {
     saveToJSONFile(event.formData, schemaType)
   }
 
+  /**
+   * Transforms errors to prepend property name to error message
+   * @param {object[]} errors List of errors from JSON Schema validation
+   * @returns {object[]} Transformed errors
+   */
   function transformErrors (errors) {
     return errors.map(error => {
       if (error.property) { error.stack = `${error.property}: ${error.stack}` }
