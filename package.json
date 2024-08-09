@@ -49,10 +49,10 @@
   "jest": {
     "coverageThreshold": {
       "global": {
-        "statements": 69,
-        "branches": 67,
-        "functions": 75,
-        "lines": 69
+        "statements": 71,
+        "branches": 71,
+        "functions": 77,
+        "lines": 70
       }
     },
     "transformIgnorePatterns": [
