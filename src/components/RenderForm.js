@@ -6,7 +6,6 @@ import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import { AJV_OPTIONS } from '../utilities/schemaHandlers'
-import { deepEquals } from '@rjsf/utils'
 import { saveToJSONFile } from '../utilities/fileUtils'
 import { toast } from 'react-toastify'
 
@@ -33,33 +32,6 @@ function RenderForm (props) {
       toast.success('Form is valid. Ready to submit!')
     }
     event.target.blur()
-  }
-
-  /**
-   * onBlur event handler to omit extra data from formData.
-   */
-  const omitExtraDataOnBlur = () => {
-    // NOTE: There is a bug in RJSF `omitExtraData` logic causing validation errors.
-    // This is a workaround to omit extra data whenever a user leaves an input field.
-    // We avoid using `liveOmit` prop due to perf issues.
-
-    // TODO: remove this function once bug is fixed in RJSF.
-    const {
-      schemaUtils: _schemaUtils,
-      schema: _schema,
-      formData: _formData
-    } = formRef.current.state
-    const retrievedSchema = _schemaUtils.retrieveSchema(_schema, _formData)
-    const pathSchema = _schemaUtils.toPathSchema(retrievedSchema, '', _formData)
-    const fieldNames = formRef.current.getFieldNames(pathSchema, _formData)
-    const newFormData = formRef.current.getUsedFormData(_formData, fieldNames)
-
-    if (!deepEquals(_formData, newFormData)) {
-      formRef.current.setState({
-        ...formRef.current.state,
-        formData: newFormData
-      })
-    }
   }
 
   /**
@@ -92,7 +64,6 @@ function RenderForm (props) {
         uiSchema={uiSchema}
         widgets={widgets}
         onSubmit={saveFileOnSubmit}
-        onBlur={omitExtraDataOnBlur}
         transformErrors={transformErrors}
         omitExtraData
         noHtml5Validate

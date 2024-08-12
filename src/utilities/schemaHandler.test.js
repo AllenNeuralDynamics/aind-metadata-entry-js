@@ -243,5 +243,5 @@ test('Checks if anyOf string/number are changed to decimal', () => {
 
 test('Checks if anyOf null/string/number are changed to decimal', () => {
   const processedSchema = preProcessSchema(testSchema6)
-  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ type: 'null', title: 'null' }, { title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }])
+  expect(processedSchema.properties.test.anyOf).toStrictEqual([{ title: 'decimal', type: 'string', pattern: '^-?\\d+(\\.\\d{1,})?$' }, { type: 'null', title: 'null' }])
 })

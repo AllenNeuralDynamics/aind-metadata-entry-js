@@ -52,13 +52,13 @@ describe('RenderForm component', () => {
     const sampleInvalidFormData = {
       sub_schema: {
         discriminator_property: 'Discriminator 1',
-        invalid_prop: 'I am not allowed'
+        extra_data_str: 123
       }
     }
     render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={sampleInvalidFormData} />)
     fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
     expect(screen.getByText('Errors')).toBeVisible()
-    expect(screen.getByText('.sub_schema: \'Option1\' must NOT have additional properties')).toBeVisible()
+    expect(screen.getByText('.sub_schema.extra_data_str: \'Extra Data String\' must be string')).toBeVisible()
   })
 
   it('shows a success message when form data is validated with no errors', () => {
@@ -68,12 +68,20 @@ describe('RenderForm component', () => {
     expect(toast.success).toHaveBeenCalledWith('Form is valid. Ready to submit!')
   })
 
-  it('omits extra data on blur events', () => {
+  it('omits extra data on validate', () => {
     render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={SAMPLE_FORM_DATA} />)
     // Select Option2, which should clear extra_data_str from initial formData
     const option2Val = screen.getByRole('option', { name: 'Option2' }).value
     fireEvent.change(screen.getByDisplayValue('Option1'), { target: { value: option2Val } })
-    fireEvent.blur(screen.getByDisplayValue('Option2'))
+    fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
+    expect(screen.queryByText('Errors')).toBeNull()
+  })
+
+  it('omits extra data on submit', () => {
+    render(<RenderForm schemaType={SAMPLE_SCHEMA_TYPE} schema={SAMPLE_SCHEMA} formData={SAMPLE_FORM_DATA} />)
+    // Select Option2, which should clear extra_data_str from initial formData
+    const option2Val = screen.getByRole('option', { name: 'Option2' }).value
+    fireEvent.change(screen.getByDisplayValue('Option1'), { target: { value: option2Val } })
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
     const formData = saveToJSONFile.mock.calls[0][0]
     expect(formData.sub_schema).not.toHaveProperty('extra_data_str')
