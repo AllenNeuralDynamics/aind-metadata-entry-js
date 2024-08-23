@@ -1,4 +1,5 @@
 import { validate, compareVersions } from 'compare-versions'
+import Config from '../config'
 
 /**
  * @typedef {Object} Schema
@@ -36,7 +37,13 @@ export function parseAndFilterSchemas (schemaLinks) {
   for (const link of schemaLinks) {
     const parts = link.split('/')
     if (isValidSchema(link) && !filterArray.includes(parts[1])) {
-      schemaList.push({ type: parts[1], version: parts[2], path: link })
+      const s = { type: parts[1], version: parts[2], path: link }
+      // temporary upper bound for schema versions
+      const upperBound = Config.SCHEMAS_UPPER_BOUNDS[s.type]
+      if (upperBound && compareVersions(s.version, upperBound) > 0) {
+        continue
+      }
+      schemaList.push(s)
     }
   }
   return schemaList
