@@ -28,9 +28,13 @@ jobs:
         old_version=$(sed -n '3p' package.json | sed 's/.*"version": "\(.*\)".*/\1/')
         new_version=${{ env.VERSION }}
         sed -i "3s/$old_version/$new_version/" package.json
+    - name: Update package-lock.json
+      run: npm install
     - name: Commit and Push version bump
       uses: EndBug/add-and-commit@v9
       with:
         default_author: github_actions
         message: "version bump [skip actions]"
-        add: package.json
+        add: |
+          package.json
+          package-lock.json
