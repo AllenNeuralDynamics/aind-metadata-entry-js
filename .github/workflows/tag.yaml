@@ -30,11 +30,11 @@ jobs:
         sed -i "3s/$old_version/$new_version/" package.json
     - name: Update package-lock.json
       run: npm install
-    - name: Commit and Push version bump
+    - name: Commit and push version bump
       uses: EndBug/add-and-commit@v9
       with:
         default_author: github_actions
-        message: "version bump [skip actions]"
+        message: "ci: version bump [skip actions]"
         add: |
           package.json
           package-lock.json
