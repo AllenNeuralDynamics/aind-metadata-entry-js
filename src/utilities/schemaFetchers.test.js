@@ -1,14 +1,18 @@
 import { parseAndFilterSchemas, findSchemaFromData } from './schemaFetchers'
 
+// Mock the Config object before the tests
+jest.mock('../config', () => ({
+  Config: {
+    REACT_APP_FILTER_VERSIONS: {
+      test_type_1: ['1.0.0', '1.0.1']
+    }
+  }
+}));
+
 const SAMPLE_VALID_SCHEMA_LINKS = [
   'schemas/test_type_1/1.0.0/test_type_1_schema.json',
   'schemas/test_type_1/1.0.1/test_type_1_schema.json',
   'schemas/test_type_2/1.0/test_type_1_schema.json'
-]
-const SAMPLE_UNFILTERED_SCHEMA_LINKS = [
-  'schemas/test_type_1/1.0.0/test_type_1_schema.json',
-  'schemas/test_type_1/1.0.1/test_type_1_schema.json',
-  'schemas/test_type_1/2.0.0/test_type_1_schema.json'
 ]
 const EXPECTED_PARSED_SCHEMAS = [
   { type: 'test_type_1', version: '1.0.0', path: 'schemas/test_type_1/1.0.0/test_type_1_schema.json' },
@@ -78,17 +82,10 @@ describe('parseAndFilterSchemas', () => {
   })
 
   it('should filter out schemas based on version in Config.REACT_APP_FILTER_VERSIONS', () => {
-    process.env.REACT_APP_FILTER_SCHEMAS = JSON.stringify([])
-    global.Config = {
-      REACT_APP_FILTER_VERSIONS: {
-        test_type_1: ['1.0.0', '1.0.1']
-      }
-    }
-
-    const result = parseAndFilterSchemas(SAMPLE_UNFILTERED_SCHEMA_LINKS)
-
+    // process.env.REACT_APP_FILTER_VERSIONS = JSON.stringify([])
+    const result = parseAndFilterSchemas(SAMPLE_VALID_SCHEMA_LINKS)
     expect(result).toEqual([
-      { type: 'test_type_1', version: '2.0.0', path: 'schemas/test_type_1/2.0.0/test_type_1_schema.json' }
+      { type: 'test_type_2', version: '1.0', path: 'schemas/test_type_2/1.0/test_type_1_schema.json' }
     ])
   })
 })

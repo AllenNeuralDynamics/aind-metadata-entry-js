@@ -1,5 +1,5 @@
 import { validate, compareVersions } from 'compare-versions'
-import Config from '../config'
+import { Config } from '../config'
 
 /**
  * @typedef {Object} Schema
@@ -40,6 +40,7 @@ export function parseAndFilterSchemas (schemaLinks) {
       const s = { type: parts[1], version: parts[2], path: link }
       // filter out deprecated versions
       const filterVersions = Config.REACT_APP_FILTER_VERSIONS && Config.REACT_APP_FILTER_VERSIONS[s.type]
+      console.log(Config)
       if (filterVersions && filterVersions.includes(s.version)) {
         continue
       }
