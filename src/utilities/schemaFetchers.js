@@ -38,9 +38,9 @@ export function parseAndFilterSchemas (schemaLinks) {
     const parts = link.split('/')
     if (isValidSchema(link) && !filterArray.includes(parts[1])) {
       const s = { type: parts[1], version: parts[2], path: link }
-      // temporary upper bound for schema versions
-      const upperBound = Config.SCHEMAS_UPPER_BOUNDS[s.type]
-      if (upperBound && compareVersions(s.version, upperBound) > 0) {
+      // filter out deprecated versions
+      const filterVersions = Config.REACT_APP_FILTER_VERSIONS && Config.REACT_APP_FILTER_VERSIONS[s.type]
+      if (filterVersions && filterVersions.includes(s.version)) {
         continue
       }
       schemaList.push(s)
