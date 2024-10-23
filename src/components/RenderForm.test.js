@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import RenderForm from './RenderForm'
-import { preProcessSchema } from '../utilities/schemaHandlers'
-import { saveToJSONFile } from '../utilities/fileUtils'
+import { preProcessSchema } from '../utils/helpers/schema-handlers.helpers'
+import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import SCHEMA_DISCRIMINATOR_EXTRA_DATA from '../tests/resources/schemas/discriminator-extra-data.json'
 import { toast } from 'react-toastify'
 
@@ -16,7 +16,7 @@ const FORM_DATA = {
   }
 }
 
-jest.mock('../utilities/fileUtils', () => ({ saveToJSONFile: jest.fn() }))
+jest.mock('../utils/helpers/file.helpers', () => ({ saveToJSONFile: jest.fn() }))
 jest.mock('react-toastify', () => ({
   toast: {
     error: jest.fn(),

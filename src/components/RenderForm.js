@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
-import { AJV_OPTIONS } from '../utilities/schemaHandlers'
-import { saveToJSONFile } from '../utilities/fileUtils'
+import { AJV_OPTIONS } from '../utils/helpers/schema-handlers.helpers'
+import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import { toast } from 'react-toastify'
 
 function RenderForm (props) {

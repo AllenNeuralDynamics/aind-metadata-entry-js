@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { getLinkAsButton } from './uiUtils'
+import { getLinkAsButton } from './ui.helpers'
 
 describe('uiUtils', () => {
   describe('getLinkAsButton', () => {

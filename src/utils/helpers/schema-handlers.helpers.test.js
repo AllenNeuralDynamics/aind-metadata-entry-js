@@ -1,10 +1,10 @@
-import { preProcessSchema } from './schemaHandlers'
-import SCHEMA_CONSTS from '../tests/resources/schemas/consts.json'
-import SCHEMA_DEFAULTS from '../tests/resources/schemas/defaults.json'
-import SCHEMA_NESTED from '../tests/resources/schemas/nested.json'
-import SCHEMA_DISCRIMINATOR from '../tests/resources/schemas/discriminator.json'
-import SCHEMA_SIMPLE from '../tests/resources/schemas/simple.json'
-import SCHEMA_DECIMALS from '../tests/resources/schemas/decimals.json'
+import { preProcessSchema } from './schema-handlers.helpers'
+import SCHEMA_CONSTS from '../../tests/resources/schemas/consts.json'
+import SCHEMA_DEFAULTS from '../../tests/resources/schemas/defaults.json'
+import SCHEMA_NESTED from '../../tests/resources/schemas/nested.json'
+import SCHEMA_DISCRIMINATOR from '../../tests/resources/schemas/discriminator.json'
+import SCHEMA_SIMPLE from '../../tests/resources/schemas/simple.json'
+import SCHEMA_DECIMALS from '../../tests/resources/schemas/decimals.json'
 
 test('Checks preProcessSchema modifies const schema to add missing default or type', () => {
   const expectedTypes = [

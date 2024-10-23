@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { compareVersions } from 'compare-versions'
 import styles from './Toolbar.module.css'
 import { toast } from 'react-toastify'
-import Config from '../config'
-import { getLinkAsButton } from '../utilities/uiUtils'
+import Config from '../utils/config'
+import { getLinkAsButton } from '../utils/helpers/ui.helpers'
 
 const helpToast = (
   <div >

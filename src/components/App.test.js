@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import App from './App'
 import Toolbar from './Toolbar'
 import RenderForm from './RenderForm'
-import * as fileUtils from '../utilities/fileUtils'
-import * as schemaFetchers from '../utilities/schemaFetchers'
+import * as fileHelpers from '../utils/helpers/file.helpers'
+import * as schemaFetchers from '../utils/helpers/schema-fetchers.helpers'
 
 const TEST_APP_VERSION = '0.1.0'
 
@@ -62,7 +62,7 @@ describe('handleRehydrate', () => {
       <div>{JSON.stringify(formData)}</div>
     ))
     // mock utils to return correct file data and matched schema
-    jest.spyOn(fileUtils, 'readFromJSONFile').mockResolvedValue(FILE_DATA)
+    jest.spyOn(fileHelpers, 'readFromJSONFile').mockResolvedValue(FILE_DATA)
     jest.spyOn(schemaFetchers, 'findSchemaFromData').mockReturnValue(MOCK_MATCHED_SCHEMA_DEF)
     jest.spyOn(global, 'fetch').mockResolvedValue({ json: () => MOCK_FETCHED_SCHEMA_JSON })
   })
@@ -75,7 +75,7 @@ describe('handleRehydrate', () => {
     render(<App appVersion={TEST_APP_VERSION} />)
     fireEvent.click(await screen.findByTestId('test-autofill-btn'))
 
-    expect(fileUtils.readFromJSONFile).toHaveBeenCalledTimes(1)
+    expect(fileHelpers.readFromJSONFile).toHaveBeenCalledTimes(1)
     expect(await screen.findByText(MOCK_MATCHED_SCHEMA_DEF.type)).toBeVisible()
     expect(await screen.findByText(JSON.stringify(FILE_DATA))).toBeVisible()
   })

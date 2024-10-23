@@ -1,6 +1,6 @@
-import { parseAndFilterSchemas, findSchemaFromData } from './schemaFetchers'
-import SIMPLE_SCHEMA_LINKS from '../tests/resources/schema-links/simple.json'
-import INVALID_SCHEMA_LINKS from '../tests/resources/schema-links/invalid.json'
+import { parseAndFilterSchemas, findSchemaFromData } from './schema-fetchers.helpers'
+import SIMPLE_SCHEMA_LINKS from '../../tests/resources/schema-links/simple.json'
+import INVALID_SCHEMA_LINKS from '../../tests/resources/schema-links/invalid.json'
 
 // Mock the Config object before the tests
 jest.mock('../config', () => ({

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Toolbar from './Toolbar'
-import { parseAndFilterSchemas } from '../utilities/schemaFetchers'
+import { parseAndFilterSchemas } from '../utils/helpers/schema-fetchers.helpers'
 import SCHEMA_LINKS from '../tests/resources/schema-links/full.json'
 import SORTED_VERSION_LIST_INSTRUMENT from '../tests/resources/sorted-version-list-instrument.json'
 import { toast } from 'react-toastify'
