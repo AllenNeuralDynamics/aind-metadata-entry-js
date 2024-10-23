@@ -1,0 +1,55 @@
+{
+  "title": "sample schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Full Name",
+      "type": "string"
+    },
+    "email": {
+      "title": "Email Address",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resume": {
+      "title": "Resume",
+      "type": "object",
+      "properties": {
+        "education": {
+          "title": "Education",
+          "const": "Farmington University",
+          "type": "string"
+        },
+        "past_experiences": {
+          "title": "Past Experiences",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PastExperience"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PastExperience": {
+      "title": "PastExperience",
+      "description": "Description of Past Experience",
+      "type": "object",
+      "key_points": {
+        "title": "Key Points",
+        "description": "Info about job experience (ex: company name, duration, etc)",
+        "type": "object",
+        "default": {}
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

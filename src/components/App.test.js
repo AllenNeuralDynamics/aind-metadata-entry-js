@@ -8,7 +8,7 @@ import * as schemaFetchers from '../utilities/schemaFetchers'
 
 const TEST_APP_VERSION = '0.1.0'
 
-const SAMPLE_FILE_DATA = { test_property: 'data' }
+const FILE_DATA = { test_property: 'data' }
 const MOCK_MATCHED_SCHEMA_DEF = { type: 'test_type_1', path: 'test_type_1.py' }
 const MOCK_FETCHED_SCHEMA_JSON = {
   title: 'Test Type 1',
@@ -62,7 +62,7 @@ describe('handleRehydrate', () => {
       <div>{JSON.stringify(formData)}</div>
     ))
     // mock utils to return correct file data and matched schema
-    jest.spyOn(fileUtils, 'readFromJSONFile').mockResolvedValue(SAMPLE_FILE_DATA)
+    jest.spyOn(fileUtils, 'readFromJSONFile').mockResolvedValue(FILE_DATA)
     jest.spyOn(schemaFetchers, 'findSchemaFromData').mockReturnValue(MOCK_MATCHED_SCHEMA_DEF)
     jest.spyOn(global, 'fetch').mockResolvedValue({ json: () => MOCK_FETCHED_SCHEMA_JSON })
   })
@@ -77,6 +77,6 @@ describe('handleRehydrate', () => {
 
     expect(fileUtils.readFromJSONFile).toHaveBeenCalledTimes(1)
     expect(await screen.findByText(MOCK_MATCHED_SCHEMA_DEF.type)).toBeVisible()
-    expect(await screen.findByText(JSON.stringify(SAMPLE_FILE_DATA))).toBeVisible()
+    expect(await screen.findByText(JSON.stringify(FILE_DATA))).toBeVisible()
   })
 })
