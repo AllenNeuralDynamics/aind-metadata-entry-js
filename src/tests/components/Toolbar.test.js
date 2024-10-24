@@ -18,12 +18,12 @@ describe('Toolbar component', () => {
       schemaList={SCHEMA_LIST}
       handleRehydrate={NULL_CALLBACK}
     />)
-    expect(screen.getByTitle('Select a schema')).toBeInTheDocument()
-    expect(screen.getByTitle('Select a version')).toBeInTheDocument()
+    expect(screen.getByTitle('Select schema')).toBeInTheDocument()
+    expect(screen.getByTitle('Select version')).toBeInTheDocument()
     expect(screen.getByTitle('Autofill with existing data from local file')).toBeInTheDocument()
     expect(screen.getByTitle('Get help')).toBeInTheDocument()
-    expect(screen.getByTitle('Select a schema')).toBeEnabled()
-    expect(screen.getByTitle('Select a version')).toBeDisabled()
+    expect(screen.getByTitle('Select schema')).toBeEnabled()
+    expect(screen.getByTitle('Select version')).toBeDisabled()
     expect(screen.getByTitle('Autofill with existing data from local file')).toBeEnabled()
     expect(screen.getByTitle('Get help')).toBeEnabled()
   })
@@ -40,8 +40,8 @@ describe('Toolbar component', () => {
       schemaList={SCHEMA_LIST}
       handleRehydrate={NULL_CALLBACK}
     />)
-    fireEvent.change(screen.getByTitle('Select a schema'), { target: { value: newSchemaType } })
-    expect(screen.getByTitle('Select a version')).toBeEnabled()
+    fireEvent.change(screen.getByTitle('Select schema'), { target: { value: newSchemaType } })
+    expect(screen.getByTitle('Select version')).toBeEnabled()
     expect(mockTypeCallback).toHaveBeenCalledWith(newSchemaType)
   })
 
@@ -55,7 +55,7 @@ describe('Toolbar component', () => {
       schemaList={SCHEMA_LIST}
       handleRehydrate={NULL_CALLBACK}
     />)
-    const schemaVersionsList = [...screen.getByTitle('Select a version').options].map((option) => option.text)
+    const schemaVersionsList = [...screen.getByTitle('Select version').options].map((option) => option.text)
     expect(schemaVersionsList).toStrictEqual(SORTED_VERSION_LIST_INSTRUMENT)
   })
 
@@ -71,7 +71,7 @@ describe('Toolbar component', () => {
       schemaList={SCHEMA_LIST}
       handleRehydrate={NULL_CALLBACK}
     />)
-    fireEvent.change(screen.getByTitle('Select a version'), { target: { value: schemaPath } })
+    fireEvent.change(screen.getByTitle('Select version'), { target: { value: schemaPath } })
     expect(mockVersionCallback).toHaveBeenCalledWith(schemaPath)
   })
 
