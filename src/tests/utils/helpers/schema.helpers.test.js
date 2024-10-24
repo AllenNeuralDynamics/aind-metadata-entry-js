@@ -5,18 +5,18 @@ import {
   findSchemaFromData,
   fetchSchemaContentAsync,
   processSchemaContent
-} from './schema.helpers'
-import SIMPLE_SCHEMA_LINKS from '../../tests/resources/schema-links/simple.json'
-import INVALID_SCHEMA_LINKS from '../../tests/resources/schema-links/invalid.json'
-import SCHEMA_CONSTS from '../../tests/resources/schemas/consts.json'
-import SCHEMA_DEFAULTS from '../../tests/resources/schemas/defaults.json'
-import SCHEMA_NESTED from '../../tests/resources/schemas/nested.json'
-import SCHEMA_DISCRIMINATOR from '../../tests/resources/schemas/discriminator.json'
-import SCHEMA_SIMPLE from '../../tests/resources/schemas/simple.json'
-import SCHEMA_DECIMALS from '../../tests/resources/schemas/decimals.json'
+} from '../../../utils/helpers/schema.helpers'
+import SIMPLE_SCHEMA_LINKS from '../../resources/schema-links/simple.json'
+import INVALID_SCHEMA_LINKS from '../../resources/schema-links/invalid.json'
+import SCHEMA_CONSTS from '../../resources/schemas/consts.json'
+import SCHEMA_DEFAULTS from '../../resources/schemas/defaults.json'
+import SCHEMA_NESTED from '../../resources/schemas/nested.json'
+import SCHEMA_DISCRIMINATOR from '../../resources/schemas/discriminator.json'
+import SCHEMA_SIMPLE from '../../resources/schemas/simple.json'
+import SCHEMA_DECIMALS from '../../resources/schemas/decimals.json'
 
 // Mock the Config object before the tests
-jest.mock('../config', () => ({
+jest.mock('../../../utils/config', () => ({
   __esModule: true, // Indicate that this is an ES module
   default: {
     REACT_APP_FILTER_VERSIONS: {

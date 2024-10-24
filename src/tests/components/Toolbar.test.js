@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import Toolbar from './Toolbar'
-import SCHEMA_LIST from '../tests/resources/schema-links/full-parsed-filtered.json'
-import SORTED_VERSION_LIST_INSTRUMENT from '../tests/resources/sorted-version-list-instrument.json'
+import Toolbar from '../../components/Toolbar'
+import SCHEMA_LIST from '../resources/schema-links/full-parsed-filtered.json'
+import SORTED_VERSION_LIST_INSTRUMENT from '../resources/sorted-version-list-instrument.json'
 import { toast } from 'react-toastify'
 
 const NULL_CALLBACK = () => { }

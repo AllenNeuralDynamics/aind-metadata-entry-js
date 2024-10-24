@@ -1,10 +1,10 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import App from './App'
-import Toolbar from './Toolbar'
-import RenderForm from './RenderForm'
-import * as fileHelpers from '../utils/helpers/file.helpers'
-import * as schemaFetchers from '../utils/helpers/schema.helpers'
+import App from '../../components/App'
+import Toolbar from '../../components/Toolbar'
+import RenderForm from '../../components/RenderForm'
+import * as fileHelpers from '../../utils/helpers/file.helpers'
+import * as schemaFetchers from '../../utils/helpers/schema.helpers'
 
 const TEST_APP_VERSION = '0.1.0'
 
@@ -20,8 +20,8 @@ const MOCK_FETCHED_SCHEMA_JSON = {
   }
 }
 
-jest.mock('./Toolbar', () => jest.fn())
-jest.mock('./RenderForm', () => jest.fn())
+jest.mock('../../components/Toolbar', () => jest.fn())
+jest.mock('../../components/RenderForm', () => jest.fn())
 
 describe('App component', () => {
   afterEach(() => {

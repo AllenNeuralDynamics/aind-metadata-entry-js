@@ -1,4 +1,4 @@
-import { readFromJSONFile } from './file.helpers'
+import { readFromJSONFile } from '../../../utils/helpers/file.helpers'
 
 const FILE_DATA = { test: 'data' }
 const EXPECTED_TYPE_OPTIONS = [{ accept: { 'application/json': ['.json'] } }]
