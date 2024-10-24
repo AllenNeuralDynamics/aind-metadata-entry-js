@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
-import RenderForm from './RenderForm'
-import { readFromJSONFile } from '../utils/helpers/file.helpers'
+import RenderForm from '../RenderForm'
+import { readFromJSONFile } from '../../utils/helpers/file.helpers'
 import {
   fetchAndFilterSchemasAsync,
   findLatestSchemas,
   findSchemaFromData,
   fetchSchemaContentAsync,
   processSchemaContent
-} from '../utils/helpers/schema.helpers'
-import Toolbar from './Toolbar'
-import styles from './App.module.css'
+} from '../../utils/helpers/schema.helpers'
+import Toolbar from '../Toolbar'
+import styles from './MetadataEntryPage.module.css'
 import { nanoid } from 'nanoid'
 
-function App (props) {
-  /*
-    Application to display a dropdown menu of schemas.
-        Fetches schema objects from s3
-        Creates schema objects from filepaths
-        Renders dropdown menu with options
-        Gives user the option to autofill the form with previously input data
-     */
-  const { appVersion } = props
-  const appVersionMsg = appVersion ? `App version ${appVersion}` : null
+/**
+ * Page to display a dropdown menu of schemas and form to enter metadata.
+ *    Fetches schema objects from s3
+ *    Creates schema objects from filepaths
+ *    Renders dropdown menu with options
+ *    Gives user the option to autofill the form with previously input data
+ */
+function MetadataEntryPage () {
   const [data, setData] = useState(null)
   const [schema, setSchema] = useState(null)
   const [selectedSchemaType, setSelectedSchemaType] = useState('')
@@ -118,11 +115,6 @@ function App (props) {
 
   return (
     <div>
-      <div className={styles.titleSection}>
-        <h1> AIND Metadata Entry </h1>
-        <div>User-interface for metadata ingestion and validation. Use on Chrome or Edge. {appVersionMsg}</div>
-      </div>
-      <div className={styles.toolbarSection}>
         < Toolbar
           ParentTypeCallback={typeCallbackFunction}
           ParentVersionCallback={versionCallbackFunction}
@@ -131,7 +123,6 @@ function App (props) {
           schemaList={schemaList}
           handleRehydrate={handleRehydrate}
         />
-      </div>
       <div className={styles.formSection}>
         <ErrorBoundary
           fallback={<div title='Form error' className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}
@@ -145,8 +136,4 @@ function App (props) {
   )
 }
 
-App.propTypes = {
-  appVersion: PropTypes.string.isRequired
-}
-
-export default App
+export default MetadataEntryPage

@@ -1,12 +1,10 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import App from '../../components/App'
-import Toolbar from '../../components/Toolbar'
-import RenderForm from '../../components/RenderForm'
-import * as fileHelpers from '../../utils/helpers/file.helpers'
-import * as schemaFetchers from '../../utils/helpers/schema.helpers'
-
-const TEST_APP_VERSION = '0.1.0'
+import MetadataEntryPage from '../../../components/pages/MetadataEntryPage'
+import Toolbar from '../../../components/Toolbar'
+import RenderForm from '../../../components/RenderForm'
+import * as fileHelpers from '../../../utils/helpers/file.helpers'
+import * as schemaFetchers from '../../../utils/helpers/schema.helpers'
 
 const FILE_DATA = { test_property: 'data' }
 const MOCK_MATCHED_SCHEMA_DEF = { type: 'test_type_1', path: 'test_type_1.py' }
@@ -20,21 +18,21 @@ const MOCK_FETCHED_SCHEMA_JSON = {
   }
 }
 
-jest.mock('../../components/Toolbar', () => jest.fn())
-jest.mock('../../components/RenderForm', () => jest.fn())
+jest.mock('../../../components/Toolbar', () => jest.fn())
+jest.mock('../../../components/RenderForm', () => jest.fn())
 
-describe('App component', () => {
+describe('MetadataEntryPage', () => {
   afterEach(() => {
     jest.restoreAllMocks()
   })
 
   it('renders without crashing', () => {
-    render(<App appVersion={TEST_APP_VERSION} />)
+    render(<MetadataEntryPage/>)
     expect(screen.queryByTitle('Form error')).toBeNull()
   })
 
   it('renders Toolbar and RenderForm child components on default', () => {
-    render(<App appVersion={TEST_APP_VERSION} />)
+    render(<MetadataEntryPage/>)
     expect(Toolbar).toHaveBeenCalled()
     expect(RenderForm).toHaveBeenCalled()
   })
@@ -42,7 +40,7 @@ describe('App component', () => {
   it('catches and displays error when unable to render form', () => {
     jest.spyOn(console, 'error').mockImplementation(() => jest.fn())
     RenderForm.mockImplementation(() => { throw new Error('Unable to render form') })
-    render(<App appVersion={TEST_APP_VERSION} />)
+    render(<MetadataEntryPage/>)
     expect(RenderForm).toThrow('Unable to render form')
     expect(screen.getByTitle('Form error')).toBeVisible()
   })
@@ -72,7 +70,7 @@ describe('handleRehydrate', () => {
   })
 
   it('reads and validates from JSON file and updates state based on contents', async () => {
-    render(<App appVersion={TEST_APP_VERSION} />)
+    render(<MetadataEntryPage/>)
     fireEvent.click(await screen.findByTestId('test-autofill-btn'))
 
     expect(fileHelpers.readFromJSONFile).toHaveBeenCalledTimes(1)
