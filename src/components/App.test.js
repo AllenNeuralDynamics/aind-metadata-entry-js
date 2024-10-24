@@ -4,7 +4,7 @@ import App from './App'
 import Toolbar from './Toolbar'
 import RenderForm from './RenderForm'
 import * as fileHelpers from '../utils/helpers/file.helpers'
-import * as schemaFetchers from '../utils/helpers/schema-fetchers.helpers'
+import * as schemaFetchers from '../utils/helpers/schema.helpers'
 
 const TEST_APP_VERSION = '0.1.0'
 
@@ -50,7 +50,7 @@ describe('App component', () => {
 
 describe('handleRehydrate', () => {
   beforeEach(() => {
-    jest.spyOn(schemaFetchers, 'fetchSchemasfromS3').mockResolvedValue([])
+    jest.spyOn(schemaFetchers, 'fetchAndFilterSchemasAsync').mockResolvedValue([])
     // mock child components to trigger handleRehydrate and display state changes
     Toolbar.mockImplementation(({ selectedSchemaType, handleRehydrate }) => (
       <div>

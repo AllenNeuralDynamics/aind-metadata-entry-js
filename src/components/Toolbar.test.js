@@ -1,13 +1,11 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Toolbar from './Toolbar'
-import { parseAndFilterSchemas } from '../utils/helpers/schema-fetchers.helpers'
-import SCHEMA_LINKS from '../tests/resources/schema-links/full.json'
+import SCHEMA_LIST from '../tests/resources/schema-links/full-parsed-filtered.json'
 import SORTED_VERSION_LIST_INSTRUMENT from '../tests/resources/sorted-version-list-instrument.json'
 import { toast } from 'react-toastify'
 
 const NULL_CALLBACK = () => { }
-const SCHEMA_LIST = parseAndFilterSchemas(SCHEMA_LINKS)
 jest.mock('react-toastify', () => ({ toast: jest.fn() }))
 
 describe('Toolbar component', () => {

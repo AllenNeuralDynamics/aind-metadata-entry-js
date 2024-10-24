@@ -1,14 +1,14 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import RenderForm from './RenderForm'
-import { preProcessSchema } from '../utils/helpers/schema-handlers.helpers'
+import { processSchemaContent } from '../utils/helpers/schema.helpers'
 import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import SCHEMA_DISCRIMINATOR_EXTRA_DATA from '../tests/resources/schemas/discriminator-extra-data.json'
 import { toast } from 'react-toastify'
 
 const EXPECTED_PROMPT_TEXT = 'Please select a schema from the dropdown above or autofill data from an existing file.'
 const SCHEMA_TYPE = 'test'
-const SCHEMA = preProcessSchema(SCHEMA_DISCRIMINATOR_EXTRA_DATA)
+const SCHEMA = processSchemaContent(SCHEMA_DISCRIMINATOR_EXTRA_DATA)
 const FORM_DATA = {
   sub_schema: {
     discriminator_property: 'Discriminator 1',

@@ -4,8 +4,13 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import { readFromJSONFile } from '../utils/helpers/file.helpers'
-import { preProcessSchema } from '../utils/helpers/schema-handlers.helpers'
-import { fetchSchemasfromS3, findLatestSchemas, parseAndFilterSchemas, findSchemaFromData } from '../utils/helpers/schema-fetchers.helpers'
+import {
+  fetchAndFilterSchemasAsync,
+  findLatestSchemas,
+  findSchemaFromData,
+  fetchSchemaContentAsync,
+  processSchemaContent
+} from '../utils/helpers/schema.helpers'
 import Toolbar from './Toolbar'
 import styles from './App.module.css'
 import { nanoid } from 'nanoid'
@@ -28,16 +33,7 @@ function App (props) {
   const [schemaList, setSchemaList] = useState([])
 
   useEffect(() => {
-    async function fetchSchemaList () {
-      /*
-            Method to retrieve list of schema links from aws s3 bucket
-            UseEffect hook so that dropdowns can be rendered from list
-            */
-      const schemaLinks = await fetchSchemasfromS3()
-      const filteredSchemas = parseAndFilterSchemas(schemaLinks)
-      setSchemaList(filteredSchemas)
-    }
-    fetchSchemaList()
+    fetchAndFilterSchemasAsync(setSchemaList)
   }, [])
 
   const typeCallbackFunction = async (childData) => {
@@ -93,21 +89,30 @@ function App (props) {
     })
   }
 
-  const fetchAndSetSchema = async (url) => {
+  const fetchAndSetSchema = async (schemaPath) => {
     /**
          * Method to put the user-selected schema into state
          * defaults to latest schema version
          */
     try {
       setData(null)
-      const response = await fetch(process.env.REACT_APP_S3_URL + '/' + url)
-      const schema = await response.json()
-      const processedSchema = await schema ? preProcessSchema(schema) : undefined
-      setSelectedSchemaPath(url)
+      const schema = await fetchSchemaContentAsync(schemaPath)
+      // Try to process schema for custom rendering
+      // If there are errors, render raw original schema
+      let processedSchema
+      try {
+        processedSchema = processSchemaContent(schema)
+      } catch (error) {
+        const msg = `Error processing ${schema?.title} ${schema.properties?.schema_version?.const}`
+        console.error(msg, error)
+        processedSchema = schema
+        toast.warn(`${msg}. Rendered raw schema instead.`)
+      }
+      setSelectedSchemaPath(schemaPath)
       setSchema(processedSchema)
     } catch (error) {
       console.error(error)
-      toast.error(`Unable to render ${url}`)
+      toast.error(`Unable to render ${schemaPath}`)
     }
   }
 
