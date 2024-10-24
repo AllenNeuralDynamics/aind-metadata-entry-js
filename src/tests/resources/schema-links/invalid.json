@@ -1,0 +1,9 @@
+[
+  "schemas/test/1.0.0/test_schema",
+  "schemas/test/1.0.0/test_schema.txt",
+  "schemas/test/1.0.0a/test_schema.json",
+  "schemas/test/test_schema.json",
+  "schemas/1.0.0/test_schema.json",
+  "test_schema.json",
+  "index.html"
+]

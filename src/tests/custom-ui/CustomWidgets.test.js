@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import Form from '@rjsf/core'
-import { widgets } from './CustomWidgets'
+import { widgets } from '../../custom-ui/CustomWidgets'
 import validator from '@rjsf/validator-ajv8'
 
 describe('CustomTextWidget', () => {

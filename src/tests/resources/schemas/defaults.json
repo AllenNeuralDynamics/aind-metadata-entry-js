@@ -1,0 +1,30 @@
+{
+  "title": "sample schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Full Name",
+      "type": "string"
+    },
+    "email": {
+      "title": "Email Address",
+      "type": "string"
+    },
+    "parameters": {
+      "title": "parameters",
+      "type": "object",
+      "default": {}
+    },
+    "default_array": {
+      "title": "Test Array",
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -4,6 +4,11 @@ const Config = {
   AIND_DATA_SCHEMA_READTHEDOCS_URL: 'https://aind-data-schema.readthedocs.io/en/latest/',
   REACT_APP_FILTER_VERSIONS: {
     rig: ['1.0.0']
+  },
+  AJV_OPTIONS: {
+    ajvOptionsOverrides: {
+      discriminator: true
+    }
   }
 }
 

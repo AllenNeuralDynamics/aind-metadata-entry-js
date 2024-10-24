@@ -1,14 +1,14 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import App from './App'
-import Toolbar from './Toolbar'
-import RenderForm from './RenderForm'
-import * as fileUtils from '../utilities/fileUtils'
-import * as schemaFetchers from '../utilities/schemaFetchers'
+import App from '../../components/App'
+import Toolbar from '../../components/Toolbar'
+import RenderForm from '../../components/RenderForm'
+import * as fileHelpers from '../../utils/helpers/file.helpers'
+import * as schemaFetchers from '../../utils/helpers/schema.helpers'
 
 const TEST_APP_VERSION = '0.1.0'
 
-const SAMPLE_FILE_DATA = { test_property: 'data' }
+const FILE_DATA = { test_property: 'data' }
 const MOCK_MATCHED_SCHEMA_DEF = { type: 'test_type_1', path: 'test_type_1.py' }
 const MOCK_FETCHED_SCHEMA_JSON = {
   title: 'Test Type 1',
@@ -20,8 +20,8 @@ const MOCK_FETCHED_SCHEMA_JSON = {
   }
 }
 
-jest.mock('./Toolbar', () => jest.fn())
-jest.mock('./RenderForm', () => jest.fn())
+jest.mock('../../components/Toolbar', () => jest.fn())
+jest.mock('../../components/RenderForm', () => jest.fn())
 
 describe('App component', () => {
   afterEach(() => {
@@ -50,7 +50,7 @@ describe('App component', () => {
 
 describe('handleRehydrate', () => {
   beforeEach(() => {
-    jest.spyOn(schemaFetchers, 'fetchSchemasfromS3').mockResolvedValue([])
+    jest.spyOn(schemaFetchers, 'fetchAndFilterSchemasAsync').mockResolvedValue([])
     // mock child components to trigger handleRehydrate and display state changes
     Toolbar.mockImplementation(({ selectedSchemaType, handleRehydrate }) => (
       <div>
@@ -62,7 +62,7 @@ describe('handleRehydrate', () => {
       <div>{JSON.stringify(formData)}</div>
     ))
     // mock utils to return correct file data and matched schema
-    jest.spyOn(fileUtils, 'readFromJSONFile').mockResolvedValue(SAMPLE_FILE_DATA)
+    jest.spyOn(fileHelpers, 'readFromJSONFile').mockResolvedValue(FILE_DATA)
     jest.spyOn(schemaFetchers, 'findSchemaFromData').mockReturnValue(MOCK_MATCHED_SCHEMA_DEF)
     jest.spyOn(global, 'fetch').mockResolvedValue({ json: () => MOCK_FETCHED_SCHEMA_JSON })
   })
@@ -75,8 +75,8 @@ describe('handleRehydrate', () => {
     render(<App appVersion={TEST_APP_VERSION} />)
     fireEvent.click(await screen.findByTestId('test-autofill-btn'))
 
-    expect(fileUtils.readFromJSONFile).toHaveBeenCalledTimes(1)
+    expect(fileHelpers.readFromJSONFile).toHaveBeenCalledTimes(1)
     expect(await screen.findByText(MOCK_MATCHED_SCHEMA_DEF.type)).toBeVisible()
-    expect(await screen.findByText(JSON.stringify(SAMPLE_FILE_DATA))).toBeVisible()
+    expect(await screen.findByText(JSON.stringify(FILE_DATA))).toBeVisible()
   })
 })

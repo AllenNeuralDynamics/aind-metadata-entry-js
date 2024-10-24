@@ -1,0 +1,5 @@
+[
+  "schemas/test_type_1/1.0.0/test_type_1_schema.json",
+  "schemas/test_type_1/1.0.1/test_type_1_schema.json",
+  "schemas/test_type_2/1.0/test_type_1_schema.json"
+]

@@ -1,0 +1,17 @@
+{
+  "title": "sample schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Full Name",
+      "type": "string"
+    },
+    "email": {
+      "title": "Email Address",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "title": "sample schema",
+  "type": "object",
+  "properties": {
+    "decimal_prop": {
+      "title": "test",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "decimal_prop_optional": {
+      "title": "test",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}
