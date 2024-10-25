@@ -1,16 +1,18 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import Toolbar from '../../components/Toolbar'
+import SchemaToolbar from '../../components/SchemaToolbar'
 import SCHEMA_LIST from '../resources/schema-links/full-parsed-filtered.json'
 import SORTED_VERSION_LIST_INSTRUMENT from '../resources/sorted-version-list-instrument.json'
 import { toast } from 'react-toastify'
+import Help from '../../components/Help'
 
 const NULL_CALLBACK = () => { }
 jest.mock('react-toastify', () => ({ toast: jest.fn() }))
+jest.mock('../../components/Help', () => jest.fn())
 
-describe('Toolbar component', () => {
+describe('SchemaToolbar component', () => {
   it('renders appropriate inputs on default', () => {
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={NULL_CALLBACK}
       ParentVersionCallback={NULL_CALLBACK}
       selectedSchemaType=''
@@ -32,7 +34,7 @@ describe('Toolbar component', () => {
     const mockTypeCallback = jest.fn()
     const schemaType = 'subject'
     const newSchemaType = 'instrument'
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={mockTypeCallback}
       ParentVersionCallback={NULL_CALLBACK}
       selectedSchemaType={schemaType}
@@ -47,7 +49,7 @@ describe('Toolbar component', () => {
 
   it('has schema versions sorted by latest-first semantic version', () => {
     const schemaType = 'instrument'
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={NULL_CALLBACK}
       ParentVersionCallback={NULL_CALLBACK}
       selectedSchemaType={schemaType}
@@ -63,7 +65,7 @@ describe('Toolbar component', () => {
     const mockVersionCallback = jest.fn()
     const schemaType = 'instrument'
     const schemaPath = 'schemas/instrument/0.10.0/instrument_schema.json'
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={NULL_CALLBACK}
       ParentVersionCallback={mockVersionCallback}
       selectedSchemaType={schemaType}
@@ -77,7 +79,7 @@ describe('Toolbar component', () => {
 
   it('calls handleRehydrate when autofill button is clicked', () => {
     const mockRehydrateCallback = jest.fn()
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={NULL_CALLBACK}
       ParentVersionCallback={NULL_CALLBACK}
       selectedSchemaType=''
@@ -90,26 +92,11 @@ describe('Toolbar component', () => {
   })
 
   it('displays a popup with Help info when the Help button is clicked', () => {
-    const expectedHelpDiv = expect.objectContaining({
-      type: 'div',
-      props: {
-        children: expect.arrayContaining([
-          expect.objectContaining({
-            type: 'h2',
-            props: expect.objectContaining({ children: 'Help' })
-          }),
-          expect.objectContaining({
-            type: 'h4',
-            props: expect.objectContaining({ children: 'Getting started' })
-          })
-        ])
-      }
-    })
     const expectedToastParams = {
       toastId: 'help-toast',
       autoClose: false
     }
-    render(<Toolbar
+    render(<SchemaToolbar
       ParentTypeCallback={NULL_CALLBACK}
       ParentVersionCallback={NULL_CALLBACK}
       selectedSchemaType=''
@@ -118,6 +105,6 @@ describe('Toolbar component', () => {
       handleRehydrate={NULL_CALLBACK}
     />)
     fireEvent.click(screen.getByTitle('Get help'))
-    expect(toast).toHaveBeenCalledWith(expectedHelpDiv, expectedToastParams)
+    expect(toast).toHaveBeenCalledWith((<Help />), expectedToastParams)
   })
 })

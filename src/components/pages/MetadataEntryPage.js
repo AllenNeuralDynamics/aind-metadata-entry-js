@@ -10,7 +10,7 @@ import {
   fetchSchemaContentAsync,
   processSchemaContent
 } from '../../utils/helpers/schema.helpers'
-import Toolbar from '../Toolbar'
+import SchemaToolbar from '../SchemaToolbar'
 import styles from './MetadataEntryPage.module.css'
 import { nanoid } from 'nanoid'
 
@@ -115,14 +115,14 @@ function MetadataEntryPage () {
 
   return (
     <div>
-        < Toolbar
-          ParentTypeCallback={typeCallbackFunction}
-          ParentVersionCallback={versionCallbackFunction}
-          selectedSchemaType={selectedSchemaType}
-          selectedSchemaPath={selectedSchemaPath}
-          schemaList={schemaList}
-          handleRehydrate={handleRehydrate}
-        />
+      < SchemaToolbar
+        ParentTypeCallback={typeCallbackFunction}
+        ParentVersionCallback={versionCallbackFunction}
+        selectedSchemaType={selectedSchemaType}
+        selectedSchemaPath={selectedSchemaPath}
+        schemaList={schemaList}
+        handleRehydrate={handleRehydrate}
+      />
       <div className={styles.formSection}>
         <ErrorBoundary
           fallback={<div title='Form error' className={styles.error}>Unable to render form. Please try again or select a different schema/version.</div>}

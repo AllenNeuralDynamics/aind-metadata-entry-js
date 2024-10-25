@@ -15,6 +15,7 @@ function App (props) {
       < Header
         title="AIND Metadata Entry"
         subtitle={`User-interface for metadata ingestion and validation. Use on Chrome or Edge. App version ${appVersion}`}
+        alignCenter
       />
       < MetadataEntryPage/>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import MetadataEntryPage from '../../../components/pages/MetadataEntryPage'
-import Toolbar from '../../../components/Toolbar'
+import SchemaToolbar from '../../../components/SchemaToolbar'
 import RenderForm from '../../../components/RenderForm'
 import * as fileHelpers from '../../../utils/helpers/file.helpers'
 import * as schemaFetchers from '../../../utils/helpers/schema.helpers'
@@ -18,7 +18,7 @@ const MOCK_FETCHED_SCHEMA_JSON = {
   }
 }
 
-jest.mock('../../../components/Toolbar', () => jest.fn())
+jest.mock('../../../components/SchemaToolbar', () => jest.fn())
 jest.mock('../../../components/RenderForm', () => jest.fn())
 
 describe('MetadataEntryPage', () => {
@@ -31,9 +31,9 @@ describe('MetadataEntryPage', () => {
     expect(screen.queryByTitle('Form error')).toBeNull()
   })
 
-  it('renders Toolbar and RenderForm child components on default', () => {
+  it('renders SchemaToolbar and RenderForm child components on default', () => {
     render(<MetadataEntryPage/>)
-    expect(Toolbar).toHaveBeenCalled()
+    expect(SchemaToolbar).toHaveBeenCalled()
     expect(RenderForm).toHaveBeenCalled()
   })
 
@@ -50,7 +50,7 @@ describe('handleRehydrate', () => {
   beforeEach(() => {
     jest.spyOn(schemaFetchers, 'fetchAndFilterSchemasAsync').mockResolvedValue([])
     // mock child components to trigger handleRehydrate and display state changes
-    Toolbar.mockImplementation(({ selectedSchemaType, handleRehydrate }) => (
+    SchemaToolbar.mockImplementation(({ selectedSchemaType, handleRehydrate }) => (
       <div>
         <button data-testid='test-autofill-btn' onClick={handleRehydrate}>Test Autofill Button</button >
         <span>{selectedSchemaType}</span>
