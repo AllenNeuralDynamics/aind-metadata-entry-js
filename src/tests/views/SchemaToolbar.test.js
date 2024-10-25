@@ -1,15 +1,15 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import SchemaToolbar from '../../../components/views/SchemaToolbar'
-import SCHEMA_LIST from '../../resources/schema-links/full-parsed-filtered.json'
-import SORTED_VERSION_LIST_INSTRUMENT from '../../resources/sorted-version-list-instrument.json'
+import SchemaToolbar from '../../views/SchemaToolbar'
+import SCHEMA_LIST from '../resources/schema-links/full-parsed-filtered.json'
+import SORTED_VERSION_LIST_INSTRUMENT from '../resources/sorted-version-list-instrument.json'
 import { toast } from 'react-toastify'
-import Help from '../../../components/views/Help'
-import { SchemaContext } from '../../../contexts/schema.context'
+import Help from '../../views/Help'
+import { SchemaContext } from '../../contexts/schema.context'
 
 const NULL_CALLBACK = () => { }
 jest.mock('react-toastify', () => ({ toast: jest.fn() }))
-jest.mock('../../../components/views/Help', () => jest.fn())
+jest.mock('../../views/Help', () => jest.fn())
 
 /**
  * Helper function to render SchemaToolbar component with test context

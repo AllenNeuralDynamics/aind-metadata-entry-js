@@ -84,4 +84,4 @@ CustomTextWidget.propTypes = {
   schema: PropTypes.object
 }
 
-export const CustomWidgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }
+export const widgets = { checkbox: CustomCheckboxWidget, time: CustomTimeWidget, text: CustomTextWidget }

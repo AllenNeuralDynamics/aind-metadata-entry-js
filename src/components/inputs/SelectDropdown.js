@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './SelectDropdown.module.css'
-import { onChangeWrapper } from '../../../utils/helpers/ui.helpers'
+import { onChangeWrapper } from '../../utils/helpers/ui.helpers'
 
 /**
  * Select component that renders a dropdown menu.

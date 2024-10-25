@@ -1,7 +1,7 @@
 import React from 'react'
-import Config from '../../utils/config'
-import { LinkButton } from '../layout/inputs'
-import Header from '../layout/Header'
+import Config from '../utils/config'
+import { LinkButton } from '../components/inputs'
+import { Header } from '../components/layout'
 
 /**
  * Component to display About/Help information

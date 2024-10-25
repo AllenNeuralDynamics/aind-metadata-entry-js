@@ -1,14 +1,14 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import Help from '../../../components/views/Help'
-import Header from '../../../components/layout/Header'
+import Help from '../../views/Help'
+import { Header } from '../../components/layout'
 
-jest.mock('../../../utils/config', () => ({
+jest.mock('../../utils/config', () => ({
   REPO_URL: 'https://github.com/repo',
   AIND_DATA_SCHEMA_REPO_URL: 'https://github.com/schema-repo',
   AIND_DATA_SCHEMA_READTHEDOCS_URL: 'https://schema-repo.readthedocs.io'
 }))
-jest.mock('../../../components/layout/Header', () => jest.fn())
+jest.mock('../../components/layout/Header', () => jest.fn())
 
 describe('Help component', () => {
   afterEach(() => {

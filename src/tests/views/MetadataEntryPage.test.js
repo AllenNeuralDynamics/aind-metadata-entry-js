@@ -1,14 +1,14 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import MetadataEntryPage from '../../../components/views/MetadataEntryPage'
-import SchemaToolbar from '../../../components/views/SchemaToolbar'
-import RenderForm from '../../../components/views/RenderForm'
-import { SchemaContext } from '../../../contexts/schema.context'
+import MetadataEntryPage from '../../views/MetadataEntryPage'
+import SchemaToolbar from '../../views/SchemaToolbar'
+import RenderForm from '../../views/RenderForm'
+import { SchemaContext } from '../../contexts/schema.context'
 
 const SCHEMA_TYPE = 'test_type'
 
-jest.mock('../../../components/views/SchemaToolbar', () => jest.fn())
-jest.mock('../../../components/views/RenderForm', () => jest.fn())
+jest.mock('../../views/SchemaToolbar', () => jest.fn())
+jest.mock('../../views/RenderForm', () => jest.fn())
 
 /**
  * Helper function to render MetadataEntryPage with test context

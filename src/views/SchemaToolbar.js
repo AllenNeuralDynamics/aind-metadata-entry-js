@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { compareVersions } from 'compare-versions'
 import { toast } from 'react-toastify'
-import { Button, SelectDropdown } from '../layout/inputs'
-import Toolbar from '../layout/Toolbar'
+import { Button, SelectDropdown } from '../components/inputs'
+import { Toolbar } from '../components/layout'
 import Help from './Help'
-import { SchemaContext } from '../../contexts/schema.context'
+import { SchemaContext } from '../contexts/schema.context'
 
 /**
  * Component to render a dropdown menu for schema-selection.

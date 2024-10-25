@@ -1,11 +1,11 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import RenderForm from '../../../components/views/RenderForm'
-import { processSchemaContent } from '../../../utils/helpers/schema.helpers'
-import { saveToJSONFile } from '../../../utils/helpers/file.helpers'
-import SCHEMA_DISCRIMINATOR_EXTRA_DATA from '../../resources/schemas/discriminator-extra-data.json'
+import RenderForm from '../../views/RenderForm'
+import { processSchemaContent } from '../../utils/helpers/schema.helpers'
+import { saveToJSONFile } from '../../utils/helpers/file.helpers'
+import SCHEMA_DISCRIMINATOR_EXTRA_DATA from '../resources/schemas/discriminator-extra-data.json'
 import { toast } from 'react-toastify'
-import { SchemaContext } from '../../../contexts/schema.context'
+import { SchemaContext } from '../../contexts/schema.context'
 
 const EXPECTED_PROMPT_TEXT = 'Please select a schema from the dropdown above or autofill data from an existing file.'
 const SCHEMA_TYPE = 'test'
@@ -17,7 +17,7 @@ const FORM_DATA = {
   }
 }
 
-jest.mock('../../../utils/helpers/file.helpers', () => ({ saveToJSONFile: jest.fn() }))
+jest.mock('../../utils/helpers/file.helpers', () => ({ saveToJSONFile: jest.fn() }))
 jest.mock('react-toastify', () => ({
   toast: {
     error: jest.fn(),

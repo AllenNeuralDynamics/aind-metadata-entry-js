@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import RenderForm from './RenderForm'
 import SchemaToolbar from './SchemaToolbar'
 import styles from './MetadataEntryPage.module.css'
-import { SchemaContext } from '../../contexts/schema.context'
+import { SchemaContext } from '../contexts/schema.context'
 
 /**
  * Page to display a dropdown menu of schemas and form to enter metadata.

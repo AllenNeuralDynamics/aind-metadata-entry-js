@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { onChangeWrapper } from '../../../utils/helpers/ui.helpers'
+import { onChangeWrapper } from '../../utils/helpers/ui.helpers'
 
 /**
  * Button component with optional tooltip and styling.

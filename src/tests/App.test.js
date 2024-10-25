@@ -1,11 +1,11 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import App from '../App'
-import MetadataEntryPage from '../components/views/MetadataEntryPage'
+import MetadataEntryPage from '../views/MetadataEntryPage'
 
 const TEST_APP_VERSION = '0.1.0'
 
-jest.mock('../components/views/MetadataEntryPage', () => jest.fn())
+jest.mock('../views/MetadataEntryPage', () => jest.fn())
 
 describe('App component', () => {
   afterEach(() => {
