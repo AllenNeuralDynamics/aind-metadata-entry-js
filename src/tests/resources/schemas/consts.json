@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "describedBy": {
+      "type": "string",
+      "const": "https://github.com/AllenNeuralDynamics/data_schema/blob/main/schemas/subject.json",
+      "description": "The URL reference to the schema.",
+      "title": "Described by"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "description": "The version of the schema.",
+      "title": "Schema Version"
+    },
+    "number_const": {
+      "title": "Number with missing type",
+      "const": 1,
+      "default": 1
+    },
+    "boolean_const": {
+      "title": "Boolean with missing type",
+      "const": true,
+      "default": true
+    },
+    "object_const": {
+      "title": "Object with missing type",
+      "const": {
+        "key": "value"
+      },
+      "default": {
+        "key": "value"
+      }
+    },
+    "array_const": {
+      "title": "Array with missing type",
+      "const": [
+        1,
+        2,
+        3
+      ],
+      "default": [
+        1,
+        2,
+        3
+      ]
+    },
+    "null_const": {
+      "title": "Null with missing type",
+      "const": null,
+      "default": null
+    }
+  }
+}

@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
-import { AJV_OPTIONS } from '../utilities/schemaHandlers'
-import { saveToJSONFile } from '../utilities/fileUtils'
+import Config from '../utils/config'
+import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import { toast } from 'react-toastify'
 
 function RenderForm (props) {
@@ -21,7 +21,7 @@ function RenderForm (props) {
   */
   const { schemaType, schema, formData } = props
   const formRef = createRef()
-  const validator = customizeValidator(AJV_OPTIONS)
+  const validator = customizeValidator(Config.ajvOptions)
 
   /**
    * Event handler to validate the form
