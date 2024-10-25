@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from './components/layout/Header'
-import MetadataEntryPage from './components/pages/MetadataEntryPage'
+import MetadataEntryPage from './components/views/MetadataEntryPage'
 import { SchemaContextProvider } from './contexts/schema.context'
 
 /**

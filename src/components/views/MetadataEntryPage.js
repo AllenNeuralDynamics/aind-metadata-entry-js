@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-toastify'
-import RenderForm from '../RenderForm'
-import SchemaToolbar from '../SchemaToolbar'
+import RenderForm from './RenderForm'
+import SchemaToolbar from './SchemaToolbar'
 import styles from './MetadataEntryPage.module.css'
 import { SchemaContext } from '../../contexts/schema.context'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import Form from '@rjsf/core'
-import { widgets } from '../../custom-ui/CustomWidgets'
+import { CustomWidgets } from '../../../components/rjsf/CustomWidgets'
 import validator from '@rjsf/validator-ajv8'
 
 describe('CustomTextWidget', () => {
@@ -12,7 +12,7 @@ describe('CustomTextWidget', () => {
     }
     render(<Form schema={testSchema}
       validator={validator}
-      widgets={ { text: widgets.text } }
+      widgets={ { text: CustomWidgets.text } }
     />)
     expect(screen.getByLabelText('Test String Const')).toBeInTheDocument()
   })
@@ -25,7 +25,7 @@ describe('CustomTextWidget', () => {
     }
     render(<Form schema={testSchema}
       validator={validator}
-      widgets={ { text: widgets.text } }
+      widgets={ { text: CustomWidgets.text } }
       onSubmit={({ formData }) => {
         expect(formData).toEqual('const example string value')
       }
@@ -43,7 +43,7 @@ describe('CustomTextWidget', () => {
     }
     render(<Form schema={testSchema}
       validator={validator}
-      widgets={ { text: widgets.text } }
+      widgets={ { text: CustomWidgets.text } }
     />)
     expect(screen.getByLabelText('decimal')).toBeInTheDocument()
     const textbox = screen.getByLabelText('decimal')

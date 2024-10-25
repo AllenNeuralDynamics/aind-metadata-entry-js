@@ -1,13 +1,13 @@
 import React, { createRef, useContext } from 'react'
 import Form from '@rjsf/core'
 import { customizeValidator } from '@rjsf/validator-ajv8'
-import { widgets } from '../custom-ui/CustomWidgets'
-import { uiSchema } from '../custom-ui/CustomUISchema'
-import Config from '../utils/config'
-import { saveToJSONFile } from '../utils/helpers/file.helpers'
+import { CustomWidgets } from '../rjsf/CustomWidgets'
+import { CustomUISchema } from '../rjsf/CustomUISchema'
+import Config from '../../utils/config'
+import { saveToJSONFile } from '../../utils/helpers/file.helpers'
 import { toast } from 'react-toastify'
-import { Button } from './layout/inputs'
-import { SchemaContext } from '../contexts/schema.context'
+import { Button } from '../layout/inputs'
+import { SchemaContext } from '../../contexts/schema.context'
 
 /**
  * Component to read and render a form based on the user-selected schema.
@@ -54,8 +54,8 @@ function RenderForm () {
         schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
-        widgets={widgets}
+        uiSchema={CustomWidgets}
+        widgets={CustomUISchema}
         onSubmit={saveFileOnSubmit}
         transformErrors={transformErrors}
         omitExtraData
