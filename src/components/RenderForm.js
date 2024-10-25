@@ -1,13 +1,13 @@
 import React, { createRef } from 'react'
 import PropTypes from 'prop-types'
 import Form from '@rjsf/core'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import Config from '../utils/config'
 import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import { toast } from 'react-toastify'
+import { Button } from './layout/inputs'
 
 function RenderForm (props) {
   /*
@@ -24,14 +24,12 @@ function RenderForm (props) {
   const validator = customizeValidator(Config.ajvOptions)
 
   /**
-   * Event handler to validate the form
-   * @param {Event} event The click event
+   * Event handler called after rjsf form validation
    */
-  const onValidateForm = (event) => {
+  const onValidateForm = () => {
     if (formRef.current.validateForm()) {
       toast.success('Form is valid. Ready to submit!')
     }
-    event.target.blur()
   }
 
   /**
@@ -70,8 +68,9 @@ function RenderForm (props) {
         focusOnFirstError
       >
         <div className="btn-group" role="group">
-          <button title="Save form data to JSON file" type="submit" className="btn btn-primary">Submit</button>
-          <button title="Validate form" type="button" className="btn btn-default" onClick={onValidateForm}>Validate</button>
+           {/* submit button must have type="submit" and onSubmit provided above */}
+          <Button text='Submit' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary'/>
+          <Button text='Validate' tooltip='Validate form' onClick={onValidateForm}/>
         </div>
       </Form>
     )

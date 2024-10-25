@@ -12,7 +12,7 @@ import {
 } from '../../utils/helpers/schema.helpers'
 import SchemaToolbar from '../SchemaToolbar'
 import styles from './MetadataEntryPage.module.css'
-import { nanoid } from 'nanoid'
+import { toastPromiseWrapper } from '../../utils/helpers/ui.helpers'
 
 /**
  * Page to display a dropdown menu of schemas and form to enter metadata.
@@ -33,23 +33,23 @@ function MetadataEntryPage () {
     fetchAndFilterSchemasAsync(setSchemaList)
   }, [])
 
-  const typeCallbackFunction = async (childData) => {
+  const updateSelectedSchemaType = async (schemaType) => {
     /**
          * Method to retrieve user-selected schema and
          * defaults form to latest version.
          */
-    setSelectedSchemaType(childData)
+    setSelectedSchemaType(schemaType)
     const latestSchemas = findLatestSchemas(schemaList)
-    const schemaURL = latestSchemas[childData].path
-    await fetchAndSetSchema(schemaURL)
+    const schemaPath = latestSchemas[schemaType].path
+    await fetchAndSetSchema(schemaPath)
   }
 
-  const versionCallbackFunction = async (childData) => {
+  const updateSelectedSchemaVersion = async (schemaPath) => {
     /**
          * Method to retrieve user-selected schema version
          * and replace default form to selected version
          */
-    await fetchAndSetSchema(childData)
+    await fetchAndSetSchema(schemaPath)
   }
 
   /**
@@ -69,21 +69,12 @@ function MetadataEntryPage () {
       setData(data)
     }
 
-    const toastID = nanoid()
-    toast.promise(
+    toastPromiseWrapper(
       autofillFromJSONFile(),
-      {
-        pending: 'Reading file...',
-        success: 'Successfully autofilled existing data from file.',
-        error: { render ({ data }) { return `${data.name}: ${data.message}` } }
-      },
-      { toastId: toastID }
-    ).catch((error) => {
-      // Dismiss error if file upload was cancelled by user
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        toast.dismiss(toastID)
-      }
-    })
+      'Reading file...',
+      'Successfully autofilled existing data from file.',
+      (error) => (error instanceof DOMException && error.name === 'AbortError')
+    )
   }
 
   const fetchAndSetSchema = async (schemaPath) => {
@@ -115,9 +106,9 @@ function MetadataEntryPage () {
 
   return (
     <div>
-      < SchemaToolbar
-        ParentTypeCallback={typeCallbackFunction}
-        ParentVersionCallback={versionCallbackFunction}
+      <SchemaToolbar
+        updateSelectedSchemaType={updateSelectedSchemaType}
+        updateSelectedSchemaVersion={updateSelectedSchemaVersion}
         selectedSchemaType={selectedSchemaType}
         selectedSchemaPath={selectedSchemaPath}
         schemaList={schemaList}

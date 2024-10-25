@@ -13,8 +13,8 @@ jest.mock('../../components/Help', () => jest.fn())
 describe('SchemaToolbar component', () => {
   it('renders appropriate inputs on default', () => {
     render(<SchemaToolbar
-      ParentTypeCallback={NULL_CALLBACK}
-      ParentVersionCallback={NULL_CALLBACK}
+      updateSelectedSchemaType={NULL_CALLBACK}
+      updateSelectedSchemaVersion={NULL_CALLBACK}
       selectedSchemaType=''
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
@@ -30,13 +30,13 @@ describe('SchemaToolbar component', () => {
     expect(screen.getByTitle('Get help')).toBeEnabled()
   })
 
-  it('calls ParentTypeCallback and enables version selection dropdown when a schema type is chosen', () => {
+  it('calls updateSelectedSchemaType and enables version selection dropdown when a schema type is chosen', () => {
     const mockTypeCallback = jest.fn()
     const schemaType = 'subject'
     const newSchemaType = 'instrument'
     render(<SchemaToolbar
-      ParentTypeCallback={mockTypeCallback}
-      ParentVersionCallback={NULL_CALLBACK}
+      updateSelectedSchemaType={mockTypeCallback}
+      updateSelectedSchemaVersion={NULL_CALLBACK}
       selectedSchemaType={schemaType}
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
@@ -50,8 +50,8 @@ describe('SchemaToolbar component', () => {
   it('has schema versions sorted by latest-first semantic version', () => {
     const schemaType = 'instrument'
     render(<SchemaToolbar
-      ParentTypeCallback={NULL_CALLBACK}
-      ParentVersionCallback={NULL_CALLBACK}
+      updateSelectedSchemaType={NULL_CALLBACK}
+      updateSelectedSchemaVersion={NULL_CALLBACK}
       selectedSchemaType={schemaType}
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
@@ -61,13 +61,13 @@ describe('SchemaToolbar component', () => {
     expect(schemaVersionsList).toStrictEqual(SORTED_VERSION_LIST_INSTRUMENT)
   })
 
-  it('calls ParentVersionCallback when a schema version is chosen', () => {
+  it('calls updateSelectedSchemaVersion when a schema version is chosen', () => {
     const mockVersionCallback = jest.fn()
     const schemaType = 'instrument'
     const schemaPath = 'schemas/instrument/0.10.0/instrument_schema.json'
     render(<SchemaToolbar
-      ParentTypeCallback={NULL_CALLBACK}
-      ParentVersionCallback={mockVersionCallback}
+      updateSelectedSchemaType={NULL_CALLBACK}
+      updateSelectedSchemaVersion={mockVersionCallback}
       selectedSchemaType={schemaType}
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
@@ -80,8 +80,8 @@ describe('SchemaToolbar component', () => {
   it('calls handleRehydrate when autofill button is clicked', () => {
     const mockRehydrateCallback = jest.fn()
     render(<SchemaToolbar
-      ParentTypeCallback={NULL_CALLBACK}
-      ParentVersionCallback={NULL_CALLBACK}
+      updateSelectedSchemaType={NULL_CALLBACK}
+      updateSelectedSchemaVersion={NULL_CALLBACK}
       selectedSchemaType=''
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
@@ -97,8 +97,8 @@ describe('SchemaToolbar component', () => {
       autoClose: false
     }
     render(<SchemaToolbar
-      ParentTypeCallback={NULL_CALLBACK}
-      ParentVersionCallback={NULL_CALLBACK}
+      updateSelectedSchemaType={NULL_CALLBACK}
+      updateSelectedSchemaVersion={NULL_CALLBACK}
       selectedSchemaType=''
       selectedSchemaPath=''
       schemaList={SCHEMA_LIST}
