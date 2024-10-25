@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from './components/layout/Header'
 import MetadataEntryPage from './components/pages/MetadataEntryPage'
+import { SchemaContextProvider } from './contexts/schema.context'
 
 /**
  * Single-page application to display a header and metadata entry form.
@@ -18,7 +19,9 @@ function App (props) {
         subtitle={`User-interface for metadata ingestion and validation. Use on Chrome or Edge. App version ${appVersion}`}
         alignCenter
       />
-      < MetadataEntryPage/>
+      <SchemaContextProvider>
+        < MetadataEntryPage/>
+      </SchemaContextProvider>
     </div>
   )
 }

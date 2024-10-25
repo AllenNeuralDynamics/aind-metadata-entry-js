@@ -1,18 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext } from 'react'
 import { compareVersions } from 'compare-versions'
 import { toast } from 'react-toastify'
 import { Button, SelectDropdown } from './layout/inputs'
 import Toolbar from './layout/Toolbar'
 import Help from './Help'
+import { SchemaContext } from '../contexts/schema.context'
 
 /**
  * Component to render a dropdown menu for schema-selection.
  * Based on selected schema, renders a dropdown menu for version-selection.
- * Gives user the option to autofill the form with previously input data
+ * Gives user the option to autofill the form with previously input data.
+ * Uses SchemaContext to get and manage states (e.g. selectedSchemaPath, updateSelectedSchemaVersion).
  */
-function SchemaToolbar (props) {
-  const { updateSelectedSchemaType, updateSelectedSchemaVersion, selectedSchemaType, selectedSchemaPath, schemaList, handleRehydrate } = props
+function SchemaToolbar () {
+  const { updateSelectedSchemaType, updateSelectedSchemaVersion, selectedSchemaType, selectedSchemaPath, schemaList, handleRehydrate } = useContext(SchemaContext)
 
   const schemaTypes = Array.from(
     new Set(schemaList.map((schema) => schema.type))
@@ -60,14 +61,6 @@ function SchemaToolbar (props) {
       />
     </Toolbar>
   )
-}
-SchemaToolbar.propTypes = {
-  updateSelectedSchemaType: PropTypes.func.isRequired,
-  updateSelectedSchemaVersion: PropTypes.func.isRequired,
-  selectedSchemaType: PropTypes.string.isRequired,
-  selectedSchemaPath: PropTypes.string.isRequired,
-  schemaList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleRehydrate: PropTypes.func.isRequired
 }
 
 export default SchemaToolbar
