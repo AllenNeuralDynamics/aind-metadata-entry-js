@@ -2,7 +2,7 @@ import {
   fetchSchemaPathsFromS3Async,
   parseAndFilterSchemas,
   fetchAndFilterSchemasAsync,
-  findSchemaFromData,
+  findSchemaFromFormData,
   fetchSchemaContentAsync,
   processSchemaContent
 } from '../../../utils/helpers/schema.helpers'
@@ -155,14 +155,14 @@ describe('fetchAndFilterSchemasAsync', () => {
 describe('findSchemaFromFormData', () => {
   it('returns the matching schema', () => {
     for (const formData of VALID_FORM_DATAS) {
-      const resultSchema = findSchemaFromData(formData, EXPECTED_PARSED_SCHEMAS)
+      const resultSchema = findSchemaFromFormData(formData, EXPECTED_PARSED_SCHEMAS)
       expect(resultSchema).toStrictEqual(EXPECTED_PARSED_SCHEMAS[0])
     }
   })
 
   it('returns undefined if no matching schema is found', () => {
     for (const formData of INVALID_FORM_DATAS) {
-      const resultSchema = findSchemaFromData(formData, EXPECTED_PARSED_SCHEMAS)
+      const resultSchema = findSchemaFromFormData(formData, EXPECTED_PARSED_SCHEMAS)
       expect(resultSchema).toBeUndefined()
     }
   })

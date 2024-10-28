@@ -1,17 +1,51 @@
-import React from 'react'
+import { toast } from 'react-toastify'
+import { nanoid } from 'nanoid'
 
 /**
- * Create an HTML link <a> element formatted as a button or a simple link. Link opens in a new tab.
- * @param {string} url The link URL
- * @param {string} text The text to display
- * @param {string | null} tooltip The tooltip text
- * @param {boolean | null} displayAsButton Flag to display the link as a button
- * @returns HTML <a> element for formatted link
+ * Wrapper function for onChange event handlers.
+ * Calls the callback function with the value of the event target.
+ * Blurs the event target to remove focus.
+ *
+ * @param {Event} event - event object
+ * @param {func | null} callback - optional callback function
  */
-export function getLinkAsButton (url, text, tooltip = '', displayAsButton = false) {
-  if (displayAsButton) {
-    return (<a href={url} target="_blank" rel='noreferrer' type="button" className="btn btn-default" title={tooltip}>{text}</a>)
-  } else {
-    return (<a href={url} target="_blank" rel='noreferrer' title={tooltip}>{text}</a>)
+export function onChangeWrapper (event, callback) {
+  if (callback) {
+    callback(event.target.value)
   }
+  event.target.blur()
+}
+
+/**
+ * Wraps a promise with a toast notification.
+ * Toast promise is used to display pending, success, and error messages.
+ * Optional dismissError function for specific error handling.
+ *
+ * @param {Promise} promise - promise to wrap
+ * @param {string} pendingMsg - optional custom pending message
+ * @param {string} successMsg - optional custom success message
+ * @param {func} dismissError - optional dismiss error function. dismissError(error) must return true to dismiss the notification
+ */
+export async function toastPromiseWrapper (promise, pendingMsg, successMsg, dismissError) {
+  const toastID = nanoid()
+  toast.promise(
+    promise,
+    {
+      pending: pendingMsg ?? 'Processing...',
+      success: successMsg ?? 'Success!',
+      error: {
+        render ({ data }) {
+          if (dismissError && dismissError(data)) {
+            return 'Dismissed.'
+          }
+          return `${data.name}: ${data.message}`
+        }
+      }
+    },
+    { toastId: toastID }
+  ).catch((error) => {
+    if (dismissError && dismissError(error)) {
+      toast.dismiss(toastID)
+    }
+  })
 }

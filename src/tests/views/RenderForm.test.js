@@ -1,10 +1,11 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import RenderForm from '../../components/RenderForm'
+import RenderForm from '../../views/RenderForm'
 import { processSchemaContent } from '../../utils/helpers/schema.helpers'
 import { saveToJSONFile } from '../../utils/helpers/file.helpers'
 import SCHEMA_DISCRIMINATOR_EXTRA_DATA from '../resources/schemas/discriminator-extra-data.json'
 import { toast } from 'react-toastify'
+import { SchemaContext } from '../../contexts/schema.context'
 
 const EXPECTED_PROMPT_TEXT = 'Please select a schema from the dropdown above or autofill data from an existing file.'
 const SCHEMA_TYPE = 'test'
@@ -24,15 +25,27 @@ jest.mock('react-toastify', () => ({
   }
 }))
 
+/**
+ * Helper function to render RenderForm component with test context
+ * @param {*} context - Context value to used in the test
+ */
+const renderWithContext = (context) => {
+  render(
+    <SchemaContext.Provider value={context}>
+      <RenderForm/>
+    </SchemaContext.Provider>
+  )
+}
+
 describe('RenderForm component', () => {
   it('renders prompt on default if no schema is provided', () => {
-    render(<RenderForm schemaType={SCHEMA_TYPE} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE })
     expect(screen.getByText(EXPECTED_PROMPT_TEXT)).toBeVisible()
     expect(screen.queryByRole('button', { name: 'Submit' })).toBeNull()
   })
 
   it('renders with provided schema and formData on default', () => {
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={FORM_DATA} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     expect(screen.queryByText(EXPECTED_PROMPT_TEXT)).toBeNull()
     expect(screen.getByRole('button', { name: 'Submit' })).toBeVisible()
     expect(screen.getByText(SCHEMA.title)).toBeVisible()
@@ -40,7 +53,7 @@ describe('RenderForm component', () => {
   })
 
   it('saves form data on submit', () => {
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={FORM_DATA} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
     const formData = saveToJSONFile.mock.calls[0][0]
     expect(formData).toEqual(FORM_DATA)
@@ -55,7 +68,7 @@ describe('RenderForm component', () => {
         extra_data_str: 123
       }
     }
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={invalidFormData} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: invalidFormData })
     fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
     expect(screen.getByText('Errors')).toBeVisible()
     expect(screen.getByText('.sub_schema.extra_data_str: \'Extra Data String\' must be string')).toBeVisible()
@@ -63,13 +76,13 @@ describe('RenderForm component', () => {
 
   it('shows a success message when form data is validated with no errors', () => {
     // if valid data, show success message
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={FORM_DATA} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     fireEvent.click(screen.getByRole('button', { name: 'Validate' }))
     expect(toast.success).toHaveBeenCalledWith('Form is valid. Ready to submit!')
   })
 
   it('omits extra data on validate', () => {
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={FORM_DATA} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     // Select Option2, which should clear extra_data_str from initial formData
     const option2Val = screen.getByRole('option', { name: 'Option2' }).value
     fireEvent.change(screen.getByDisplayValue('Option1'), { target: { value: option2Val } })
@@ -78,7 +91,7 @@ describe('RenderForm component', () => {
   })
 
   it('omits extra data on submit', () => {
-    render(<RenderForm schemaType={SCHEMA_TYPE} schema={SCHEMA} formData={FORM_DATA} />)
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     // Select Option2, which should clear extra_data_str from initial formData
     const option2Val = screen.getByRole('option', { name: 'Option2' }).value
     fireEvent.change(screen.getByDisplayValue('Option1'), { target: { value: option2Val } })

@@ -97,7 +97,7 @@ function isValidSchemaPath (path) {
  * @param {SchemaInfo[]} schemaList - The list of schemas to search.
  * @returns {SchemaInfo|undefined} The matching schema or undefined if no matching schema is found.
  */
-export function findSchemaFromData (data, schemaList) {
+export function findSchemaFromFormData (data, schemaList) {
   // The 'describedBy' field should end in {schemaType}.py
   const schemaType = data.describedBy?.split('/').pop().split('.').shift()
   return schemaList.find(schema =>

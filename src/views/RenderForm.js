@@ -1,37 +1,30 @@
-import React, { createRef } from 'react'
-import PropTypes from 'prop-types'
+import React, { createRef, useContext } from 'react'
 import Form from '@rjsf/core'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import Config from '../utils/config'
 import { saveToJSONFile } from '../utils/helpers/file.helpers'
 import { toast } from 'react-toastify'
+import { Button } from '../components/inputs'
+import { SchemaContext } from '../contexts/schema.context'
 
-function RenderForm (props) {
-  /*
-  Method to read and render a form based on the user-selected schema
-  Arguments:
-    props.schemaType (string) = the selected schema type
-    props.schema (object) = the selected schema
-    props.formData (object) = the form data
-  Returns:
-    Form object
-  */
-  const { schemaType, schema, formData } = props
+/**
+ * Component to read and render a form based on the user-selected schema.
+ * Uses SchemaContext to get states (e.g. schema, formData) to render the form. for the form)
+ */
+function RenderForm () {
+  const { selectedSchemaType, schema, formData } = useContext(SchemaContext)
   const formRef = createRef()
-  const validator = customizeValidator(Config.ajvOptions)
+  const validator = customizeValidator(Config.AJV_OPTIONS)
 
   /**
-   * Event handler to validate the form
-   * @param {Event} event The click event
+   * Event handler called after rjsf form validation
    */
-  const onValidateForm = (event) => {
+  const onValidateForm = () => {
     if (formRef.current.validateForm()) {
       toast.success('Form is valid. Ready to submit!')
     }
-    event.target.blur()
   }
 
   /**
@@ -39,7 +32,7 @@ function RenderForm (props) {
    * @param {Event} event The form event
    */
   async function saveFileOnSubmit (event) {
-    saveToJSONFile(event.formData, schemaType)
+    saveToJSONFile(event.formData, selectedSchemaType)
   }
 
   /**
@@ -61,8 +54,8 @@ function RenderForm (props) {
         schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={uiSchema}
-        widgets={widgets}
+        uiSchema={widgets}
+        widgets={uiSchema}
         onSubmit={saveFileOnSubmit}
         transformErrors={transformErrors}
         omitExtraData
@@ -70,20 +63,15 @@ function RenderForm (props) {
         focusOnFirstError
       >
         <div className="btn-group" role="group">
-          <button title="Save form data to JSON file" type="submit" className="btn btn-primary">Submit</button>
-          <button title="Validate form" type="button" className="btn btn-default" onClick={onValidateForm}>Validate</button>
+           {/* submit button must have type="submit" and onSubmit provided above */}
+          <Button text='Submit' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary'/>
+          <Button text='Validate' tooltip='Validate form' onClick={onValidateForm}/>
         </div>
       </Form>
     )
   } else {
     return (<div>Please select a schema from the dropdown above or autofill data from an existing file.</div>)
   }
-}
-
-RenderForm.propTypes = {
-  schemaType: PropTypes.string.isRequired,
-  schema: PropTypes.object,
-  formData: PropTypes.object
 }
 
 export default RenderForm
