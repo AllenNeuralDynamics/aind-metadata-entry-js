@@ -28,12 +28,12 @@ describe('MetadataEntryPage', () => {
   })
 
   it('renders without crashing', () => {
-    renderWithContext({ selectedSchemaType: SCHEMA_TYPE})
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE })
     expect(screen.queryByTitle('Form error')).toBeNull()
   })
 
   it('renders SchemaToolbar and RenderForm child components on default', () => {
-    renderWithContext({ selectedSchemaType: SCHEMA_TYPE})
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE })
     expect(SchemaToolbar).toHaveBeenCalled()
     expect(RenderForm).toHaveBeenCalled()
   })
@@ -41,7 +41,7 @@ describe('MetadataEntryPage', () => {
   it('catches and displays error when unable to render form', () => {
     jest.spyOn(console, 'error').mockImplementation(() => jest.fn())
     RenderForm.mockImplementation(() => { throw new Error('Unable to render form') })
-    renderWithContext({ selectedSchemaType: SCHEMA_TYPE})
+    renderWithContext({ selectedSchemaType: SCHEMA_TYPE })
     expect(RenderForm).toThrow('Unable to render form')
     expect(screen.getByTitle('Form error')).toBeVisible()
   })

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { LinkButton } from '../../../components/inputs'
+import LinkButton from '../../../components/inputs/LinkButton'
 
 describe('LinkButton', () => {
   const PLACEHOLDER_URL = 'https://example.com'
