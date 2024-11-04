@@ -26,6 +26,36 @@ describe('SchemaContextProvider', () => {
     jest.restoreAllMocks()
   })
 
+  it('provides correct default states', () => {
+    const expectedDefaultStates = {
+      formData: null,
+      schema: null,
+      selectedSchemaType: '',
+      selectedSchemaPath: '',
+      schemaList: []
+    }
+    const mockChildComponent = (values) => (
+      <span>{JSON.stringify(values)}</span>
+    )
+    render(
+      <SchemaContextProvider>
+        <SchemaContext.Consumer>{mockChildComponent}</SchemaContext.Consumer>
+      </SchemaContextProvider>
+    )
+    expect(screen.getByText(
+      JSON.stringify(expectedDefaultStates)
+    )).toBeVisible()
+  })
+
+  it('fetches and filters schemas on mount', () => {
+    render(
+      <SchemaContextProvider>
+        <SchemaContext.Consumer>{() => null}</SchemaContext.Consumer>
+      </SchemaContextProvider>
+    )
+    expect(schemaFetchers.fetchAndFilterSchemasAsync).toHaveBeenCalledTimes(1)
+  })
+
   describe('handleRehydrate', () => {
     it('reads and validates from JSON file and updates state based on contents', async () => {
       // child component to trigger handleRehydrate and display state changes
