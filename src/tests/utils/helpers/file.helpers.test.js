@@ -60,4 +60,22 @@ describe('saveToJSONFile', () => {
     expect(writer.write).toHaveBeenCalledWith(new Blob([JSON.stringify(data, undefined, 4)], { type: 'text/plain' }))
     expect(toastSpy).toHaveBeenCalledWith('Error saving file. Please try again.')
   })
+
+  it('dismisses error message if error is caused by user abort', async () => {
+    // mock file system access APIs and toast notification
+    const writer = {
+      write: jest.fn().mockRejectedValue(new DOMException('AbortError', 'AbortError'))
+    }
+    const handle = {
+      createWritable: jest.fn().mockResolvedValue(writer)
+    }
+    window.showSaveFilePicker = jest.fn().mockResolvedValue(handle)
+    const toastSpy = jest.spyOn(toast, 'error')
+    const data = { test: 'data' }
+    const filename = 'test'
+    await saveToJSONFile(data, filename)
+    expect(window.showSaveFilePicker).toHaveBeenCalled()
+    expect(writer.write).toHaveBeenCalledWith(new Blob([JSON.stringify(data, undefined, 4)], { type: 'text/plain' }))
+    expect(toastSpy).not.toHaveBeenCalled()
+  })
 })
