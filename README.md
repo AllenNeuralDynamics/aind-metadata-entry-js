@@ -2,20 +2,48 @@
 User-interface to ease AIND metadata ingest and validation. 
 
 # Overview
-This repository contains the components of a React app that renders forms directly from schemas defined by [aind-data-schema](https://github.com/AllenNeuralDynamics/aind-data-schema). The schemas are fetched from an s3-bucket, defined in environment. On user-selection, the app renders a form from selected schema (defaults to latest version). On submission, it validates the form data, and downloads it as a JSON-file. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains a React app that renders forms from JSON schemas defined by [aind-data-schema](https://github.com/AllenNeuralDynamics/aind-data-schema). The schemas are fetched from an s3-bucket, defined in environment. On user-selection, the app renders a form from selected schema (defaults to latest version). On submission, it validates the form data, and downloads it as a JSON-file. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Suggested Usage
 Browser: Google Chrome.
 Machine: Windows or Linux.
 
 # Cloud Deployment
-
-Ensure `gcloud` is configured to the right project. From the root directory, run `./bin/deploy-to-gcloud.sh`. The cloud configurations can be set in `app.yaml`. 
+The application is deployed using AWS Amplify. The build configurations can be set in `amplify.yaml`.
 
 # Local Development
 
+## Project organization
+The source code for the React app is located in the `/src` directory.
+
+The project is organized as follows:
+- components - global shared/reusable components, such as inputs (buttons, dropdowns) and layout (wrappers, navigation)
+- contexts - global context providers for state management
+- utils - utilities, helpers, constants/ config
+- views - main UI components or "pages", such as the the `MetadataEntryPage`
+- tests - unit tests and static json resources for test inputs
+
+The entrypoint for the application is `index.js`, and `App.js` sets up the intial Context and View.
+
+```
+.
+└── /src
+    ├── /components
+    ├── /services
+    ├── /store
+    ├── /utils
+    ├── /views    
+    ├── index.js
+    └── App.js
+```
+## Setup
 For local testing and development, you will need to configure the environment variables.
-Run `export REACT_APP_S3_URL="https://s3-url-placeholder"` and `export REACT_APP_FILTER_SCHEMAS=['schema1', 'schema2']` to set up required configurations before running `npm start`.
+```sh
+export REACT_APP_S3_URL="https://s3-url-placeholder"   # change this
+export REACT_APP_FILTER_SCHEMAS=['schema1', 'schema2'] # change this if required
+```
+
+Then, run `npm install` to install dependencies or `npm start` to start the app. Please see other commands below.
 
 ## Available Scripts
 
@@ -49,7 +77,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+See the Create React App docs about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `npm run eject`
 
