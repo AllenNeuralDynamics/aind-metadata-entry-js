@@ -1,0 +1,8 @@
+.formSection {
+    padding: 10px;
+    border: 1px dashed grey;
+
+    .error {
+        color: red;
+    }
+}
