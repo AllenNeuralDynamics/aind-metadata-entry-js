@@ -5,11 +5,12 @@ import { readFromJSONFile } from '../utils/helpers/file.helpers'
 import {
   fetchAndFilterSchemasAsync,
   findLatestSchemas,
-  findSchemaFromFormData,
+  // findSchemaFromFormData,
   fetchSchemaContentAsync,
   processSchemaContent
 } from '../utils/helpers/schema.helpers'
 import { toastPromiseWrapper } from '../utils/helpers/ui.helpers'
+import Config from '../utils/config'
 
 export const SchemaContext = createContext()
 
@@ -63,11 +64,11 @@ export const SchemaContextProvider = ({ children }) => {
   const handleRehydrate = async () => {
     const autofillFromJSONFile = async () => {
       const formData = await readFromJSONFile()
-      const schema = findSchemaFromFormData(formData, schemaList)
-      if (!schema) {
-        throw new Error('Invalid schema type or version. Please check your file.')
-      }
-      setSelectedSchemaType(schema.type)
+      // Only autofill for 'SubmitJobRequest' schema type
+      setSelectedSchemaType('SubmitJobRequest')
+      const schema = Config.AIND_DATA_TRANSFER_SCHEMAS.find(
+        (schema) => schema.type === 'SubmitJobRequest'
+      )
       await fetchAndSetSchema(schema.path)
       setFormData(formData)
     }
