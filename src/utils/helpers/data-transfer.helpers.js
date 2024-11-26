@@ -34,3 +34,22 @@ export async function validateToServer (formData, schemaType) {
     throw new Error(data.message + ': ' + data.data.errors)
   }
 }
+
+export async function submitJobsToServer (formData, schemaType) {
+  postProcessJobRequestFormData(formData, schemaType)
+  console.log(formData)
+  // Submit formData to server
+  const response = await fetch(
+    process.env.REACT_APP_DATA_TRANSFER_SERVICE_URL + '/api/v1/submit_jobs',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    }
+  )
+  const data = await response.json()
+  console.log(data)
+  if (response.status !== 200) {
+    throw new Error(data.message + ': ' + data.data.errors)
+  }
+}

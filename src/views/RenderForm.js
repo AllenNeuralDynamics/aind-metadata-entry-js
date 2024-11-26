@@ -8,7 +8,7 @@ import { saveToJSONFile } from '../utils/helpers/file.helpers'
 // import { toast } from 'react-toastify'
 import { Button } from '../components/inputs'
 import { SchemaContext } from '../contexts/schema.context'
-import { validateToServer } from '../utils/helpers/data-transfer.helpers'
+import { validateToServer, submitJobsToServer } from '../utils/helpers/data-transfer.helpers'
 import { toastPromiseWrapper } from '../utils/helpers/ui.helpers'
 
 /**
@@ -36,20 +36,34 @@ function RenderForm () {
   }
 
   /**
-   * onSubmit event handler to save validated form data to a JSON file.
+   * onSubmit event handler to post jobs to aind-data-transfer-service.
    * @param {Event} event The form event
    */
-  async function saveFileOnSubmit (event) {
+  async function onSubmitForm (event) {
     const formData = event.formData
-    const validateThenSave = async (formData, schemaType) => {
-      await validateToServer(formData, schemaType)
-      await saveToJSONFile(formData, schemaType)
-    }
     toastPromiseWrapper(
-      validateThenSave(formData, selectedSchemaType),
-      'Saving form data...',
-      'Form data saved to file!'
+      submitJobsToServer(formData, selectedSchemaType),
+      'Submitting form data...',
+      'Form data submitted to aind-data-service!'
     )
+  }
+
+  /**
+   * Event handler to save validated form data to a JSON file.
+   */
+  async function onSaveFormData () {
+    if (formRef.current.validateForm()) {
+      const validateThenSave = async (formData, schemaType) => {
+        await validateToServer(formData, schemaType)
+        await saveToJSONFile(formData, schemaType)
+      }
+      const formData = formRef.current.state.formData
+      toastPromiseWrapper(
+        validateThenSave(formData, selectedSchemaType),
+        'Saving form data...',
+        'Form data saved to file!'
+      )
+    }
   }
 
   /**
@@ -73,17 +87,18 @@ function RenderForm () {
         validator={validator}
         uiSchema={widgets}
         widgets={uiSchema}
-        onSubmit={saveFileOnSubmit}
+        onSubmit={onSubmitForm}
         transformErrors={transformErrors}
         omitExtraData
         noHtml5Validate
         focusOnFirstError
       >
         <div className="btn-group" role="group">
-           {/* submit button must have type="submit" and onSubmit provided above */}
-          <Button text='Save to file' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary'/>
           <Button text='Validate' tooltip='Validate form' onClick={onValidateForm}/>
+          <Button text='Save to file' tooltip='Save form data to JSON file' onClick={onSaveFormData}/>
         </div>
+        {/* submit button must have type="submit" and onSubmit provided above */}
+        <Button text='Submit to server' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary pull-right'/>
       </Form>
     )
   } else {
