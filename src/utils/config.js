@@ -9,7 +9,10 @@ const Config = {
     ajvOptionsOverrides: {
       discriminator: true
     }
-  }
+  },
+  AIND_DATA_TRANSFER_SCHEMAS: [
+    { type: 'SubmitJobRequest', version: 'latest', path: 'api/v1/models/SubmitJobRequestForm/schema' }
+  ]
 }
 
 export default Config

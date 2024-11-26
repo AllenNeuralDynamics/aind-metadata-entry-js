@@ -47,17 +47,15 @@ export function parseAndFilterSchemas (schemaPaths) {
 }
 
 /**
- * Retrieves list of schema links from AWS S3 Bucket, and
- * filters and parses schema info from the links.
- * The s3Url and filtered schema types are stored in environment.
- * The specific schema versions to filter are stored in Config.
+ * Retrieves list of aind-data-transfer schemas from Config
  *
  * @param {function} callback - The callback function to call with the result list.
  */
 export async function fetchAndFilterSchemasAsync (callback) {
-  const s3Url = process.env.REACT_APP_S3_URL
-  const schemaPaths = await fetchSchemaPathsFromS3Async(s3Url)
-  const filteredSchemas = parseAndFilterSchemas(schemaPaths)
+  // const s3Url = process.env.REACT_APP_S3_URL
+  // const schemaPaths = await fetchSchemaPathsFromS3Async(s3Url)
+  // const filteredSchemas = parseAndFilterSchemas(schemaPaths)
+  const filteredSchemas = Config.AIND_DATA_TRANSFER_SCHEMAS
   if (callback) {
     callback(filteredSchemas)
   }
@@ -105,12 +103,13 @@ export function findSchemaFromFormData (data, schemaList) {
 }
 
 /**
- * Given a schema path, fetches the schema content from the S3 bucket.
+ * Given a schema path, fetches the schema content from aind-data-transfer-service.
  * @param {string} schemaPath - The path of the schema to fetch.
  * @returns {object} The schema content as a JSON object.
  */
 export async function fetchSchemaContentAsync (schemaPath) {
-  const response = await fetch(process.env.REACT_APP_S3_URL + '/' + schemaPath)
+  // const response = await fetch(process.env.REACT_APP_S3_URL + '/' + schemaPath)
+  const response = await fetch(process.env.REACT_APP_DATA_TRANSFER_SERVICE_URL + '/' + schemaPath)
   return await response.json()
 }
 
@@ -171,6 +170,10 @@ const processSchemaContentHelper = (obj) => {
         } else if (!prop.required.includes(prop.discriminator.propertyName)) {
           prop.required.push(prop.discriminator.propertyName)
         }
+      }
+      // remove format: "path" (not supported by JSON Schema)
+      if (prop.format === 'path') {
+        delete prop.format
       }
 
       // recursion

@@ -41,6 +41,7 @@ For local testing and development, you will need to configure the environment va
 ```sh
 export REACT_APP_S3_URL="https://s3-url-placeholder"   # change this
 export REACT_APP_FILTER_SCHEMAS=['schema1', 'schema2'] # change this if required
+export REACT_APP_DATA_TRANSFER_SERVICE_URL='http://localhost:5000' # change this to dev url if required
 ```
 
 Then, run `npm install` to install dependencies or `npm start` to start the app. Please see other commands below.
