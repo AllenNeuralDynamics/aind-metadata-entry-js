@@ -5,9 +5,11 @@ import { widgets } from '../custom-ui/CustomWidgets'
 import { uiSchema } from '../custom-ui/CustomUISchema'
 import Config from '../utils/config'
 import { saveToJSONFile } from '../utils/helpers/file.helpers'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { Button } from '../components/inputs'
 import { SchemaContext } from '../contexts/schema.context'
+import { validateToServer } from '../utils/helpers/data-transfer.helpers'
+import { toastPromiseWrapper } from '../utils/helpers/ui.helpers'
 
 /**
  * Component to read and render a form based on the user-selected schema.
@@ -23,7 +25,13 @@ function RenderForm () {
    */
   const onValidateForm = () => {
     if (formRef.current.validateForm()) {
-      toast.success('Form is valid. Ready to submit!')
+      // toast.success('Form is valid. Ready to submit!')
+      const formData = formRef.current.state.formData
+      toastPromiseWrapper(
+        validateToServer(formData, selectedSchemaType),
+        'Validating form data...',
+        'Form is valid. Ready to submit!'
+      )
     }
   }
 
@@ -32,7 +40,16 @@ function RenderForm () {
    * @param {Event} event The form event
    */
   async function saveFileOnSubmit (event) {
-    saveToJSONFile(event.formData, selectedSchemaType)
+    const formData = event.formData
+    const validateThenSave = async (formData, schemaType) => {
+      await validateToServer(formData, schemaType)
+      await saveToJSONFile(formData, schemaType)
+    }
+    toastPromiseWrapper(
+      validateThenSave(formData, selectedSchemaType),
+      'Saving form data...',
+      'Form data saved to file!'
+    )
   }
 
   /**
@@ -64,7 +81,7 @@ function RenderForm () {
       >
         <div className="btn-group" role="group">
            {/* submit button must have type="submit" and onSubmit provided above */}
-          <Button text='Submit' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary'/>
+          <Button text='Save to file' tooltip='Save form data to JSON file' type="submit" extraClassName='btn-primary'/>
           <Button text='Validate' tooltip='Validate form' onClick={onValidateForm}/>
         </div>
       </Form>
