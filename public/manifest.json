@@ -1,6 +1,6 @@
 {
-    "short_name": "Metadata Entry",
-    "name": "AIND Metadata Entry App",
+    "short_name": "Data Transfer Forms",
+    "name": "AIND Data Transfer Service Forms App",
     "start_url": "./index.html",
     "display": "standalone",
     "theme_color": "#000000",

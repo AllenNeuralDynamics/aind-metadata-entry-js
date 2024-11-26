@@ -14,27 +14,16 @@ function Help () {
         title='Help'
         subtitle={
           <div>
-            View or submit feedback to our <LinkButton url={Config.REPO_URL} text='GitHub repository' />:
-            <div>
-              <LinkButton url={`${Config.REPO_URL}/issues`} text='Issues (bugs or feature requests)' tooltip='View/submit bugs or feature requests' displayAsButton />
-              <LinkButton url={`${Config.REPO_URL}/discussions`} text='Discussions' tooltip='View/submit discussions' displayAsButton />
-            </div>
-          </div>
-        }
-      />
-      <br />
-      <Header
-        titleClassName="h4"
-        title='Getting started'
-        subtitle={
-          <div>
-            Use this tool to create metadata files based on&nbsp;
-            <LinkButton url={Config.AIND_DATA_SCHEMA_REPO_URL} text='aind-data-schema' />
-            &nbsp;&#40;<LinkButton url={Config.AIND_DATA_SCHEMA_READTHEDOCS_URL} text='readthedocs' />&#41;.
+            Use this tool to submit job requests to&nbsp;
+            <LinkButton url={Config.AIND_DATA_TRANSFER_SERVICE_REPO_URL} text='aind-data-transfer-service' />
+            &nbsp;&#40;<LinkButton url={Config.AIND_DATA_TRANSFER_SERVICE_READTHEDOCS_URL} text='readthedocs' />&#41;.
             <ul>
               <li>Select a schema from the dropdown. The latest version will be loaded as a fillable form.</li>
-              <li>Or, use the &apos;Autofill from file&apos; button to load an existing metadata file (must be JSON).</li>
-              <li>The submitted metadata will be validated and saved as a JSON file to your device.</li>
+              <li>Or, use the &apos;Autofill from file&apos; button to load an existing job configuration file (must be JSON).</li>
+              <li>Click &apos;Validate&apos; to validate your submission, or &apos;Save to file&apos; to save the job configs as a JSON file to your device.</li>
+              <li>Click &apos;Submit to server&apos; to submit your job request to aind-data-transfer-service</li>
+              <li>View submitted jobs in the <LinkButton url={process.env.REACT_APP_DATA_TRANSFER_SERVICE_URL + '/jobs'} text='Job Status'/> page.
+              </li>
             </ul>
           </div>
         }

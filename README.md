@@ -1,15 +1,17 @@
-# AIND Metadata Entry
-User-interface to ease AIND metadata ingest and validation. 
+# AIND Data Transfer Forms
+User-interface to submit jobs to aind-data-transfer-service.
 
 # Overview
-This repository contains a React app that renders forms from JSON schemas defined by [aind-data-schema](https://github.com/AllenNeuralDynamics/aind-data-schema). The schemas are fetched from an s3-bucket, defined in environment. On user-selection, the app renders a form from selected schema (defaults to latest version). On submission, it validates the form data, and downloads it as a JSON-file. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains a React app that renders forms from JSON schemas defined by [aind-data-transfer-models](https://github.com/AllenNeuralDynamics/aind-data-transfer-models). The schemas are fetched from aind-data-transfer-service REST API. The user can validate the form, save the form data locally, 
+or submit jobs to aind-data-transfer-service. The form data is validated against JSON schema client-side and also sent to aind-data-transfer-service to 
+validate against the Pydantic model. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Suggested Usage
 Browser: Google Chrome.
 Machine: Windows or Linux.
 
-# Cloud Deployment
-The application is deployed using AWS Amplify. The build configurations can be set in `amplify.yaml`.
+# Deployment
+This app needs to be deployed on-premise.
 
 # Local Development
 
@@ -39,9 +41,8 @@ The entrypoint for the application is `index.js`, and `App.js` sets up the intia
 ## Setup
 For local testing and development, you will need to configure the environment variables.
 ```sh
-export REACT_APP_S3_URL="https://s3-url-placeholder"   # change this
-export REACT_APP_FILTER_SCHEMAS=['schema1', 'schema2'] # change this if required
 export REACT_APP_DATA_TRANSFER_SERVICE_URL='http://localhost:5000' # change this to dev url if required
+export REACT_APP_METADATA_SERVICE_PROJECT_NAMES_URL='placeholder'  # change this
 ```
 
 Then, run `npm install` to install dependencies or `npm start` to start the app. Please see other commands below.
