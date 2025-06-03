@@ -54,8 +54,8 @@ function RenderForm () {
         schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={widgets}
-        widgets={uiSchema}
+        uiSchema={uiSchema}
+        widgets={widgets}
         onSubmit={saveFileOnSubmit}
         transformErrors={transformErrors}
         omitExtraData
