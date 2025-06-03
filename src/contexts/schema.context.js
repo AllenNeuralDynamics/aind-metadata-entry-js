@@ -87,6 +87,7 @@ export const SchemaContextProvider = ({ children }) => {
    * @param {string} schemaPath - The path to the new schema to use
    */
   const fetchAndSetSchema = async (schemaPath) => {
+    setLoading(true)
     try {
       setFormData(null)
       const schema = await fetchSchemaContentAsync(schemaPath)
@@ -107,6 +108,7 @@ export const SchemaContextProvider = ({ children }) => {
       console.error(error)
       toast.error(`Unable to render ${schemaPath}`)
     }
+    setLoading(false)
   }
 
   return (
