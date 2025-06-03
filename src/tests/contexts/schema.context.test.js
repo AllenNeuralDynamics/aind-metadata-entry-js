@@ -29,6 +29,7 @@ describe('SchemaContextProvider', () => {
 
   it('provides correct default states', () => {
     const expectedDefaultStates = {
+      loading: false,
       formData: null,
       schema: null,
       selectedSchemaType: '',

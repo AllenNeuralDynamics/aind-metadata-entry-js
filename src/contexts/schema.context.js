@@ -21,6 +21,7 @@ export const SchemaContext = createContext()
  *    Gives user the option to autofill the form with previously input data
  */
 export const SchemaContextProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false) // loading state for async operations
   const [formData, setFormData] = useState(null) // formData for rjsf form
   const [schema, setSchema] = useState(null) // JSON schema contents for rjsf form
 
@@ -110,6 +111,7 @@ export const SchemaContextProvider = ({ children }) => {
 
   return (
     <SchemaContext.Provider value={{
+      loading,
       formData,
       schema,
       selectedSchemaType,
