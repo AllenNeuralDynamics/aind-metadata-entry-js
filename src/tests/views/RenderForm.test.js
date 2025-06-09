@@ -38,18 +38,28 @@ const renderWithContext = (context) => {
 }
 
 describe('RenderForm component', () => {
-  it('renders prompt on default if no schema is provided', () => {
-    renderWithContext({ selectedSchemaType: SCHEMA_TYPE })
+  it('renders prompt on default if no schema is provided and loading state is false', () => {
+    renderWithContext({ loading: false, selectedSchemaType: SCHEMA_TYPE })
     expect(screen.getByText(EXPECTED_PROMPT_TEXT)).toBeVisible()
     expect(screen.queryByRole('button', { name: 'Submit' })).toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
+    expect(screen.queryByText('Loading...')).toBeNull()
   })
 
-  it('renders with provided schema and formData on default', () => {
-    renderWithContext({ selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
+  it('renders with provided schema and formData on default and loading state is false', () => {
+    renderWithContext({ loading: false, selectedSchemaType: SCHEMA_TYPE, schema: SCHEMA, formData: FORM_DATA })
     expect(screen.queryByText(EXPECTED_PROMPT_TEXT)).toBeNull()
     expect(screen.getByRole('button', { name: 'Submit' })).toBeVisible()
     expect(screen.getByText(SCHEMA.title)).toBeVisible()
     expect(screen.getByLabelText('Extra Data String')).toHaveValue(FORM_DATA.sub_schema.extra_data_str)
+    expect(screen.queryByRole('status')).toBeNull()
+    expect(screen.queryByText('Loading...')).toBeNull()
+  })
+
+  it('renders loading indicator when loading state is true', () => {
+    renderWithContext({ loading: true })
+    expect(screen.getByRole('status')).toBeVisible()
+    expect(screen.getByText('Loading...')).toBeVisible()
   })
 
   it('saves form data on submit', () => {

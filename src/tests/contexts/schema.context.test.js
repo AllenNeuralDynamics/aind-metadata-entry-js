@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { toast } from 'react-toastify'
 import * as fileHelpers from '../../utils/helpers/file.helpers'
 import * as schemaFetchers from '../../utils/helpers/schema.helpers'
@@ -29,6 +29,7 @@ describe('SchemaContextProvider', () => {
 
   it('provides correct default states', () => {
     const expectedDefaultStates = {
+      loading: false,
       formData: null,
       schema: null,
       selectedSchemaType: '',
@@ -58,11 +59,12 @@ describe('SchemaContextProvider', () => {
   })
 
   describe('fetchAndSetSchema and updateSelectedSchemaVersion', () => {
-    it('fetches and sets schema based on schema path', async () => {
-      const mockChildComponent = ({ selectedSchemaPath, updateSelectedSchemaVersion }) => (
+    it('fetches and sets schema based on schema path and sets loading states', async () => {
+      const mockChildComponent = ({ loading, selectedSchemaPath, updateSelectedSchemaVersion }) => (
         <div>
-          <button data-testid='test-update-schema-version-btn' onClick={() => updateSelectedSchemaVersion('test_type_1.py')}>Update Schema Version</button >
-          <span>{selectedSchemaPath ? `Schema path: ${selectedSchemaPath}` : 'No schema path'}</span>
+          <button data-testid='test-update-schema-version-btn' onClick={() => updateSelectedSchemaVersion('test_type_1.py')}>Update Schema Version</button>
+          <span data-testid="loading-state">{String(loading)}</span>
+          <span data-testid="selected-schema-path">{selectedSchemaPath ? `Schema path: ${selectedSchemaPath}` : 'No schema path'}</span>
         </div>
       )
       render(
@@ -70,9 +72,15 @@ describe('SchemaContextProvider', () => {
           <SchemaContext.Consumer>{mockChildComponent}</SchemaContext.Consumer>
         </SchemaContextProvider>
       )
+      expect(screen.getByTestId('loading-state').textContent).toBe('false')
+      expect(screen.getByTestId('selected-schema-path').textContent).toBe('No schema path')
+
       await fireEvent.click(await screen.findByTestId('test-update-schema-version-btn'))
+
+      await waitFor(() => { expect(screen.getByTestId('loading-state').textContent).toBe('true') })
+      await waitFor(() => { expect(screen.getByTestId('loading-state').textContent).toBe('false') })
       expect(global.fetch).toHaveBeenCalledTimes(1)
-      expect(await screen.findByText('Schema path: test_type_1.py')).toBeVisible()
+      expect(screen.getByTestId('selected-schema-path').textContent).toBe('Schema path: test_type_1.py')
     })
 
     it('handles errors when fetching schema', async () => {

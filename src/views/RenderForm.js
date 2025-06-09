@@ -14,7 +14,7 @@ import { SchemaContext } from '../contexts/schema.context'
  * Uses SchemaContext to get states (e.g. schema, formData) to render the form. for the form)
  */
 function RenderForm () {
-  const { selectedSchemaType, schema, formData } = useContext(SchemaContext)
+  const { loading, selectedSchemaType, schema, formData } = useContext(SchemaContext)
   const formRef = createRef()
   const validator = customizeValidator(Config.AJV_OPTIONS)
 
@@ -47,6 +47,15 @@ function RenderForm () {
     })
   }
 
+  if (loading) {
+    return (
+      <div className="d-flex align-items-center">
+        <div className="spinner-border text-secondary mr-2" role="status"></div>
+        <div>Loading...</div>
+      </div>
+    )
+  }
+
   if (schema) {
     return (
       schema && <Form
@@ -54,8 +63,8 @@ function RenderForm () {
         schema={schema}
         formData={formData}
         validator={validator}
-        uiSchema={widgets}
-        widgets={uiSchema}
+        uiSchema={uiSchema}
+        widgets={widgets}
         onSubmit={saveFileOnSubmit}
         transformErrors={transformErrors}
         omitExtraData

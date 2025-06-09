@@ -19,7 +19,8 @@ The source code for the React app is located in the `/src` directory.
 The project is organized as follows:
 - components - global shared/reusable components, such as inputs (buttons, dropdowns) and layout (wrappers, navigation)
 - contexts - global context providers for state management
-- utils - utilities, helpers, constants/ config
+- custom-ui - custom uiSchema and widgets for RJSF form
+- utils - helpers, constants/ config
 - views - main UI components or "pages", such as the the `MetadataEntryPage`
 - tests - unit tests and static json resources for test inputs
 
@@ -29,10 +30,11 @@ The entrypoint for the application is `index.js`, and `App.js` sets up the intia
 .
 └── /src
     ├── /components
-    ├── /services
-    ├── /store
+    ├── /contexts
+    ├── /custom-ui
     ├── /utils
-    ├── /views    
+    ├── /views
+    ├── /tests
     ├── index.js
     └── App.js
 ```
