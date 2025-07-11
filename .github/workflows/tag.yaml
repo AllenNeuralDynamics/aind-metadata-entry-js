@@ -1,10 +1,10 @@
-name: Tag and publish
+name: Tag
 on:
   push:
     branches:
       - main
 jobs:
-  bump-version-and-tag:
+  tag:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -13,28 +13,12 @@ jobs:
         ref: ${{ env.DEFAULT_BRANCH }}
         fetch-depth: 0
         token: ${{ secrets.SERVICE_TOKEN }}
-    - name: Bump version and push tag
-      id: tag_version
-      uses: mathieudutour/github-tag-action@v6.1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        release_branches: main
-        default_bump: patch
-    - name: Get version from tag
+    - name: Get version from package.json
       run: |
-        echo "VERSION=${{ steps.tag_version.outputs.new_version }}" >> "$GITHUB_ENV"
-    - name: Update version file with new version
+        version=$(sed -n '3p' package.json | sed 's/.*"version": "\(.*\)".*/\1/')
+        echo "VERSION=$version" >> "$GITHUB_ENV"
+    - name: Create git tag
       run: |
-        old_version=$(sed -n '3p' package.json | sed 's/.*"version": "\(.*\)".*/\1/')
-        new_version=${{ env.VERSION }}
-        sed -i "3s/$old_version/$new_version/" package.json
-    - name: Update package-lock.json
-      run: npm install
-    - name: Commit and push version bump
-      uses: EndBug/add-and-commit@v9
-      with:
-        default_author: github_actions
-        message: "ci: version bump [skip actions]"
-        add: |
-          package.json
-          package-lock.json
+        git tag "v${{ env.VERSION }}"
+    - name: Push git tag
+      run: git push origin "v${{ env.VERSION }}"
